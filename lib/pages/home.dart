@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
               SizedBox(height: 15,),
               Container(
                 height: 150,
-                color: Colors.green,
+                color: Color(0xFFBAA9DB),
                 child: ListView.builder(itemBuilder: (context, index) {
 
                 }),
