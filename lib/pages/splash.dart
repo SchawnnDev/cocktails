@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 
@@ -31,12 +32,12 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
       alignment: Alignment.center,
       child: Lottie.asset('lottie/cocktail_loading.json',
           frameRate: FrameRate(60),
-          repeat: false,
+          repeat: true,
           controller: _controller,
-          onLoaded: (composition) {
+          onLoaded: (composition) async {
             _controller
-              ..duration = Duration(seconds: 3)
-              ..forward().then((value) => context.push('/home'));
+                ..duration = Duration(seconds: 3)
+                ..repeat();
           }),
     );
   }
