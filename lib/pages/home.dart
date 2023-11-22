@@ -1,4 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cocktails/controllers/category_controller.dart';
+import 'package:cocktails/controllers/drink_controller.dart';
+import 'package:cocktails/models/drink.dart';
+import 'package:cocktails/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import 'package:cocktails/models/category.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -8,6 +17,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final CategoryController categoryController = Get.find();
+  final DrinkController drinkController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,27 +29,116 @@ class _HomePageState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _searchField(),
-          SizedBox(height: 40,),
+          SizedBox(
+            height: 40,
+          ),
+          _categoriesSection(),
+          SizedBox(
+            height: 40,
+          ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: const EdgeInsets.only(left: 20),
                 child: Text(
-                  'Category',
+                  'Recommendation',
                   style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 26,
-                    fontWeight: FontWeight.w600
-                  ),
+                      color: Colors.black,
+                      fontSize: 26,
+                      fontWeight: FontWeight.w600),
                 ),
               ),
-              SizedBox(height: 15,),
+              SizedBox(
+                height: 15,
+              ),
               Container(
-                height: 150,
-                color: Color(0xFFBAA9DB),
-                child: ListView.builder(itemBuilder: (context, index) {
-
+                color: Colors.white,
+                height: 240,
+                child: GetX<DrinkController>(builder: (logic) {
+                  return ListView.separated(
+                      itemCount: drinkController.drinks.length,
+                      scrollDirection: Axis.horizontal,
+                      padding: EdgeInsets.only(left: 20, right: 20),
+                      separatorBuilder: (context, index) => SizedBox(
+                            width: 25,
+                          ),
+                      itemBuilder: (context, index) {
+                        final Drink drink = drinkController.drinks[index];
+                        return Container(
+                          width: 210,
+                          decoration: BoxDecoration(
+                            color: generateRandomPastelColor().withOpacity(0.3),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              // Use CachedNetworkImage for loading the image with a placeholder
+                              SizedBox(
+                                width: 130,
+                                child: CachedNetworkImage(
+                                  imageUrl: drink.strDrinkThumb ?? '',
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
+                                    height: 120,
+                                    // Adjust the height as needed
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  placeholder: (context, url) => Shimmer.fromColors(
+                                    baseColor: Colors.grey[300]!,
+                                    highlightColor: Colors.grey[100]!,
+                                    child: Container(
+                                      height: 120, // Adjust the height as needed
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error),
+                                ),
+                              ),
+                              Text(
+                                drink.strDrink ?? 'No name',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Container(
+                                height: 45,
+                                width: 130,
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(colors: [
+                                    Color(0xff9DCEFF),
+                                    Color(0xff92A3FD),
+                                  ]),
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'View',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      });
                 }),
               )
             ],
@@ -47,30 +148,91 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Column _categoriesSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 20),
+          child: Text(
+            'Category',
+            style: TextStyle(
+                color: Colors.black, fontSize: 26, fontWeight: FontWeight.w600),
+          ),
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        Container(
+            height: 120,
+            color: Colors.white, // Color(0xFFBAA9DB),
+            child: GetX<CategoryController>(builder: (logic) {
+              return ListView.separated(
+                itemCount: categoryController.categories.length,
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.only(left: 20, right: 20),
+                separatorBuilder: (context, index) => SizedBox(
+                  width: 25,
+                ),
+                itemBuilder: (context, index) {
+                  final Category category =
+                      categoryController.categories[index];
+                  return Container(
+                    width: 100,
+                    decoration: BoxDecoration(
+                        color: category.boxColor.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(16)),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                              color: Colors.white, shape: BoxShape.circle),
+                          child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Icon(Icons.water)),
+                        ),
+                        Text(
+                          category.name,
+                          style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black,
+                              fontSize: 14),
+                        )
+                      ],
+                    ),
+                  );
+                },
+              );
+            })),
+      ],
+    );
+  }
+
   Container _searchField() {
     return Container(
-          margin: EdgeInsets.only(top: 40, left: 20, right: 20),
-          decoration: BoxDecoration(boxShadow: [
-            BoxShadow(
-              color: Color(0xff1D1617).withOpacity(0.11),
-              blurRadius: 40,
-              spreadRadius: 0.0,
-            )
-          ]),
-          child: TextField(
-            decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                contentPadding: EdgeInsets.all(15),
-                hintText: 'Search Cocktail',
-                hintStyle: TextStyle(
-                  color: Color(0xffDDDADA)
-                ),
-                prefixIcon: Icon(
-                  Icons.search,
-                  color: Colors.black,
-                ),
-                /*         suffixIcon: Container(
+      margin: EdgeInsets.only(top: 40, left: 20, right: 20),
+      decoration: BoxDecoration(boxShadow: [
+        BoxShadow(
+          color: Color(0xff1D1617).withOpacity(0.11),
+          blurRadius: 40,
+          spreadRadius: 0.0,
+        )
+      ]),
+      child: TextField(
+        decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
+            contentPadding: EdgeInsets.all(15),
+            hintText: 'Search Cocktail',
+            hintStyle: TextStyle(color: Color(0xffDDDADA)),
+            prefixIcon: Icon(
+              Icons.search,
+              color: Colors.black,
+            ),
+            /*         suffixIcon: Container(
                   width: 80,
                   child: IntrinsicHeight(
                     child: Row(
@@ -93,11 +255,11 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),*/
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide.none)),
-          ),
-        );
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide.none)),
+      ),
+    );
   }
 
   AppBar appBar() {

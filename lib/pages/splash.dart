@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 
 class Splash extends StatefulWidget {
@@ -30,7 +28,7 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
     return Container(
       color: Color(0xFFBAA9DB),
       alignment: Alignment.center,
-      child: Lottie.asset('lottie/cocktail_loading.json',
+      child: Lottie.asset('assets/lottie/cocktail_loading.json',
           frameRate: FrameRate(60),
           repeat: true,
           controller: _controller,

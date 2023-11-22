@@ -32,9 +32,9 @@ void main() {
     expect(drink.strInstructionsZHHANS, null);
     expect(drink.strInstructionsZHHANT, null);
     expect(drink.strDrinkThumb,
-        'https:\/\/www.thecocktaildb.com\/images\/media\/drink\/vvop4w1493069934.jpg');
+        'https://www.thecocktaildb.com/images/media/drink/vvop4w1493069934.jpg');
     expect(drink.ingredients, ['Amaretto', 'White Creme de Menthe']);
-    expect(drink.measures, ['1 1\/2 oz ', '3\/4 oz ']);
+    expect(drink.measures, ['1 1/2 oz ', '3/4 oz ']);
     expect(drink.strImageSource, null);
     expect(drink.strImageAttribution, null);
     expect(drink.strCreativeCommonsConfirmed, 'No');

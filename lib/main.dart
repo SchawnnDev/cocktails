@@ -1,10 +1,10 @@
 import 'package:cocktails/controllers/category_controller.dart';
+import 'package:cocktails/controllers/drink_controller.dart';
 import 'package:cocktails/pages/home.dart';
 import 'package:cocktails/pages/splash.dart';
 import 'package:cocktails/services/thecocktailsdb_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 
 void main() async {
   runApp(const MyApp());
@@ -17,10 +17,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final CategoryController categoryController = Get.put(CategoryController());
+    final DrinkController drinkController = Get.put(DrinkController());
+
     final TheCocktailsDBService cocktailsDBService = Get.put(TheCocktailsDBService());
     return FutureBuilder(
       future: Future.wait([
         cocktailsDBService.getCategories(),
+        cocktailsDBService.getRandomDrinks(5),
         Future.delayed(const Duration(seconds: 2)),
       ]),
       builder: (context, snapshot) {
@@ -28,9 +31,14 @@ class MyApp extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
 
           if (snapshot.hasData) {
-            if (snapshot.data?[0] != null && snapshot.data![0].drinks != null) {
+            if (snapshot.data![0] != null && snapshot.data![0].drinks != null) {
               categoryController.updateCategoriesDrink(snapshot.data![0].drinks!);
             }
+
+            if(snapshot.data![1] != null && snapshot.data![1].drinks != null) {
+              drinkController.updateDrinks(snapshot.data![1].drinks!);
+            }
+
           }
 
           child = GetMaterialApp(
