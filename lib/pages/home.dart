@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cocktails/controllers/category_controller.dart';
 import 'package:cocktails/controllers/drink_controller.dart';
 import 'package:cocktails/models/drink.dart';
+import 'package:cocktails/pages/widgets/navbar.dart';
 import 'package:cocktails/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -36,115 +37,117 @@ class _HomePageState extends State<HomePage> {
           SizedBox(
             height: 40,
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Text(
-                  'Recommendation',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 26,
-                      fontWeight: FontWeight.w600),
-                ),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              Container(
-                color: Colors.white,
-                height: 240,
-                child: GetX<DrinkController>(builder: (logic) {
-                  return ListView.separated(
-                      itemCount: drinkController.drinks.length,
-                      scrollDirection: Axis.horizontal,
-                      padding: EdgeInsets.only(left: 20, right: 20),
-                      separatorBuilder: (context, index) => SizedBox(
-                            width: 25,
-                          ),
-                      itemBuilder: (context, index) {
-                        final Drink drink = drinkController.drinks[index];
-                        return Container(
-                          width: 210,
-                          decoration: BoxDecoration(
-                            color: generateRandomPastelColor().withOpacity(0.3),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              // Use CachedNetworkImage for loading the image with a placeholder
-                              SizedBox(
-                                width: 130,
-                                child: CachedNetworkImage(
-                                  imageUrl: drink.strDrinkThumb ?? '',
-                                  imageBuilder: (context, imageProvider) =>
-                                      Container(
-                                    height: 120,
-                                    // Adjust the height as needed
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      image: DecorationImage(
-                                        image: imageProvider,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                  placeholder: (context, url) => Shimmer.fromColors(
-                                    baseColor: Colors.grey[300]!,
-                                    highlightColor: Colors.grey[100]!,
-                                    child: Container(
-                                      height: 120, // Adjust the height as needed
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                  errorWidget: (context, url, error) =>
-                                      Icon(Icons.error),
-                                ),
-                              ),
-                              Text(
-                                drink.strDrink ?? 'No name',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              Container(
-                                height: 45,
-                                width: 130,
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(colors: [
-                                    Color(0xff9DCEFF),
-                                    Color(0xff92A3FD),
-                                  ]),
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    'View',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      });
-                }),
-              )
-            ],
-          )
+          _recommendationSection()
         ],
       ),
+      bottomNavigationBar: NavBar(),
+    );
+  }
+
+  Column _recommendationSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 20),
+          child: Text(
+            'Recommendation',
+            style: TextStyle(
+                color: Colors.black, fontSize: 26, fontWeight: FontWeight.w600),
+          ),
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        Container(
+          color: Colors.white,
+          height: 240,
+          child: GetX<DrinkController>(builder: (logic) {
+            return ListView.separated(
+                itemCount: drinkController.drinks.length,
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.only(left: 20, right: 20),
+                separatorBuilder: (context, index) => SizedBox(
+                      width: 25,
+                    ),
+                itemBuilder: (context, index) {
+                  final Drink drink = drinkController.drinks[index];
+                  return Container(
+                    width: 210,
+                    decoration: BoxDecoration(
+                      color: generateRandomPastelColor().withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        // Use CachedNetworkImage for loading the image with a placeholder
+                        SizedBox(
+                          width: 130,
+                          child: CachedNetworkImage(
+                            imageUrl: drink.strDrinkThumb ?? '',
+                            imageBuilder: (context, imageProvider) => Container(
+                              height: 120,
+                              // Adjust the height as needed
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            placeholder: (context, url) => Shimmer.fromColors(
+                              baseColor: Colors.grey[300]!,
+                              highlightColor: Colors.grey[100]!,
+                              child: Container(
+                                height: 120, // Adjust the height as needed
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                          ),
+                        ),
+                        Text(
+                          drink.strDrink ?? 'No name',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Container(
+                          height: 45,
+                          width: 130,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(colors: [
+                              Color(0xff9DCEFF),
+                              Color(0xff92A3FD),
+                            ]),
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'View',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                });
+          }),
+        )
+      ],
     );
   }
 
@@ -196,10 +199,12 @@ class _HomePageState extends State<HomePage> {
                         ),
                         Text(
                           category.name,
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                               fontWeight: FontWeight.w400,
                               color: Colors.black,
-                              fontSize: 14),
+                              fontSize: 14,
+                          ),
                         )
                       ],
                     ),
