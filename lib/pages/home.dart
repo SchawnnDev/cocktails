@@ -85,7 +85,7 @@ class _HomePageState extends State<HomePage> {
                         SizedBox(
                           width: 130,
                           child: CachedNetworkImage(
-                            imageUrl: drink.strDrinkThumb ?? '',
+                            imageUrl: drink.thumbnail ?? '',
                             imageBuilder: (context, imageProvider) => Container(
                               height: 120,
                               // Adjust the height as needed
@@ -195,7 +195,8 @@ class _HomePageState extends State<HomePage> {
                               color: Colors.white, shape: BoxShape.circle),
                           child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Icon(Icons.water)),
+                              child: Image.asset(category.imagePath ?? 'img/cocktail.png')
+                          ),
                         ),
                         Text(
                           category.name,

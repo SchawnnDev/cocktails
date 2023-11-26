@@ -16,6 +16,7 @@ class Drink {
   String? strInstructionsZHHANS;
   String? strInstructionsZHHANT;
   String? strDrinkThumb;
+  String? thumbnail;
   List<String>? ingredients; // 1 to 15
   List<String>? measures; // 1 to 15
   String? strImageSource;
@@ -45,7 +46,8 @@ class Drink {
     this.strImageSource,
     this.strImageAttribution,
     this.strCreativeCommonsConfirmed,
-    this.dateModified});
+    this.dateModified,
+    this.thumbnail});
 
   Drink.fromJson(Map<String, dynamic> json) {
     idDrink = json['idDrink'];
@@ -65,6 +67,10 @@ class Drink {
     strInstructionsZHHANS = json['strInstructionsZH-HANS'];
     strInstructionsZHHANT = json['strInstructionsZH-HANT'];
     strDrinkThumb = json['strDrinkThumb'];
+
+    if(strDrinkThumb != null) {
+      thumbnail = "${strDrinkThumb!}/preview";
+    }
 
     ingredients = [];
 

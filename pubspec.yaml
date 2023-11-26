@@ -85,6 +85,19 @@ flutter:
   assets:
     - assets/lottie/cocktail_loading.json
     - assets/lottie/icon_home.json
+    - assets/lottie/icon_like.json
+    - assets/lottie/icon_settings.json
+    - assets/img/cocktail.png
+    - assets/img/beer.png
+    - assets/img/cocoa.png
+    - assets/img/coffee-cup.png
+    - assets/img/frappe.png
+    - assets/img/liqueur.png
+    - assets/img/open-box.png
+    - assets/img/punch.png
+    - assets/img/soda.png
+    - assets/img/soft-drinks.png
+    - assets/img/tequila-shot.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
