@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           _searchField(),
           SizedBox(
-            height: 40,
+            height: 20,
           ),
           _categoriesSection(),
           SizedBox(
@@ -73,9 +73,9 @@ class _HomePageState extends State<HomePage> {
                 itemBuilder: (context, index) {
                   final Drink drink = drinkController.drinks[index];
                   return Container(
-                    width: 210,
+                    width: 180,
                     decoration: BoxDecoration(
-                      color: generateRandomPastelColor().withOpacity(0.3),
+                      color: Color(0xFFBAA9DB).withOpacity(index % 2 == 0 ? 0.6 : 0.3),//generateRandomPastelColor().withOpacity(0.3),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Column(
@@ -112,35 +112,79 @@ class _HomePageState extends State<HomePage> {
                                 Icon(Icons.error),
                           ),
                         ),
-                        Text(
-                          drink.strDrink ?? 'No name',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
-                            fontSize: 16,
-                          ),
-                        ),
-                        Container(
-                          height: 45,
-                          width: 130,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(colors: [
-                              Color(0xff9DCEFF),
-                              Color(0xff92A3FD),
-                            ]),
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'View',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14,
-                              ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 2, right: 2),
+                          child: Text(
+                            drink.strDrink ?? 'No name',
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black,
+                              fontSize: 18,
                             ),
                           ),
                         ),
+                        if (drink.strAlcoholic != null) ...[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Icon(
+                                drink.strAlcoholic! == "Alcoholic" ? Icons.local_bar : Icons.no_drinks,
+                                size: 16,
+                                color: Colors.grey,
+                              ),
+                              Text(
+                                drink.strAlcoholic!,
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                        if (drink.ingredients != null && drink.ingredients!.isNotEmpty) ...[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                '${drink.ingredients!.length}',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Icon(
+                                  Icons.shopping_cart_outlined,
+                                size: 16,
+                                color: Colors.black,
+                              )
+                            ],
+                          )
+                        ],
+                        // Container(
+                        //   height: 45,
+                        //   width: 130,
+                        //   decoration: BoxDecoration(
+                        //     gradient: LinearGradient(colors: [
+                        //       Color(0xff9DCEFF),
+                        //       Color(0xff92A3FD),
+                        //     ]),
+                        //     borderRadius: BorderRadius.circular(50),
+                        //   ),
+                        //   child: Center(
+                        //     child: Text(
+                        //       'View',
+                        //       style: TextStyle(
+                        //         color: Colors.white,
+                        //         fontWeight: FontWeight.w600,
+                        //         fontSize: 14,
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                   );
@@ -183,7 +227,7 @@ class _HomePageState extends State<HomePage> {
                   return Container(
                     width: 100,
                     decoration: BoxDecoration(
-                        color: category.boxColor.withOpacity(0.3),
+                        color: category.boxColor.withOpacity(index % 2 == 0 ? 0.6 : 0.3),
                         borderRadius: BorderRadius.circular(16)),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -219,7 +263,7 @@ class _HomePageState extends State<HomePage> {
 
   Container _searchField() {
     return Container(
-      margin: EdgeInsets.only(top: 40, left: 20, right: 20),
+      margin: EdgeInsets.only(top: 20, left: 20, right: 20),
       decoration: BoxDecoration(boxShadow: [
         BoxShadow(
           color: Color(0xff1D1617).withOpacity(0.11),
@@ -278,20 +322,20 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.white,
       elevation: 0.0,
       centerTitle: true,
-      leading: GestureDetector(
-        child: Container(
-          margin: EdgeInsets.all(10),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-              color: Color(0xffF7F8F8),
-              borderRadius: BorderRadius.circular(10)),
-          child: Icon(
-            Icons.chevron_left,
-            color: Colors.black,
-            size: 24.0,
-          ),
-        ),
-      ),
+      // leading: GestureDetector(
+      //   child: Container(
+      //     margin: EdgeInsets.all(10),
+      //     alignment: Alignment.center,
+      //     decoration: BoxDecoration(
+      //         color: Color(0xffF7F8F8),
+      //         borderRadius: BorderRadius.circular(10)),
+      //     child: Icon(
+      //       Icons.chevron_left,
+      //       color: Colors.black,
+      //       size: 24.0,
+      //     ),
+      //   ),
+      // ),
     );
   }
 }

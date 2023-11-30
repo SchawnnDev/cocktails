@@ -9,9 +9,8 @@ class Category {
 
   Category({required this.name}) {
     imagePath = _getImagePath();
-    boxColor = generateRandomPastelColor();
+    boxColor = Color(0xFFBAA9DB);//generateRandomPastelColor();
   }
-
 
   String? _getImagePath() {
     switch (name) {
@@ -38,6 +37,7 @@ class Category {
       case 'Soft Drink':
         return 'img/soft-drinks.png';
     }
+    return null;
   }
 
 }

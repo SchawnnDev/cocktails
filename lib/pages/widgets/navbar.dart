@@ -39,53 +39,58 @@ class _NavBarState extends State<NavBar> with TickerProviderStateMixin {
       ]),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
-        child: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            elevation: 0.0,
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            backgroundColor: Colors.white,
-            selectedItemColor: Colors.redAccent,
-            unselectedItemColor: Colors.black,
-            currentIndex: idx,
-            landscapeLayout: BottomNavigationBarLandscapeLayout.linear,
-            onTap: (index) {
-              setState(() {
-                _controllers[index].reset();
-                //_controllers[0].reverse();
-                idx = index;
-                _controllers[index].forward();
-              });
-            },
-            items: [
-              BottomNavigationBarItem(
-                  icon: Lottie.asset(
-                      'lottie/icon_home.json',
-                    height: 32,
-                    frameRate: FrameRate(60),
-                    controller: _controllers[0],
-                  ),
-                  label: "Home",
-              ),
-              BottomNavigationBarItem(
-                  icon: Lottie.asset(
-                    'lottie/icon_like.json',
-                    height: 32,
-                    frameRate: FrameRate(60),
-                    controller: _controllers[1],
-                  ),
-                  label: "Favorite"
-              ),
-              BottomNavigationBarItem(
-                  icon: Lottie.asset(
-                    'lottie/icon_settings.json',
-                    height: 32,
-                    frameRate: FrameRate(60),
-                    controller: _controllers[2],
-                  ),
-                  label: "Setting"
-              ),
-            ]),
+        child: SizedBox(
+          height: 50,
+          child: BottomNavigationBar(
+              selectedFontSize: 0.0,
+              unselectedFontSize: 0.0,
+              type: BottomNavigationBarType.fixed,
+              elevation: 0.0,
+              showSelectedLabels: false,
+              showUnselectedLabels: false,
+              backgroundColor: Colors.white,
+              selectedItemColor: Colors.redAccent,
+              unselectedItemColor: Colors.black,
+              currentIndex: idx,
+              landscapeLayout: BottomNavigationBarLandscapeLayout.linear,
+              onTap: (index) {
+                setState(() {
+                  _controllers[index].reset();
+                  //_controllers[0].reverse();
+                  idx = index;
+                  _controllers[index].forward();
+                });
+              },
+              items: [
+                BottomNavigationBarItem(
+                    icon: Lottie.asset(
+                        'lottie/icon_home.json',
+                      height: 32,
+                      frameRate: FrameRate(60),
+                      controller: _controllers[0],
+                    ),
+                    label: "Home",
+                ),
+                BottomNavigationBarItem(
+                    icon: Lottie.asset(
+                      'lottie/icon_like.json',
+                      height: 42,
+                      frameRate: FrameRate(60),
+                      controller: _controllers[1],
+                    ),
+                    label: "Favorite"
+                ),
+                BottomNavigationBarItem(
+                    icon: Lottie.asset(
+                      'lottie/icon_settings.json',
+                      height: 32,
+                      frameRate: FrameRate(60),
+                      controller: _controllers[2],
+                    ),
+                    label: "Setting"
+                ),
+              ]),
+        ),
       ),
     );
   }

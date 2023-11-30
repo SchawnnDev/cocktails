@@ -12,3 +12,9 @@ Color generateRandomPastelColor() {
   // Create a color by blending with white
   return Color.fromARGB(255, red, green, blue);
 }
+
+String truncateWithEllipsis(int cutoff, String myString) {
+  return (myString.length <= cutoff)
+      ? myString
+      : '${myString.substring(0, cutoff)}...';
+}
