@@ -3,7 +3,6 @@ import 'package:cocktails/controllers/category_controller.dart';
 import 'package:cocktails/controllers/drink_controller.dart';
 import 'package:cocktails/models/drink.dart';
 import 'package:cocktails/pages/widgets/navbar.dart';
-import 'package:cocktails/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -35,7 +34,7 @@ class _HomePageState extends State<HomePage> {
           ),
           _categoriesSection(),
           SizedBox(
-            height: 40,
+            height: 20,
           ),
           _recommendationSection()
         ],
@@ -61,7 +60,7 @@ class _HomePageState extends State<HomePage> {
         ),
         Container(
           color: Colors.white,
-          height: 240,
+          height: 190,
           child: GetX<DrinkController>(builder: (logic) {
             return ListView.separated(
                 itemCount: drinkController.drinks.length,
@@ -72,127 +71,130 @@ class _HomePageState extends State<HomePage> {
                     ),
                 itemBuilder: (context, index) {
                   final Drink drink = drinkController.drinks[index];
-                  return Container(
-                    width: 180,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFBAA9DB).withOpacity(index % 2 == 0 ? 0.6 : 0.3),//generateRandomPastelColor().withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        // Use CachedNetworkImage for loading the image with a placeholder
-                        SizedBox(
-                          width: 130,
-                          child: CachedNetworkImage(
-                            imageUrl: drink.thumbnail ?? '',
-                            imageBuilder: (context, imageProvider) => Container(
-                              height: 120,
-                              // Adjust the height as needed
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                image: DecorationImage(
-                                  image: imageProvider,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            placeholder: (context, url) => Shimmer.fromColors(
-                              baseColor: Colors.grey[300]!,
-                              highlightColor: Colors.grey[100]!,
-                              child: Container(
-                                height: 120, // Adjust the height as needed
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 2, right: 2),
-                          child: Text(
-                            drink.strDrink ?? 'No name',
-                            textAlign: TextAlign.center,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black,
-                              fontSize: 18,
-                            ),
-                          ),
-                        ),
-                        if (drink.strAlcoholic != null) ...[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Icon(
-                                drink.strAlcoholic! == "Alcoholic" ? Icons.local_bar : Icons.no_drinks,
-                                size: 16,
-                                color: Colors.grey,
-                              ),
-                              Text(
-                                drink.strAlcoholic!,
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 12,
-                                ),
-                              )
-                            ],
-                          )
-                        ],
-                        if (drink.ingredients != null && drink.ingredients!.isNotEmpty) ...[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(
-                                '${drink.ingredients!.length}',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              Icon(
-                                  Icons.shopping_cart_outlined,
-                                size: 16,
-                                color: Colors.black,
-                              )
-                            ],
-                          )
-                        ],
-                        // Container(
-                        //   height: 45,
-                        //   width: 130,
-                        //   decoration: BoxDecoration(
-                        //     gradient: LinearGradient(colors: [
-                        //       Color(0xff9DCEFF),
-                        //       Color(0xff92A3FD),
-                        //     ]),
-                        //     borderRadius: BorderRadius.circular(50),
-                        //   ),
-                        //   child: Center(
-                        //     child: Text(
-                        //       'View',
-                        //       style: TextStyle(
-                        //         color: Colors.white,
-                        //         fontWeight: FontWeight.w600,
-                        //         fontSize: 14,
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-                      ],
-                    ),
-                  );
+                  return _recommendationSectionItem(index, drink);
                 });
           }),
         )
       ],
     );
+  }
+
+  Stack _recommendationSectionItem(int index, Drink drink) {
+    return Stack(children: [
+      Container(
+        width: 150,
+        decoration: BoxDecoration(
+          color: Color(0xFFBAA9DB).withOpacity(index % 2 == 0 ? 0.6 : 0.3),
+          //generateRandomPastelColor().withOpacity(0.3),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(5),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              // Use CachedNetworkImage for loading the image with a placeholder
+              SizedBox(
+                width: 100,
+                child: CachedNetworkImage(
+                  imageUrl: drink.thumbnail ?? '',
+                  imageBuilder: (context, imageProvider) => Container(
+                    height: 100,
+                    // Adjust the height as needed
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  placeholder: (context, url) => Shimmer.fromColors(
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
+                    child: Container(
+                      height: 100,
+                      // Adjust the height as needed
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 2, right: 2),
+                child: Text(
+                  drink.strDrink ?? 'No name',
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                  style: TextStyle(
+                    //fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              if (drink.strAlcoholic != null) ...[
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Icon(
+                        drink.strAlcoholic! == "Alcoholic"
+                            ? Icons.local_bar_outlined
+                            : Icons.no_drinks_outlined,
+                        size: 20,
+                        color: Colors.black,
+                      ),
+                      Spacer(),
+                      if (drink.ingredients != null &&
+                          drink.ingredients!.isNotEmpty) ...[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              '${drink.ingredients!.length}',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 16,
+                              ),
+                            ),
+                            Icon(
+                              Icons.liquor,
+                              size: 20,
+                              color: Colors.black,
+                            )
+                          ],
+                        ),
+                      ],
+                    ],
+                  ),
+                )
+              ],
+            ],
+          ),
+        ),
+      ),
+      Positioned.fill(
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(15),
+            splashColor: Color(0x00542E71).withOpacity(0.2),
+            highlightColor: Color(0x00542E71).withOpacity(0.3),
+            onTapUp: (TapUpDetails details) {
+              print('bla');
+            },
+          ),
+        ),
+      ),
+    ]);
   }
 
   Column _categoriesSection() {
@@ -224,39 +226,58 @@ class _HomePageState extends State<HomePage> {
                 itemBuilder: (context, index) {
                   final Category category =
                       categoryController.categories[index];
-                  return Container(
-                    width: 100,
-                    decoration: BoxDecoration(
-                        color: category.boxColor.withOpacity(index % 2 == 0 ? 0.6 : 0.3),
-                        borderRadius: BorderRadius.circular(16)),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Container(
-                          width: 50,
-                          height: 50,
-                          decoration: BoxDecoration(
-                              color: Colors.white, shape: BoxShape.circle),
-                          child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Image.asset(category.imagePath ?? 'img/cocktail.png')
-                          ),
-                        ),
-                        Text(
-                          category.name,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black,
-                              fontSize: 14,
-                          ),
-                        )
-                      ],
-                    ),
-                  );
+                  return _categoriesSectionItem(category, index);
                 },
               );
             })),
+      ],
+    );
+  }
+
+  Stack _categoriesSectionItem(Category category, int index) {
+    return Stack(
+      children: [
+        Container(
+          width: 100,
+          decoration: BoxDecoration(
+              color: category.boxColor.withOpacity(index % 2 == 0 ? 0.6 : 0.3),
+              borderRadius: BorderRadius.circular(16)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                width: 50,
+                height: 50,
+                decoration:
+                    BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+                child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child:
+                        Image.asset(category.imagePath ?? 'img/cocktail.png')),
+              ),
+              Text(
+                category.name,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black,
+                  fontSize: 14,
+                ),
+              )
+            ],
+          ),
+        ),
+        Positioned.fill(
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(16),
+              splashColor: Color(0x00542E71).withOpacity(0.2),
+              highlightColor: Color(0x00542E71).withOpacity(0.3),
+              onTap: () {},
+            ),
+          ),
+        ),
       ],
     );
   }

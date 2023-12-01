@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-import 'package:cocktails/utils/utils.dart';
-
 class Category {
   String name;
   late Color boxColor;
