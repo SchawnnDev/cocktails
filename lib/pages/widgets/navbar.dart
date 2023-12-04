@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:lottie/lottie.dart';
 
 class NavBar extends StatefulWidget {
@@ -58,6 +60,19 @@ class _NavBarState extends State<NavBar> with TickerProviderStateMixin {
                   _controllers[index].reset();
                   //_controllers[0].reverse();
                   idx = index;
+
+                  switch(index) {
+                    case 0:
+                      Get.toNamed('/');
+                      break;
+                    case 1:
+                      Get.toNamed('/swipe');
+                      break;
+                    case 2:
+                      Get.toNamed('/favorites');
+                      break;
+                  }
+
                   _controllers[index].forward();
                 });
               },

@@ -13,27 +13,27 @@ class Category {
   String? _getImagePath() {
     switch (name) {
       case 'Cocktail':
-        return 'img/cocktail.png';
+        return 'assets/img/cocktail.png';
       case 'Ordinary Drink':
-        return 'img/soda.png';
+        return 'assets/img/soda.png';
       case 'Shake':
-        return 'img/frappe.png';
+        return 'assets/img/frappe.png';
       case 'Other / Unknown':
-        return 'img/open-box.png';
+        return 'assets/img/open-box.png';
       case 'Cocoa':
-        return 'img/cocoa.png';
+        return 'assets/img/cocoa.png';
       case 'Shot':
-        return 'img/tequila-shot.png';
+        return 'assets/img/tequila-shot.png';
       case 'Coffee / Tea':
-        return 'img/coffee-cup.png';
+        return 'assets/img/coffee-cup.png';
       case 'Homemade Liqueur':
-        return 'img/liqueur.png';
+        return 'assets/img/liqueur.png';
       case 'Punch / Party Drink':
-        return 'img/punch.png';
+        return 'assets/img/punch.png';
       case 'Beer':
-        return 'img/beer.png';
+        return 'assets/img/beer.png';
       case 'Soft Drink':
-        return 'img/soft-drinks.png';
+        return 'assets/img/soft-drinks.png';
     }
     return null;
   }

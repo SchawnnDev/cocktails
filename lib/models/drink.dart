@@ -84,7 +84,7 @@ class Drink {
 
     for (var i = 1; i <= 15; i++) {
       String? measure = json['strMeasure$i'];
-      if (measure == null) continue;
+      measure ??= '';
       measures!.add(measure);
     }
 

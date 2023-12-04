@@ -1,7 +1,9 @@
 import 'package:cocktails/controllers/category_controller.dart';
 import 'package:cocktails/controllers/drink_controller.dart';
+import 'package:cocktails/pages/favorites.dart';
 import 'package:cocktails/pages/home.dart';
 import 'package:cocktails/pages/splash.dart';
+import 'package:cocktails/pages/swipe.dart';
 import 'package:cocktails/services/thecocktailsdb_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -48,7 +50,18 @@ class MyApp extends StatelessWidget {
               GetPage(
                   name: '/',
                   page: () => const HomePage(),
-                  transition: Transition.fadeIn)
+                  transition: Transition.fadeIn
+              ),
+              GetPage(
+                  name: '/favorites',
+                  page: () => const FavoritesPage(),
+                  transition: Transition.fadeIn
+              ),
+              GetPage(
+                  name: '/swipe',
+                  page: () => const SwipePage(),
+                  transition: Transition.fadeIn
+              )
             ],
           );
         } else {

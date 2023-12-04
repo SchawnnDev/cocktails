@@ -189,7 +189,15 @@ class _HomePageState extends State<HomePage> {
             splashColor: Color(0x00542E71).withOpacity(0.2),
             highlightColor: Color(0x00542E71).withOpacity(0.3),
             onTapUp: (TapUpDetails details) {
-              print('bla');
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(10))),
+                builder: (context) => FractionallySizedBox(
+                    heightFactor: 0.98, child: _buildRecipeModal(drink)),
+              );
             },
           ),
         ),
@@ -204,7 +212,7 @@ class _HomePageState extends State<HomePage> {
         Padding(
           padding: const EdgeInsets.only(left: 20),
           child: Text(
-            'Category',
+            'Category >',
             style: TextStyle(
                 color: Colors.black, fontSize: 26, fontWeight: FontWeight.w600),
           ),
@@ -357,6 +365,169 @@ class _HomePageState extends State<HomePage> {
       //     ),
       //   ),
       // ),
+    );
+  }
+
+  CustomScrollView _buildRecipeModal(Drink drink) {
+    return CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          expandedHeight: 250.0,
+          pinned: true,
+          backgroundColor: Color(0xFFBAA9DB).withOpacity(0.3),
+          flexibleSpace: FlexibleSpaceBar(
+            title: Text(
+              drink.strDrink!,
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.black),
+            ),
+            background: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: 180,
+                    height: 180,
+                    child: CachedNetworkImage(
+                      imageUrl: drink.strDrinkThumb ?? '',
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                              color: Colors.white,
+                              style: BorderStyle.solid,
+                              width: 4),
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      placeholder: (context, url) => Shimmer.fromColors(
+                        baseColor: Colors.grey[300]!,
+                        highlightColor: Colors.grey[100]!,
+                        child: Container(
+                          height: 100,
+                          // Adjust the height as needed
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            collapseMode: CollapseMode.pin,
+          ),
+          leading: Container(
+            // margin: EdgeInsets.only(right: 5),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white,
+            ),
+            child: IconButton(
+              icon: Icon(Icons.close_outlined),
+              color: Colors.black,
+              onPressed: () {
+                // Add your settings button functionality here
+              },
+            ),
+          ),
+          automaticallyImplyLeading: false,
+          actions: [
+            Container(
+              margin: EdgeInsets.only(right: 5),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+              ),
+              child: IconButton(
+                icon: Icon(Icons.favorite_outline),
+                color: Colors.black,
+                onPressed: () {
+                  // Add your settings button functionality here
+                },
+              ),
+            )
+          ],
+        ),
+        SliverList(
+            delegate: SliverChildListDelegate([
+              Container(
+                color: Color(0xFFBAA9DB).withOpacity(0.6),
+                padding: EdgeInsets.all(10),
+                child: Column(
+                  children: [
+                    Text(
+                      'Ingredients',
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 10),
+                    Wrap(
+                      spacing: 20,
+                      // Adjust the spacing between items
+                      runSpacing: 10,
+                      // Adjust the run spacing (spacing between rows)
+                      children: List.generate(
+                        drink.ingredients!.length,
+                        (index) => SizedBox(
+                          width: 80, // Adjust the width as needed
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: 50, // Adjust the width as needed
+                                height: 50, // Adjust the height as needed
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.white,
+                                ),
+                                child: Center(
+                                  child: Icon(Icons.fastfood_outlined),
+                                ),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                drink.measures![index],
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                drink.ingredients![index],
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                color: Color(0xFFBAA9DB).withOpacity(0.3),
+                padding: EdgeInsets.all(10),
+                child: Column(
+                  children: [
+                    Text(
+                      drink.strInstructions ?? 'No instructions',
+                      textAlign: TextAlign.center,
+                    )
+                  ],
+                ),
+              )
+            ])
+        ),
+      ],
     );
   }
 }
