@@ -152,13 +152,12 @@ class _HomePageState extends State<HomePage> {
                         color: Colors.black,
                       ),
                       Spacer(),
-                      if (drink.ingredients != null &&
-                          drink.ingredients!.isNotEmpty) ...[
+                      if (drink.ingredients.isNotEmpty) ...[
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Text(
-                              '${drink.ingredients!.length}',
+                              '${drink.ingredients.length}',
                               style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.w700,
@@ -433,7 +432,7 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.close_outlined),
               color: Colors.black,
               onPressed: () {
-                // Add your settings button functionality here
+                Navigator.pop(context);
               },
             ),
           ),
@@ -465,45 +464,81 @@ class _HomePageState extends State<HomePage> {
                     Text(
                       'Ingredients',
                       textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 15),
                     Wrap(
-                      spacing: 20,
+                      spacing: 30,
                       // Adjust the spacing between items
                       runSpacing: 10,
                       // Adjust the run spacing (spacing between rows)
                       children: List.generate(
-                        drink.ingredients!.length,
+                        drink.ingredients.length,
                         (index) => SizedBox(
                           width: 80, // Adjust the width as needed
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Container(
-                                width: 50, // Adjust the width as needed
-                                height: 50, // Adjust the height as needed
+                                width: 75, // Adjust the width as needed
+                                height: 75, // Adjust the height as needed
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: Colors.white,
                                 ),
                                 child: Center(
-                                  child: Icon(Icons.fastfood_outlined),
+                                  child: CachedNetworkImage(
+                                    imageUrl: drink.ingredients[index].getLittleImageUrl(),
+                                    imageBuilder: (context, imageProvider) => Container(
+                                      height: 70,
+                                      width: 70,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                          image: imageProvider,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                    placeholder: (context, url) => Shimmer.fromColors(
+                                      baseColor: Colors.grey[300]!,
+                                      highlightColor: Colors.grey[100]!,
+                                      child: Container(
+                                        width: 70,
+                                        height: 70,
+                                        // Adjust the height as needed
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    errorWidget: (context, url, error) => Icon(Icons.error),
+                                  ),
                                 ),
                               ),
                               SizedBox(height: 5),
-                              Text(
-                                drink.measures![index],
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
+                              FittedBox(
+                                fit: BoxFit.fitWidth,
+                                child: Text(
+                                  drink.ingredients[index].measure,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
-                                textAlign: TextAlign.center,
                               ),
                               SizedBox(height: 5),
-                              Text(
-                                drink.ingredients![index],
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 12),
+                              FittedBox(
+                                fit: BoxFit.fitWidth,
+                                child: Text(
+                                  drink.ingredients[index].name,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 12),
+                                ),
                               ),
                             ],
                           ),
@@ -518,10 +553,19 @@ class _HomePageState extends State<HomePage> {
                 padding: EdgeInsets.all(10),
                 child: Column(
                   children: [
-                    Text(
-                      drink.strInstructions ?? 'No instructions',
-                      textAlign: TextAlign.center,
-                    )
+                    if (drink.instructions['EN'] != null)
+                      ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: drink.instructions['EN']!.length,
+                        itemBuilder: (context, index) {
+                          return Text(
+                            drink.instructions['EN']![index],
+                            textAlign: TextAlign.center,
+                          );
+                        },
+                      ),
+                    if (drink.instructions['EN'] == null || drink.instructions['EN']!.isEmpty)
+                      Text('No instructions'),
                   ],
                 ),
               )
