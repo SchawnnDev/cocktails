@@ -1,4 +1,5 @@
 import 'package:cocktails/models/ingredient.dart';
+import 'package:get/get.dart';
 
 class Drink {
   String? idDrink;
@@ -34,10 +35,12 @@ class Drink {
     this.strCreativeCommonsConfirmed,
     this.dateModified,
     this.thumbnail})
-  : ingredients = [],
-  instructions = {};
+  : ingredients = [], instructions = <String, List<String>>{};
 
   Drink.fromJson(Map<String, dynamic> json) {
+    instructions = <String, List<String>>{};
+    ingredients = [];
+
     idDrink = json['idDrink'];
     strDrink = json['strDrink'];
     strDrinkAlternate = json['strDrinkAlternate'];
@@ -61,7 +64,6 @@ class Drink {
       thumbnail = "${strDrinkThumb!}/preview";
     }
 
-    ingredients = [];
 
     for (var i = 1; i <= 15; i++) {
       String? name = json['strIngredient$i'];
@@ -83,7 +85,9 @@ class Drink {
     }
 
     List<String> splitInstructions = value.split('.');
-    splitInstructions = splitInstructions.map((instruction) => instruction.trim()).toList();
+    splitInstructions = splitInstructions
+        .where((element) => element.isNotEmpty)
+        .map((instruction) => '${instruction.trim().capitalizeFirst}.').toList();
     instructions[lang] = splitInstructions;
   }
 

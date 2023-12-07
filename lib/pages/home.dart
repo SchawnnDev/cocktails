@@ -373,7 +373,7 @@ class _HomePageState extends State<HomePage> {
         SliverAppBar(
           expandedHeight: 250.0,
           pinned: true,
-          backgroundColor: Color(0xFFBAA9DB).withOpacity(0.3),
+          backgroundColor: Colors.white,
           flexibleSpace: FlexibleSpaceBar(
             title: Text(
               drink.strDrink!,
@@ -393,7 +393,7 @@ class _HomePageState extends State<HomePage> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
-                              color: Colors.white,
+                              color: Color(0xFFBAA9DB).withOpacity(1),
                               style: BorderStyle.solid,
                               width: 4),
                           image: DecorationImage(
@@ -520,9 +520,9 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               SizedBox(height: 5),
-                              FittedBox(
+                              /*FittedBox(
                                 fit: BoxFit.fitWidth,
-                                child: Text(
+                                child: */Text(
                                   drink.ingredients[index].measure,
                                   style: TextStyle(
                                     fontSize: 14,
@@ -530,7 +530,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   textAlign: TextAlign.center,
                                 ),
-                              ),
+                              // ),
                               SizedBox(height: 5),
                               FittedBox(
                                 fit: BoxFit.fitWidth,
@@ -553,19 +553,44 @@ class _HomePageState extends State<HomePage> {
                 padding: EdgeInsets.all(10),
                 child: Column(
                   children: [
-                    if (drink.instructions['EN'] != null)
-                      ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: drink.instructions['EN']!.length,
-                        itemBuilder: (context, index) {
-                          return Text(
-                            drink.instructions['EN']![index],
-                            textAlign: TextAlign.center,
-                          );
-                        },
+                    Text(
+                      'Instructions',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                    ),
+                    if (drink.instructions['EN'] != null) // TODO: choose lang
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: drink.instructions['EN']!.length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              margin: EdgeInsets.only(top: 10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    index+1 == drink.instructions['EN']!.length ? 'Final step' : 'Step ${index+1}',
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12
+                                    ),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  SizedBox(height: 3,),
+                                  Text(
+                                    drink.instructions['EN']![index],
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     if (drink.instructions['EN'] == null || drink.instructions['EN']!.isEmpty)
-                      Text('No instructions'),
+                      Text('No instructions :('),
                   ],
                 ),
               )
