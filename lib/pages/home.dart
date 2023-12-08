@@ -2,12 +2,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cocktails/controllers/category_controller.dart';
 import 'package:cocktails/controllers/drink_controller.dart';
 import 'package:cocktails/models/drink.dart';
+import 'package:cocktails/pages/widgets/drink_recipe_modal.dart';
 import 'package:cocktails/pages/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:cocktails/models/category.dart';
 import 'package:shimmer/shimmer.dart';
+
+import '../utils/widgets/invisible_expanded_header.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -191,11 +194,13 @@ class _HomePageState extends State<HomePage> {
               showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
+                enableDrag: true,
+                showDragHandle: false,
                 shape: RoundedRectangleBorder(
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(10))),
                 builder: (context) => FractionallySizedBox(
-                    heightFactor: 0.98, child: _buildRecipeModal(drink)),
+                    heightFactor: 0.98, child: DrinkRecipeModal(drink: drink,)),
               );
             },
           ),
@@ -367,236 +372,4 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  CustomScrollView _buildRecipeModal(Drink drink) {
-    return CustomScrollView(
-      slivers: [
-        SliverAppBar(
-          expandedHeight: 250.0,
-          pinned: true,
-          backgroundColor: Colors.white,
-          flexibleSpace: FlexibleSpaceBar(
-            title: Text(
-              drink.strDrink!,
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.black),
-            ),
-            background: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  SizedBox(
-                    width: 180,
-                    height: 180,
-                    child: CachedNetworkImage(
-                      imageUrl: drink.strDrinkThumb ?? '',
-                      imageBuilder: (context, imageProvider) => Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                              color: Color(0xFFBAA9DB).withOpacity(1),
-                              style: BorderStyle.solid,
-                              width: 4),
-                          image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      placeholder: (context, url) => Shimmer.fromColors(
-                        baseColor: Colors.grey[300]!,
-                        highlightColor: Colors.grey[100]!,
-                        child: Container(
-                          height: 100,
-                          // Adjust the height as needed
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            collapseMode: CollapseMode.pin,
-          ),
-          leading: Container(
-            // margin: EdgeInsets.only(right: 5),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white,
-            ),
-            child: IconButton(
-              icon: Icon(Icons.close_outlined),
-              color: Colors.black,
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ),
-          automaticallyImplyLeading: false,
-          actions: [
-            Container(
-              margin: EdgeInsets.only(right: 5),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white,
-              ),
-              child: IconButton(
-                icon: Icon(Icons.favorite_outline),
-                color: Colors.black,
-                onPressed: () {
-                  // Add your settings button functionality here
-                },
-              ),
-            )
-          ],
-        ),
-        SliverList(
-            delegate: SliverChildListDelegate([
-              Container(
-                color: Color(0xFFBAA9DB).withOpacity(0.6),
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  children: [
-                    Text(
-                      'Ingredients',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
-                    ),
-                    SizedBox(height: 15),
-                    Wrap(
-                      spacing: 30,
-                      // Adjust the spacing between items
-                      runSpacing: 10,
-                      // Adjust the run spacing (spacing between rows)
-                      children: List.generate(
-                        drink.ingredients.length,
-                        (index) => SizedBox(
-                          width: 80, // Adjust the width as needed
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: 75, // Adjust the width as needed
-                                height: 75, // Adjust the height as needed
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.white,
-                                ),
-                                child: Center(
-                                  child: CachedNetworkImage(
-                                    imageUrl: drink.ingredients[index].getLittleImageUrl(),
-                                    imageBuilder: (context, imageProvider) => Container(
-                                      height: 70,
-                                      width: 70,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: DecorationImage(
-                                          image: imageProvider,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                    placeholder: (context, url) => Shimmer.fromColors(
-                                      baseColor: Colors.grey[300]!,
-                                      highlightColor: Colors.grey[100]!,
-                                      child: Container(
-                                        width: 70,
-                                        height: 70,
-                                        // Adjust the height as needed
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                    errorWidget: (context, url, error) => Icon(Icons.error),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 5),
-                              /*FittedBox(
-                                fit: BoxFit.fitWidth,
-                                child: */Text(
-                                  drink.ingredients[index].measure,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              // ),
-                              SizedBox(height: 5),
-                              FittedBox(
-                                fit: BoxFit.fitWidth,
-                                child: Text(
-                                  drink.ingredients[index].name,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(fontSize: 12),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                color: Color(0xFFBAA9DB).withOpacity(0.3),
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  children: [
-                    Text(
-                      'Instructions',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                    ),
-                    if (drink.instructions['EN'] != null) // TODO: choose lang
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: drink.instructions['EN']!.length,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              margin: EdgeInsets.only(top: 10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    index+1 == drink.instructions['EN']!.length ? 'Final step' : 'Step ${index+1}',
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 12
-                                    ),
-                                    textAlign: TextAlign.left,
-                                  ),
-                                  SizedBox(height: 3,),
-                                  Text(
-                                    drink.instructions['EN']![index],
-                                    textAlign: TextAlign.left,
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    if (drink.instructions['EN'] == null || drink.instructions['EN']!.isEmpty)
-                      Text('No instructions :('),
-                  ],
-                ),
-              )
-            ])
-        ),
-      ],
-    );
-  }
 }

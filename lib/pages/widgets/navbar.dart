@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:lottie/lottie.dart';
 
 class NavBar extends StatefulWidget {
@@ -32,7 +31,7 @@ class _NavBarState extends State<NavBar> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(boxShadow: [
         BoxShadow(
             color: Colors.black.withOpacity(0.5),
@@ -42,7 +41,6 @@ class _NavBarState extends State<NavBar> with TickerProviderStateMixin {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: SizedBox(
-          height: 50,
           child: BottomNavigationBar(
               selectedFontSize: 0.0,
               unselectedFontSize: 0.0,
@@ -79,7 +77,7 @@ class _NavBarState extends State<NavBar> with TickerProviderStateMixin {
               items: [
                 BottomNavigationBarItem(
                     icon: Lottie.asset(
-                        'lottie/icon_home.json',
+                        'assets/lottie/icon_home.json',
                       height: 32,
                       frameRate: FrameRate(60),
                       controller: _controllers[0],
@@ -88,7 +86,7 @@ class _NavBarState extends State<NavBar> with TickerProviderStateMixin {
                 ),
                 BottomNavigationBarItem(
                     icon: Lottie.asset(
-                      'lottie/icon_like.json',
+                      'assets/lottie/icon_like.json',
                       height: 42,
                       frameRate: FrameRate(60),
                       controller: _controllers[1],
@@ -97,7 +95,7 @@ class _NavBarState extends State<NavBar> with TickerProviderStateMixin {
                 ),
                 BottomNavigationBarItem(
                     icon: Lottie.asset(
-                      'lottie/icon_settings.json',
+                      'assets/lottie/icon_settings.json',
                       height: 32,
                       frameRate: FrameRate(60),
                       controller: _controllers[2],

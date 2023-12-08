@@ -64,10 +64,9 @@ class Drink {
       thumbnail = "${strDrinkThumb!}/preview";
     }
 
-
     for (var i = 1; i <= 15; i++) {
       String? name = json['strIngredient$i'];
-      if (name == null) continue;
+      if (name == null || name.isEmpty) continue;
       String measure = json['strMeasure$i'] ?? '1x';
       ingredients.add(Ingredient(name: name, measure: measure));
     }
@@ -88,6 +87,12 @@ class Drink {
     splitInstructions = splitInstructions
         .where((element) => element.isNotEmpty)
         .map((instruction) => '${instruction.trim().capitalizeFirst}.').toList();
+
+    // for scroll testing
+    // for (int i = 0; i < 100; i++) {
+    //   splitInstructions.add("t$i");
+    // }
+
     instructions[lang] = splitInstructions;
   }
 
