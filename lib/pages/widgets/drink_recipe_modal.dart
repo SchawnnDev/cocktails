@@ -9,6 +9,8 @@ import 'package:shimmer/shimmer.dart';
 
 class DrinkRecipeModal extends StatelessWidget {
   final Drink drink;
+  static const instructionFontSize = 16.0;
+  static const instructionStepFontSize = 15.0;
 
   DrinkRecipeModal({super.key, required this.drink});
 
@@ -30,7 +32,8 @@ class DrinkRecipeModal extends StatelessWidget {
                   InvisibleExpandedHeader(
                       child: Text(
                     drink.strDrink!,
-                    style: const TextStyle(color: Colors.black),
+                    style: const TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.w600),
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
                   )),
@@ -63,7 +66,7 @@ class DrinkRecipeModal extends StatelessWidget {
           ),
           actions: [
             Container(
-              width: 48,
+              //width: 48,
               margin: EdgeInsets.only(right: 5, top: 5),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
@@ -79,12 +82,21 @@ class DrinkRecipeModal extends StatelessWidget {
             )
           ],
         ),
-        SliverList(
-            delegate: SliverChildListDelegate([
-          _buildTitleContainer(),
-          _buildIngredientsContainer(),
-          _buildInstructionsContainer()
-        ])),
+        SliverToBoxAdapter(
+          child: _buildTitleContainer(),
+        ),
+        SliverToBoxAdapter(
+          child: _buildIngredientsContainer(),
+        ),
+        SliverToBoxAdapter(
+          child: _buildInstructionsContainer(),
+        ),
+        SliverFillRemaining(
+          hasScrollBody: false,
+          child: Container(
+            color: Color(0xFFBAA9DB).withOpacity(0.3),
+          ),
+        )
       ],
     );
   }
@@ -92,7 +104,7 @@ class DrinkRecipeModal extends StatelessWidget {
   Container _buildInstructionsContainer() {
     return Container(
       color: Color(0xFFBAA9DB).withOpacity(0.3),
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 100),
       child: Column(
         children: [
           Text(
@@ -104,6 +116,7 @@ class DrinkRecipeModal extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: drink.instructions['EN']!.length,
                 itemBuilder: (context, index) {
@@ -116,18 +129,18 @@ class DrinkRecipeModal extends StatelessWidget {
                           index + 1 == drink.instructions['EN']!.length
                               ? 'Final step'
                               : 'Step ${index + 1}',
-                          style:
-                              const TextStyle(color: Colors.grey, fontSize: 13),
+                          style: const TextStyle(
+                              color: Colors.grey,
+                              fontSize: instructionStepFontSize),
                           textAlign: TextAlign.left,
                         ),
                         SizedBox(
                           height: 3,
                         ),
-                        Text(
-                          drink.instructions['EN']![index],
-                          textAlign: TextAlign.left,
-                          style: const TextStyle(fontSize: 15)
-                        ),
+                        Text(drink.instructions['EN']![index],
+                            textAlign: TextAlign.left,
+                            style:
+                                const TextStyle(fontSize: instructionFontSize)),
                       ],
                     ),
                   );
@@ -243,47 +256,48 @@ class DrinkRecipeModal extends StatelessWidget {
 
   Container _buildTitleContainer() {
     return Container(
-      color: Color(0xFFBAA9DB).withOpacity(0.3),
-      child: Padding(
-        padding: const EdgeInsets.only(left: 25, right: 25),
-        child: Column(
-          children: [
-            Text(
-              drink.strDrink!,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 22,
-                  fontWeight: FontWeight.w500),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            const SizedBox(
-              width: 120,
-              child: Divider(
-                thickness: 4,
-                color: Color(0xFFBAA9DB),
+      color: Colors.white,
+      child: Container(
+        color: Color(0xFFBAA9DB).withOpacity(0.3),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 25, right: 25),
+          child: Column(
+            children: [
+              Text(
+                drink.strDrink!,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w600),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            if (drink.strGlass != null)
-              BadgePill(
-                text: drink.strGlass!,
-                color: Colors.black,
-                textStyle: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w200
+              const SizedBox(
+                height: 5,
+              ),
+              const SizedBox(
+                width: 120,
+                child: Divider(
+                  thickness: 4,
+                  color: Color(0xFFBAA9DB),
                 ),
               ),
-            SizedBox(
-              height: drink.strGlass == null ? 10 : 15,
-            ),
-          ],
+              const SizedBox(
+                height: 10,
+              ),
+              if (drink.strGlass != null)
+                BadgePill(
+                  text: drink.strGlass!,
+                  color: Colors.black,
+                  textStyle: const TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.w200),
+                ),
+              SizedBox(
+                height: drink.strGlass == null ? 10 : 15,
+              ),
+            ],
+          ),
         ),
       ),
     );

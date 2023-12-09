@@ -130,7 +130,7 @@ class _HomePageState extends State<HomePage> {
               Padding(
                 padding: const EdgeInsets.only(left: 2, right: 2),
                 child: Text(
-                 ( drink.strDrink ?? 'No name') + ' eeeee eeee',
+                  drink.strDrink ?? 'No name',
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
@@ -193,11 +193,11 @@ class _HomePageState extends State<HomePage> {
                 isScrollControlled: true,
                 enableDrag: true,
                 showDragHandle: false,
+                useSafeArea: true,
                 shape: RoundedRectangleBorder(
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(10))),
-                builder: (context) => FractionallySizedBox(
-                    heightFactor: 0.95, child: DrinkRecipeModal(drink: drink,)),
+                builder: (context) => DrinkRecipeModal(drink: drink,),
               );
             },
           ),
