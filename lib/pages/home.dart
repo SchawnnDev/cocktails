@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage> {
         ),
         Container(
           color: Colors.white,
-          height: 190,
+          height: 220,
           child: GetX<DrinkController>(builder: (logic) {
             return ListView.separated(
                 itemCount: drinkController.drinks.length,
@@ -92,17 +92,17 @@ class _HomePageState extends State<HomePage> {
           borderRadius: BorderRadius.circular(15),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(5),
+          padding: const EdgeInsets.all(10),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               // Use CachedNetworkImage for loading the image with a placeholder
               SizedBox(
-                width: 100,
+                height: 120,
+                width: 120,
                 child: CachedNetworkImage(
                   imageUrl: drink.thumbnail ?? '',
                   imageBuilder: (context, imageProvider) => Container(
-                    height: 100,
                     // Adjust the height as needed
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
@@ -130,7 +130,7 @@ class _HomePageState extends State<HomePage> {
               Padding(
                 padding: const EdgeInsets.only(left: 2, right: 2),
                 child: Text(
-                  drink.strDrink ?? 'No name',
+                 ( drink.strDrink ?? 'No name') + ' eeeee eeee',
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
@@ -142,41 +142,38 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               if (drink.strAlcoholic != null) ...[
-                Padding(
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Icon(
-                        drink.strAlcoholic! == "Alcoholic"
-                            ? Icons.local_bar_outlined
-                            : Icons.no_drinks_outlined,
-                        size: 20,
-                        color: Colors.black,
-                      ),
-                      Spacer(),
-                      if (drink.ingredients.isNotEmpty) ...[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              '${drink.ingredients.length}',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 16,
-                              ),
-                            ),
-                            Icon(
-                              Icons.liquor,
-                              size: 20,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(
+                      drink.strAlcoholic! == "Alcoholic"
+                          ? Icons.local_bar_outlined
+                          : Icons.no_drinks_outlined,
+                      size: 20,
+                      color: Colors.black,
+                    ),
+                    Spacer(),
+                    if (drink.ingredients.isNotEmpty) ...[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            '${drink.ingredients.length}',
+                            style: TextStyle(
                               color: Colors.black,
-                            )
-                          ],
-                        ),
-                      ],
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                            ),
+                          ),
+                          Icon(
+                            Icons.liquor,
+                            size: 20,
+                            color: Colors.black,
+                          )
+                        ],
+                      ),
                     ],
-                  ),
+                  ],
                 )
               ],
             ],
@@ -200,7 +197,7 @@ class _HomePageState extends State<HomePage> {
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(10))),
                 builder: (context) => FractionallySizedBox(
-                    heightFactor: 0.98, child: DrinkRecipeModal(drink: drink,)),
+                    heightFactor: 0.95, child: DrinkRecipeModal(drink: drink,)),
               );
             },
           ),
@@ -267,13 +264,16 @@ class _HomePageState extends State<HomePage> {
                     child:
                         Image.asset(category.imagePath ?? 'img/cocktail.png')),
               ),
-              Text(
-                category.name,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  color: Colors.black,
-                  fontSize: 14,
+              Padding(
+                padding: const EdgeInsets.only(left: 5, right: 5),
+                child: Text(
+                  category.name,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    color: Colors.black,
+                    fontSize: 14,
+                  ),
                 ),
               )
             ],
