@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       future: Future.wait([
         cocktailsDBService.getCategories(),
         cocktailsDBService.getRandomDrinks(2),
-        Future.delayed(const Duration(seconds: 2)),
+       // Future.delayed(const Duration(seconds: 2)),
       ]),
       builder: (context, snapshot) {
         Widget child;

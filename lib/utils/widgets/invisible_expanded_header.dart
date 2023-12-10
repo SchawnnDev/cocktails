@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 
 class InvisibleExpandedHeader extends StatefulWidget {
   final Widget child;
+  final Function(bool)? onVisibilityChanged;
 
-  const InvisibleExpandedHeader({
-    super.key,
-    required this.child,
-  });
+  const InvisibleExpandedHeader(
+      {super.key, required this.child, this.onVisibilityChanged});
 
   @override
   _InvisibleExpandedHeaderState createState() {
@@ -49,6 +48,9 @@ class _InvisibleExpandedHeaderState extends State<InvisibleExpandedHeader> {
     if (_visible != visible) {
       setState(() {
         _visible = visible;
+        if (widget.onVisibilityChanged != null) {
+          widget.onVisibilityChanged!(visible);
+        }
       });
     }
   }

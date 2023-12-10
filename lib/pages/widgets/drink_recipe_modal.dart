@@ -7,12 +7,19 @@ import 'package:cocktails/models/drink.dart';
 import 'package:cocktails/utils/widgets/invisible_expanded_header.dart';
 import 'package:shimmer/shimmer.dart';
 
-class DrinkRecipeModal extends StatelessWidget {
+class DrinkRecipeModal extends StatefulWidget {
   final Drink drink;
   static const instructionFontSize = 16.0;
   static const instructionStepFontSize = 15.0;
 
   DrinkRecipeModal({super.key, required this.drink});
+
+  @override
+  State<DrinkRecipeModal> createState() => _DrinkRecipeModalState();
+}
+
+class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
+  var headerVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -24,21 +31,31 @@ class DrinkRecipeModal extends StatelessWidget {
           pinned: true,
           floating: false,
           flexibleSpace: FlexibleSpaceBar(
-            title: Padding(
-              padding: const EdgeInsets.only(left: 65, right: 65),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  InvisibleExpandedHeader(
-                      child: Text(
-                    drink.strDrink!,
-                    style: const TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.w600),
-                    textAlign: TextAlign.center,
-                    overflow: TextOverflow.ellipsis,
-                  )),
-                ],
+            title: Container(
+              color: Colors.white.withOpacity(headerVisible ? 1 : 0),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 65, right: 65),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    InvisibleExpandedHeader(
+                        child: Text(
+                          widget.drink.strDrink!,
+                          style: const TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.w600),
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        onVisibilityChanged: (v) {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            setState(() {
+                              headerVisible = v;
+                            });
+                          });
+                        }),
+                  ],
+                ),
               ),
             ),
             titlePadding: EdgeInsets.zero,
@@ -49,8 +66,9 @@ class DrinkRecipeModal extends StatelessWidget {
           automaticallyImplyLeading: false,
           leadingWidth: 54,
           backgroundColor: Colors.white,
-          leading: Container(
-            margin: EdgeInsets.only(left: 5, top: 5),
+          leading: AnimatedContainer(
+            duration: Duration(milliseconds: 250), // Adjust the duration as needed
+            margin: EdgeInsets.only(left: 5, top: headerVisible ? 0 : 5),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: Colors.white,
@@ -66,9 +84,10 @@ class DrinkRecipeModal extends StatelessWidget {
             ),
           ),
           actions: [
-            Container(
+            AnimatedContainer(
+              duration: Duration(milliseconds: 250),
               //width: 48,
-              margin: EdgeInsets.only(right: 5, top: 5),
+              margin: EdgeInsets.only(right: 5, top: headerVisible ? 0 : 5),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.white,
@@ -113,13 +132,13 @@ class DrinkRecipeModal extends StatelessWidget {
             textAlign: TextAlign.center,
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
           ),
-          if (drink.instructions['EN'] != null) // TODO: choose lang
+          if (widget.drink.instructions['EN'] != null) // TODO: choose lang
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                itemCount: drink.instructions['EN']!.length,
+                itemCount: widget.drink.instructions['EN']!.length + 100,
                 itemBuilder: (context, index) {
                   return Container(
                     margin: EdgeInsets.only(top: 10),
@@ -127,29 +146,31 @@ class DrinkRecipeModal extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          index + 1 == drink.instructions['EN']!.length
+                          index + 1 == widget.drink.instructions['EN']!.length
                               ? 'Final step'
                               : 'Step ${index + 1}',
                           style: const TextStyle(
                               color: Colors.grey,
-                              fontSize: instructionStepFontSize),
+                              fontSize:
+                                  DrinkRecipeModal.instructionStepFontSize),
                           textAlign: TextAlign.left,
                         ),
                         SizedBox(
                           height: 3,
                         ),
-                        Text(drink.instructions['EN']![index],
+                        Text(index >= widget.drink.instructions['EN']!.length ? '' : widget.drink.instructions['EN']![index],
                             textAlign: TextAlign.left,
-                            style:
-                                const TextStyle(fontSize: instructionFontSize)),
+                            style: const TextStyle(
+                                fontSize:
+                                    DrinkRecipeModal.instructionFontSize)),
                       ],
                     ),
                   );
                 },
               ),
             ),
-          if (drink.instructions['EN'] == null ||
-              drink.instructions['EN']!.isEmpty)
+          if (widget.drink.instructions['EN'] == null ||
+              widget.drink.instructions['EN']!.isEmpty)
             Text('No instructions :('),
         ],
       ),
@@ -176,7 +197,7 @@ class DrinkRecipeModal extends StatelessWidget {
             runSpacing: 10,
             // Adjust the run spacing (spacing between rows)
             children: List.generate(
-              drink.ingredients.length,
+              widget.drink.ingredients.length,
               (index) => SizedBox(
                 width: 80, // Adjust the width as needed
                 child: Column(
@@ -191,8 +212,8 @@ class DrinkRecipeModal extends StatelessWidget {
                       ),
                       child: Center(
                         child: CachedNetworkImage(
-                          imageUrl:
-                              drink.ingredients[index].getLittleImageUrl(),
+                          imageUrl: widget.drink.ingredients[index]
+                              .getLittleImageUrl(),
                           imageBuilder: (context, imageProvider) => Container(
                             height: 70,
                             width: 70,
@@ -227,7 +248,7 @@ class DrinkRecipeModal extends StatelessWidget {
                               fit: BoxFit.fitWidth,
                               child: */
                     Text(
-                      drink.ingredients[index].measure,
+                      widget.drink.ingredients[index].measure,
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
@@ -240,7 +261,7 @@ class DrinkRecipeModal extends StatelessWidget {
                           fit: BoxFit.fitWidth,
                           child: */
                     Text(
-                      drink.ingredients[index].name,
+                      widget.drink.ingredients[index].name,
                       textAlign: TextAlign.center,
                       style: const TextStyle(fontSize: 12),
                     ),
@@ -265,7 +286,7 @@ class DrinkRecipeModal extends StatelessWidget {
           child: Column(
             children: [
               Text(
-                drink.strDrink!,
+                widget.drink.strDrink!,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                     color: Colors.black,
@@ -287,15 +308,20 @@ class DrinkRecipeModal extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              if (drink.strGlass != null)
+              if (widget.drink.strGlass != null)
                 BadgePill(
-                  text: drink.strGlass!,
+                  text: widget.drink.strGlass!,
                   color: Colors.black,
                   textStyle: const TextStyle(
                       color: Colors.white, fontWeight: FontWeight.w200),
+                  backIcon: Icon(
+                    Icons.wine_bar_outlined,
+                    color: Colors.white,
+                    size: 16,
+                  ),
                 ),
               SizedBox(
-                height: drink.strGlass == null ? 10 : 15,
+                height: widget.drink.strGlass == null ? 10 : 15,
               ),
             ],
           ),
@@ -315,7 +341,7 @@ class DrinkRecipeModal extends StatelessWidget {
               width: 180,
               height: 180,
               child: CachedNetworkImage(
-                imageUrl: drink.strDrinkThumb ?? '',
+                imageUrl: widget.drink.strDrinkThumb ?? '',
                 imageBuilder: (context, imageProvider) => Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
