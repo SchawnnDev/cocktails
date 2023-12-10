@@ -17,6 +17,7 @@ class DrinkRecipeModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
+      physics: ClampingScrollPhysics(),
       slivers: [
         SliverAppBar(
           expandedHeight: 240.0,
