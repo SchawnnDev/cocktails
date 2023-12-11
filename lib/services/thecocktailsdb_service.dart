@@ -2,11 +2,16 @@ import 'dart:convert';
 
 import 'package:cocktails/models/drink.dart';
 import 'package:cocktails/models/drinks.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-class TheCocktailsDBService {
+class TheCocktailsDBService extends GetxService {
 
   final String apiUrl = 'https://www.thecocktaildb.com/api/json/v1/1/';
+
+  Future<TheCocktailsDBService> init() async {
+    return this;
+  }
 
   Uri _buildUri(String script) {
     return Uri.parse(apiUrl + script);

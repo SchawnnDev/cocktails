@@ -1,5 +1,7 @@
 import 'package:cocktails/controllers/category_controller.dart';
 import 'package:cocktails/controllers/drink_controller.dart';
+import 'package:cocktails/pages/categories/categories.dart';
+import 'package:cocktails/pages/categories/category.dart';
 import 'package:cocktails/pages/favorites.dart';
 import 'package:cocktails/pages/home.dart';
 import 'package:cocktails/pages/splash.dart';
@@ -23,6 +25,7 @@ void main() async {
 
 Future<void> initServices() async {
   await Get.putAsync(() => BoxesService().init());
+  await Get.putAsync(() => TheCocktailsDBService().init());
 }
 
 class InitialBinding implements Bindings {
@@ -35,15 +38,14 @@ class InitialBinding implements Bindings {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     final storage = Get.find<BoxesService>();
-    final CategoryController categoryController = Get.put(CategoryController());
-    final DrinkController drinkController = Get.put(DrinkController());
+    final categoryController = Get.put(CategoryController(), permanent: true);
+    final drinkController = Get.put(DrinkController());
+    Get.put(LanguageController(), permanent: true);
+    final cocktailsDBService = Get.find<TheCocktailsDBService>();
 
-    final TheCocktailsDBService cocktailsDBService =
-        Get.put(TheCocktailsDBService());
     return FutureBuilder(
       future: Future.wait([
         cocktailsDBService.getCategories(),
@@ -73,11 +75,25 @@ class MyApp extends StatelessWidget {
                 storage.settingsBox.get('countryCode', defaultValue: 'US')),
             // Not Get.deviceLocale
             fallbackLocale: Locale('en', 'US'),
+            initialRoute: '/',
             getPages: [
               GetPage(
                   name: '/',
                   page: () => const HomePage(),
                   transition: Transition.fadeIn),
+              GetPage(
+                name: '/categories',
+                page: () => const CategoriesPage(),
+                transition: Transition.rightToLeft,
+                transitionDuration: const Duration(milliseconds: 200),
+              ),
+              GetPage(
+                name: '/category/:category_name',
+                page: () => const CategoryPage(),
+                transition: Transition.rightToLeft,
+                transitionDuration: const Duration(milliseconds: 200),
+                binding: CategoryPageBinding(),
+              ),
               GetPage(
                   name: '/favorites',
                   page: () => const FavoritesPage(),

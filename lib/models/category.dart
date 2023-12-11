@@ -35,7 +35,7 @@ class Category {
       case 'Soft Drink':
         return 'assets/img/soft-drinks.png';
     }
-    return null;
+    return 'assets/img/cocktail.png';
   }
 
 }

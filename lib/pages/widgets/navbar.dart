@@ -3,13 +3,16 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
 class NavBar extends StatefulWidget {
+  final int index;
+  final bool animate;
+
+  const NavBar({super.key, this.index = 0, this.animate = true});
+
   @override
   State<NavBar> createState() => _NavBarState();
 }
 
 class _NavBarState extends State<NavBar> with TickerProviderStateMixin {
-  var idx = 0;
-
   late List<AnimationController> _controllers;
 
   @override
@@ -18,6 +21,15 @@ class _NavBarState extends State<NavBar> with TickerProviderStateMixin {
     _controllers = List.generate(3, (index) {
       return AnimationController(vsync: this, duration: const Duration(seconds: 1));
     });
+
+    if (widget.animate) {
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) {
+            print('animating ${widget.index}');
+            _controllers[widget.index].forward();
+          });
+    }
+
   }
 
   @override
@@ -27,6 +39,8 @@ class _NavBarState extends State<NavBar> with TickerProviderStateMixin {
     }
     super.dispose();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -52,36 +66,46 @@ class _NavBarState extends State<NavBar> with TickerProviderStateMixin {
                 backgroundColor: Colors.white,
                 selectedItemColor: Colors.redAccent,
                 unselectedItemColor: Colors.black,
-                currentIndex: idx,
+                currentIndex: widget.index,
                 landscapeLayout: BottomNavigationBarLandscapeLayout.linear,
                 onTap: (index) {
                   setState(() {
-                    _controllers[index].reset();
-                    //_controllers[0].reverse();
-                    idx = index;
-      
                     switch(index) {
                       case 0:
                         Get.toNamed('/');
                         break;
                       case 1:
-                        Get.toNamed('/swipe');
-                        break;
-                      case 2:
                         Get.toNamed('/favorites');
                         break;
+                      case 2:
+                        Get.toNamed('/swipe');
+                        break;
                     }
-      
-                    _controllers[index].forward();
                   });
                 },
                 items: [
                   BottomNavigationBarItem(
-                      icon: Lottie.asset(
-                          'assets/lottie/icon_home.json',
-                        height: 32,
-                        frameRate: FrameRate(60),
-                        controller: _controllers[0],
+                      icon: Stack(
+                        children: [
+                          Lottie.asset(
+                            'assets/lottie/icon_home.json',
+                          height: 32,
+                          frameRate: FrameRate(60),
+                          controller: _controllers[0],
+                        ),
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: Container(
+                              width: 10,
+                              height: 10,
+                              decoration: BoxDecoration(
+                                  color: Colors.redAccent,
+                                  shape: BoxShape.circle
+                              ),
+                            ),
+                          )
+                        ]
                       ),
                       label: "Home",
                   ),

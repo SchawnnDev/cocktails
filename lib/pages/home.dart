@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cocktails/controllers/category_controller.dart';
 import 'package:cocktails/controllers/drink_controller.dart';
 import 'package:cocktails/models/drink.dart';
+import 'package:cocktails/pages/widgets/cocktails_appbar.dart';
 import 'package:cocktails/pages/widgets/drink_recipe_modal.dart';
 import 'package:cocktails/pages/widgets/navbar.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(),
+      appBar: CocktailsAppBar(isBackButton: false),
       backgroundColor: Colors.white,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,7 +43,7 @@ class _HomePageState extends State<HomePage> {
           _recommendationSection()
         ],
       ),
-      bottomNavigationBar: NavBar(),
+      bottomNavigationBar: NavBar()
     );
   }
 
@@ -53,7 +54,7 @@ class _HomePageState extends State<HomePage> {
         Padding(
           padding: const EdgeInsets.only(left: 20),
           child: Text(
-            'Recommendation',
+            'recommendation'.tr,
             style: TextStyle(
                 color: Colors.black, fontSize: 26, fontWeight: FontWeight.w600),
           ),
@@ -64,19 +65,17 @@ class _HomePageState extends State<HomePage> {
         Container(
           color: Colors.white,
           height: 220,
-          child: GetX<DrinkController>(builder: (logic) {
-            return ListView.separated(
-                itemCount: drinkController.drinks.length,
-                scrollDirection: Axis.horizontal,
-                padding: EdgeInsets.only(left: 20, right: 20),
-                separatorBuilder: (context, index) => SizedBox(
-                      width: 25,
-                    ),
-                itemBuilder: (context, index) {
-                  final Drink drink = drinkController.drinks[index];
-                  return _recommendationSectionItem(index, drink);
-                });
-          }),
+          child: Obx(() => ListView.separated(
+              itemCount: drinkController.drinks.length,
+              scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.only(left: 20, right: 20),
+              separatorBuilder: (context, index) => SizedBox(
+                    width: 25,
+                  ),
+              itemBuilder: (context, index) {
+                final Drink drink = drinkController.drinks[index];
+                return _recommendationSectionItem(index, drink);
+              })),
         )
       ],
     );
@@ -197,7 +196,9 @@ class _HomePageState extends State<HomePage> {
                 shape: RoundedRectangleBorder(
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(10))),
-                builder: (context) => DrinkRecipeModal(drink: drink,),
+                builder: (context) => DrinkRecipeModal(
+                  drink: drink,
+                ),
               );
             },
           ),
@@ -212,10 +213,30 @@ class _HomePageState extends State<HomePage> {
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 20),
-          child: Text(
-            'Category >',
-            style: TextStyle(
-                color: Colors.black, fontSize: 26, fontWeight: FontWeight.w600),
+          child: GestureDetector(
+            onTapUp: (details) {
+              Get.toNamed('/categories');
+            },
+            child: Row(
+              children: [
+                Text(
+                  'categories'.tr,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 26,
+                      fontWeight: FontWeight.w600),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  color: Colors.black,
+                  size: 16,
+                  weight: 16,
+                )
+              ],
+            ),
           ),
         ),
         SizedBox(
@@ -223,22 +244,20 @@ class _HomePageState extends State<HomePage> {
         ),
         Container(
             height: 120,
-            color: Colors.white, // Color(0xFFBAA9DB),
-            child: GetX<CategoryController>(builder: (logic) {
-              return ListView.separated(
-                itemCount: categoryController.categories.length,
-                scrollDirection: Axis.horizontal,
-                padding: EdgeInsets.only(left: 20, right: 20),
-                separatorBuilder: (context, index) => SizedBox(
-                  width: 25,
-                ),
-                itemBuilder: (context, index) {
-                  final Category category =
-                      categoryController.categories[index];
-                  return _categoriesSectionItem(category, index);
-                },
-              );
-            })),
+            color: Colors.white,
+            child: Obx(() => ListView.separated(
+                  itemCount: categoryController.categories.length,
+                  scrollDirection: Axis.horizontal,
+                  padding: EdgeInsets.only(left: 20, right: 20),
+                  separatorBuilder: (context, index) => SizedBox(
+                    width: 25,
+                  ),
+                  itemBuilder: (context, index) {
+                    final Category category =
+                        categoryController.categories[index];
+                    return _categoriesSectionItem(category, index);
+                  },
+                ))),
       ],
     );
   }
@@ -286,7 +305,9 @@ class _HomePageState extends State<HomePage> {
               borderRadius: BorderRadius.circular(16),
               splashColor: Color(0x00542E71).withOpacity(0.2),
               highlightColor: Color(0x00542E71).withOpacity(0.3),
-              onTap: () {},
+              onTapUp: (TapUpDetails details) {
+                Get.toNamed('/category/${Uri.encodeComponent(category.name)}');
+              },
             ),
           ),
         ),
@@ -344,32 +365,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
-  AppBar appBar() {
-    return AppBar(
-      title: Text(
-        'Cocktails',
-        style: TextStyle(
-            color: Colors.black, fontSize: 26, fontWeight: FontWeight.bold),
-      ),
-      backgroundColor: Colors.white,
-      elevation: 0.0,
-      centerTitle: true,
-      // leading: GestureDetector(
-      //   child: Container(
-      //     margin: EdgeInsets.all(10),
-      //     alignment: Alignment.center,
-      //     decoration: BoxDecoration(
-      //         color: Color(0xffF7F8F8),
-      //         borderRadius: BorderRadius.circular(10)),
-      //     child: Icon(
-      //       Icons.chevron_left,
-      //       color: Colors.black,
-      //       size: 24.0,
-      //     ),
-      //   ),
-      // ),
-    );
-  }
-
 }
