@@ -101,7 +101,7 @@ class MyApp extends StatelessWidget {
               GetPage(
                   name: '/swipe',
                   page: () => const SwipePage(),
-                  transition: Transition.cupertino),
+                  transition: Transition.fadeIn),
               GetPage(
                   name: '/settings',
                   page: () => const SettingsPage(),
