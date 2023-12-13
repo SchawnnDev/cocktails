@@ -4,6 +4,7 @@ import 'package:cocktails/pages/categories/categories.dart';
 import 'package:cocktails/pages/categories/category.dart';
 import 'package:cocktails/pages/favorites.dart';
 import 'package:cocktails/pages/home.dart';
+import 'package:cocktails/pages/settings.dart';
 import 'package:cocktails/pages/splash.dart';
 import 'package:cocktails/pages/swipe.dart';
 import 'package:cocktails/services/boxes_service.dart';
@@ -11,7 +12,6 @@ import 'package:cocktails/services/thecocktailsdb_service.dart';
 import 'package:cocktails/utils/translations.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/adapters.dart';
 
 import 'controllers/language_controller.dart';
 
@@ -56,12 +56,12 @@ class MyApp extends StatelessWidget {
         Widget child;
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
-            if (snapshot.data![0] != null && snapshot.data![0].drinks != null) {
+            if (snapshot.data![0].drinks != null) {
               categoryController
                   .updateCategoriesDrink(snapshot.data![0].drinks!);
             }
 
-            if (snapshot.data![1] != null && snapshot.data![1].drinks != null) {
+            if (snapshot.data![1].drinks != null) {
               drinkController.updateDrinks(snapshot.data![1].drinks!);
             }
           }
@@ -75,7 +75,7 @@ class MyApp extends StatelessWidget {
                 storage.settingsBox.get('countryCode', defaultValue: 'US')),
             // Not Get.deviceLocale
             fallbackLocale: Locale('en', 'US'),
-            initialRoute: '/',
+            initialRoute: '/swipe',
             getPages: [
               GetPage(
                   name: '/',
@@ -101,6 +101,10 @@ class MyApp extends StatelessWidget {
               GetPage(
                   name: '/swipe',
                   page: () => const SwipePage(),
+                  transition: Transition.cupertino),
+              GetPage(
+                  name: '/settings',
+                  page: () => const SettingsPage(),
                   transition: Transition.fadeIn)
             ],
             initialBinding: InitialBinding(),

@@ -14,22 +14,23 @@ class NavBar extends StatefulWidget {
 
 class _NavBarState extends State<NavBar> with TickerProviderStateMixin {
   late List<AnimationController> _controllers;
+  var currentIndex = -1;
 
   @override
   void initState() {
     super.initState();
-    _controllers = List.generate(3, (index) {
-      return AnimationController(vsync: this, duration: const Duration(seconds: 1));
+    _controllers = List.generate(4, (index) {
+      return AnimationController(
+          vsync: this, duration: const Duration(seconds: 1));
     });
 
-    if (widget.animate) {
-      WidgetsBinding.instance
-          .addPostFrameCallback((_) {
-            print('animating ${widget.index}');
-            _controllers[widget.index].forward();
-          });
-    }
+    currentIndex = widget.index;
 
+    if (widget.animate) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _controllers[widget.index].forward();
+      });
+    }
   }
 
   @override
@@ -40,10 +41,9 @@ class _NavBarState extends State<NavBar> with TickerProviderStateMixin {
     super.dispose();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
+    const activeIconColor = Color(0xFF8253DB);
     return SafeArea(
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -54,8 +54,12 @@ class _NavBarState extends State<NavBar> with TickerProviderStateMixin {
               offset: const Offset(8, 20))
         ]),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: SizedBox(
+          borderRadius: BorderRadius.circular(25),
+          child: Theme(
+            data: ThemeData(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+            ),
             child: BottomNavigationBar(
                 selectedFontSize: 0.0,
                 unselectedFontSize: 0.0,
@@ -70,7 +74,15 @@ class _NavBarState extends State<NavBar> with TickerProviderStateMixin {
                 landscapeLayout: BottomNavigationBarLandscapeLayout.linear,
                 onTap: (index) {
                   setState(() {
-                    switch(index) {
+                    if (index == currentIndex && widget.animate) {
+                      _controllers[index].reset();
+                      _controllers[index].forward();
+                      return;
+                    }
+
+                    currentIndex = index;
+
+                    switch (index) {
                       case 0:
                         Get.toNamed('/');
                         break;
@@ -80,52 +92,111 @@ class _NavBarState extends State<NavBar> with TickerProviderStateMixin {
                       case 2:
                         Get.toNamed('/swipe');
                         break;
+                      case 3:
+                        Get.toNamed('/settings');
+                        break;
                     }
                   });
                 },
                 items: [
                   BottomNavigationBarItem(
-                      icon: Stack(
-                        children: [
-                          Lottie.asset(
-                            'assets/lottie/icon_home.json',
-                          height: 32,
-                          frameRate: FrameRate(60),
-                          controller: _controllers[0],
-                        ),
-                          Positioned(
-                            top: 0,
-                            right: 0,
-                            child: Container(
-                              width: 10,
-                              height: 10,
-                              decoration: BoxDecoration(
-                                  color: Colors.redAccent,
-                                  shape: BoxShape.circle
-                              ),
+                    icon: Lottie.asset(
+                      currentIndex == 0
+                          ? 'assets/lottie/icon_home_solid.json'
+                          : 'assets/lottie/icon_home_regular.json',
+                      height: 30,
+                      frameRate: FrameRate(60),
+                      controller: _controllers[0],
+                      delegates: LottieDelegates(
+                        values: [
+                          if (currentIndex == 0)
+                            ValueDelegate.strokeColor(
+                              const ['**'],
+                              value: activeIconColor,
                             ),
-                          )
-                        ]
+                          if (currentIndex == 0)
+                            ValueDelegate.color(
+                              const ['**'],
+                              value: activeIconColor,
+                            ),
+                        ],
                       ),
-                      label: "Home",
+                    ),
+                    label: "Home",
                   ),
                   BottomNavigationBarItem(
                       icon: Lottie.asset(
-                        'assets/lottie/icon_like.json',
-                        height: 42,
+                        currentIndex == 1
+                            ? 'assets/lottie/icon_favorite_solid.json'
+                            : 'assets/lottie/icon_favorite_regular.json',
+                        height: 30,
                         frameRate: FrameRate(60),
                         controller: _controllers[1],
+                        delegates: LottieDelegates(
+                          values: [
+                            if(currentIndex == 1)
+                              ValueDelegate.strokeColor(
+                                const ['**'],
+                                value: activeIconColor,
+                              ),
+                            if(currentIndex == 1)
+                              ValueDelegate.color(
+                                const ['**'],
+                                value: activeIconColor,
+                              ),
+                          ],
+                        ),
                       ),
-                      label: "Favorite"
+                      label: "Favorite"),
+                  BottomNavigationBarItem(
+                    icon: Lottie.asset(
+                      currentIndex == 2
+                          ? 'assets/lottie/icon_swipe_solid.json'
+                          : 'assets/lottie/icon_swipe_regular.json',
+                      height: 28,
+                      frameRate: FrameRate(60),
+                      controller: _controllers[2],
+                      delegates: LottieDelegates(
+                        values: [
+                          if (currentIndex == 2)
+                            ValueDelegate.strokeColor(
+                              const ['**'],
+                              value: activeIconColor,
+                            ),
+                          if (currentIndex == 2)
+                            ValueDelegate.color(
+                              const ['**'],
+                              value: activeIconColor,
+                            ),
+                        ],
+                      ),
+                    ),
+                    label: "Swipe",
                   ),
                   BottomNavigationBarItem(
-                      icon: Lottie.asset(
-                        'assets/lottie/icon_settings.json',
-                        height: 32,
-                        frameRate: FrameRate(60),
-                        controller: _controllers[2],
+                    icon: Lottie.asset(
+                      currentIndex == 3
+                          ? 'assets/lottie/icon_settings_solid.json'
+                          : 'assets/lottie/icon_settings_regular.json',
+                      height: 28,
+                      frameRate: FrameRate(60),
+                      controller: _controllers[3],
+                      delegates: LottieDelegates(
+                        values: [
+                          if (currentIndex == 3)
+                            ValueDelegate.strokeColor(
+                              const ['**'],
+                              value: activeIconColor,
+                            ),
+                          if (currentIndex == 3)
+                            ValueDelegate.color(
+                              const ['**'],
+                              value: activeIconColor,
+                            ),
+                        ],
                       ),
-                      label: "Setting"
+                    ),
+                    label: "Settings",
                   ),
                 ]),
           ),

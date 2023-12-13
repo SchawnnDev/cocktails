@@ -18,18 +18,21 @@ class _CategoriesPageState extends State<CategoriesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CocktailsAppBar(
-            title: 'categories'.tr, isBackButton: true),
-        backgroundColor: Colors.white,
-        body: _categories(),
-      bottomNavigationBar: NavBar(animate: false,),
+      appBar: CocktailsAppBar(title: 'categories'.tr, isBackButton: true),
+      backgroundColor: Colors.white,
+      body: _categories(),
+      bottomNavigationBar: NavBar(
+        animate: false,
+      ),
+      extendBody: true,
     );
   }
 
   SingleChildScrollView _categories() {
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.all(10),
+        padding:
+            const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 80),
         child: Align(
           alignment: Alignment.topCenter,
           child: Obx(() => Wrap(
@@ -53,11 +56,11 @@ class _CategoriesPageState extends State<CategoriesPage> {
 
   SizedBox _categoriesItem(Category category, int index) {
     return SizedBox(
-      height: 150,
+      height: 145,
       child: Stack(
         children: [
           Container(
-            width: 120,
+            width: 110,
             decoration: BoxDecoration(
                 color:
                     category.boxColor.withOpacity(index % 2 == 0 ? 0.6 : 0.3),

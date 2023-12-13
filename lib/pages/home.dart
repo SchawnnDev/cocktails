@@ -11,7 +11,6 @@ import 'package:get/get.dart';
 import 'package:cocktails/models/category.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../utils/widgets/invisible_expanded_header.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

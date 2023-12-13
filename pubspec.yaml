@@ -84,9 +84,14 @@ flutter:
 
   assets:
     - assets/lottie/cocktail_loading.json
-    - assets/lottie/icon_home.json
-    - assets/lottie/icon_like.json
-    - assets/lottie/icon_settings.json
+    - assets/lottie/icon_settings_regular.json
+    - assets/lottie/icon_settings_solid.json
+    - assets/lottie/icon_favorite_regular.json
+    - assets/lottie/icon_favorite_solid.json
+    - assets/lottie/icon_home_regular.json
+    - assets/lottie/icon_home_solid.json
+    - assets/lottie/icon_swipe_regular.json
+    - assets/lottie/icon_swipe_solid.json
     - assets/img/cocktail.png
     - assets/img/beer.png
     - assets/img/cocoa.png

@@ -45,6 +45,7 @@ class CocktailsAppBar extends StatelessWidget implements PreferredSizeWidget {
         style: TextStyle(
             color: Colors.black, fontSize: 26, fontWeight: FontWeight.bold),
       ),
+      automaticallyImplyLeading: false,
       backgroundColor: Colors.white,
       elevation: 0.0,
       centerTitle: true,
