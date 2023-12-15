@@ -109,9 +109,14 @@ class MyApp extends StatelessWidget {
             ],
             initialBinding: InitialBinding(),
           );
+        } else if (snapshot.connectionState == ConnectionState.none) {
+          child = const Center(
+            child: Text('No data'),
+          );
         } else {
           child = const Splash();
         }
+
         return AnimatedSwitcher(
             duration: const Duration(seconds: 1),
             child: child,

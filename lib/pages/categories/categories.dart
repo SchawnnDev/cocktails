@@ -30,25 +30,26 @@ class _CategoriesPageState extends State<CategoriesPage> {
 
   SingleChildScrollView _categories() {
     return SingleChildScrollView(
-      child: Padding(
-        padding:
-            const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 80),
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: Obx(() => Wrap(
-                spacing: 15,
-                runSpacing: 15,
-                children: List.generate(categoryController.categories.length,
-                    (index) {
-                  // For scrolling test, uncomment this
-                  // if (index >= categoryController.categories.length) {
-                  //   return _categoriesItem(Category(name: 'Test'), index);
-                  // }
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: Obx(() => Wrap(
+                  spacing: 15,
+                  runSpacing: 15,
+                  children: List.generate(categoryController.categories.length,
+                      (index) {
+                    // For scrolling test, uncomment this
+                    // if (index >= categoryController.categories.length) {
+                    //   return _categoriesItem(Category(name: 'Test'), index);
+                    // }
 
-                  return _categoriesItem(
-                      categoryController.categories[index], index);
-                }),
-              )),
+                    return _categoriesItem(
+                        categoryController.categories[index], index);
+                  }),
+                )),
+          ),
         ),
       ),
     );
@@ -56,11 +57,11 @@ class _CategoriesPageState extends State<CategoriesPage> {
 
   SizedBox _categoriesItem(Category category, int index) {
     return SizedBox(
-      height: 145,
+      height: 140,
       child: Stack(
         children: [
           Container(
-            width: 110,
+            width: 105,
             decoration: BoxDecoration(
                 color:
                     category.boxColor.withOpacity(index % 2 == 0 ? 0.6 : 0.3),
@@ -69,8 +70,8 @@ class _CategoriesPageState extends State<CategoriesPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Container(
-                  width: 70,
-                  height: 70,
+                  width: 65,
+                  height: 65,
                   decoration: BoxDecoration(
                       color: Colors.white, shape: BoxShape.circle),
                   child: Padding(
@@ -88,7 +89,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
                       color: Colors.black,
-                      fontSize: 18,
+                      fontSize: 17,
                     ),
                   ),
                 )
