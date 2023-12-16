@@ -33,7 +33,10 @@ class Routes {
     GetPage(
         name: '/favorites',
         page: () => const FavoritesPage(),
-        transition: Transition.fadeIn),
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 200),
+        binding: FavoritesPageBinding()
+    ),
     GetPage(
         name: '/swipe',
         page: () => const SwipePage(),

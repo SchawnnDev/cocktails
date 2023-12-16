@@ -29,6 +29,29 @@ class SettingsController extends GetxController {
           return newValue;
         },
       ),
+      Setting(
+        boxesService.settingsBox.get('theme', defaultValue: 'system'),
+        icon: Icons.brightness_6,
+        values: {'light': 'Light', 'dark': 'Dark', 'system': 'System'},
+        name: 'theme',
+        onChange: (newValue) {
+          boxesService.settingsBox.put('theme', newValue);
+
+          switch (newValue) {
+            case 'light':
+              Get.changeThemeMode(ThemeMode.light);
+              return newValue;
+            case 'dark':
+              Get.changeThemeMode(ThemeMode.dark);
+              return newValue;
+              case 'system':
+              Get.changeThemeMode(ThemeMode.system);
+              return newValue;
+          }
+          
+          return newValue;
+        },
+      ),
     ]);
   }
 

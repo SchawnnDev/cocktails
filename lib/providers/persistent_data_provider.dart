@@ -19,6 +19,6 @@ class PersistentDataProvider {
             .toList() ??
         [];
 
-    randomDrinks = (await cocktailsDBService.getRandomDrinks(2)).drinks ?? [];
+    randomDrinks = (await cocktailsDBService.getRandomDrinks(10)).drinks ?? [];
   }
 }

@@ -1,5 +1,4 @@
 import 'package:cocktails/controllers/settings_controller.dart';
-import 'package:cocktails/models/setting.dart';
 import 'package:cocktails/pages/widgets/cocktails_appbar.dart';
 import 'package:cocktails/pages/widgets/navbar.dart';
 import 'package:flutter/material.dart';
@@ -33,25 +32,26 @@ class _SettingsPageState extends State<SettingsPage> {
     return SafeArea(
         child: ListView.separated(
             itemBuilder: (context, index) {
+              final setting = settingsController.settings[index];
               return SizedBox(
                 height: 50,
                 child: ListTile(
-                  leading: Icon(settingsController.settings[index].icon),
-                  title: Text(settingsController.settings[index].name.tr),
+                  leading: Icon(setting.icon),
+                  title: Text(setting.name.tr),
                   trailing: DropdownButton<String>(
-                    value: settingsController.settings[index].getValue(),
+                    value: setting.getValue(),
                     onChanged: (newValue) {
                       setState(() {
-                        settingsController.settings[index].setValue(newValue!);
+                        setting.setValue(newValue!);
                       });
                     },
-                    items: settingsController.settings[index].values.entries
-                        .map<DropdownMenuItem<String>>((entry) {
-                      return DropdownMenuItem<String>(
-                        value: entry.key,
-                        child: Text(entry.value),
-                      );
-                    }).toList(),
+                    items: setting.values.entries
+                        .map<DropdownMenuItem<String>>(
+                            (entry) => DropdownMenuItem<String>(
+                                  value: entry.key,
+                                  child: Text(entry.value),
+                                ))
+                        .toList(),
                   ),
                 ),
               );

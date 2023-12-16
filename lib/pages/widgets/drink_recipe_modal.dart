@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:cocktails/models/drink.dart';
 
 import 'package:cocktails/utils/widgets/invisible_expanded_header.dart';
+import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
 class DrinkRecipeModal extends StatefulWidget {
@@ -138,7 +139,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
               child: ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                itemCount: widget.drink.instructions['EN']!.length + 100,
+                itemCount: widget.drink.instructions['EN']!.length,
                 itemBuilder: (context, index) {
                   return Container(
                     margin: EdgeInsets.only(top: 10),
@@ -147,8 +148,8 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                       children: [
                         Text(
                           index + 1 == widget.drink.instructions['EN']!.length
-                              ? 'Final step'
-                              : 'Step ${index + 1}',
+                              ? 'final_step'.tr
+                              : '${'step'.tr} ${index + 1}',
                           style: const TextStyle(
                               color: Colors.grey,
                               fontSize:
