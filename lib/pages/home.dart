@@ -1,16 +1,27 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cocktails/controllers/category_controller.dart';
-import 'package:cocktails/controllers/drink_controller.dart';
+import 'package:cocktails/controllers/home_controller.dart';
 import 'package:cocktails/models/drink.dart';
+import 'package:cocktails/models/ingredient.dart';
 import 'package:cocktails/pages/widgets/cocktails_appbar.dart';
 import 'package:cocktails/pages/widgets/drink_recipe_modal.dart';
 import 'package:cocktails/pages/widgets/navbar.dart';
+import 'package:cocktails/providers/persistent_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:cocktails/models/category.dart';
 import 'package:shimmer/shimmer.dart';
 
+class HomePageBinding extends Bindings {
+  @override
+  void dependencies() {
+    final dataProvider = Get.find<PersistentDataProvider>();
+    Get.lazyPut(() => HomeController(
+          categories: dataProvider.categories,
+          recommendations: dataProvider.randomDrinks,
+        ));
+  }
+}
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,30 +31,36 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final CategoryController categoryController = Get.find();
-  final DrinkController drinkController = Get.find();
+  final HomeController homeController = Get.find();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CocktailsAppBar(isBackButton: false),
-      backgroundColor: Colors.white,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _searchField(),
-          SizedBox(
-            height: 20,
+        appBar: CocktailsAppBar(isBackButton: false),
+        backgroundColor: Colors.white,
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _searchField(),
+              SizedBox(
+                height: 20,
+              ),
+              _categoriesSection(),
+              if (homeController.ingredients.isNotEmpty) ...[
+                SizedBox(
+                  height: 20,
+                ),
+                _ingredientsSection(),
+              ],
+              SizedBox(
+                height: 20,
+              ),
+              _recommendationSection()
+            ],
           ),
-          _categoriesSection(),
-          SizedBox(
-            height: 20,
-          ),
-          _recommendationSection()
-        ],
-      ),
-      bottomNavigationBar: NavBar()
-    );
+        ),
+        bottomNavigationBar: NavBar());
   }
 
   Column _recommendationSection() {
@@ -65,14 +82,14 @@ class _HomePageState extends State<HomePage> {
           color: Colors.white,
           height: 220,
           child: Obx(() => ListView.separated(
-              itemCount: drinkController.drinks.length,
+              itemCount: homeController.recommendations.length,
               scrollDirection: Axis.horizontal,
               padding: EdgeInsets.only(left: 20, right: 20),
               separatorBuilder: (context, index) => SizedBox(
                     width: 25,
                   ),
               itemBuilder: (context, index) {
-                final Drink drink = drinkController.drinks[index];
+                final Drink drink = homeController.recommendations[index];
                 return _recommendationSectionItem(index, drink);
               })),
         )
@@ -86,7 +103,6 @@ class _HomePageState extends State<HomePage> {
         width: 150,
         decoration: BoxDecoration(
           color: Color(0xFFBAA9DB).withOpacity(index % 2 == 0 ? 0.6 : 0.3),
-          //generateRandomPastelColor().withOpacity(0.3),
           borderRadius: BorderRadius.circular(15),
         ),
         child: Padding(
@@ -245,15 +261,14 @@ class _HomePageState extends State<HomePage> {
             height: 120,
             color: Colors.white,
             child: Obx(() => ListView.separated(
-                  itemCount: categoryController.categories.length,
+                  itemCount: homeController.categories.length,
                   scrollDirection: Axis.horizontal,
                   padding: EdgeInsets.only(left: 20, right: 20),
                   separatorBuilder: (context, index) => SizedBox(
                     width: 25,
                   ),
                   itemBuilder: (context, index) {
-                    final Category category =
-                        categoryController.categories[index];
+                    final Category category = homeController.categories[index];
                     return _categoriesSectionItem(category, index);
                   },
                 ))),
@@ -314,6 +329,188 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Column _ingredientsSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 20),
+          child: GestureDetector(
+            onTapUp: (details) {
+              Get.toNamed('/ingredients');
+            },
+            child: Row(
+              children: [
+                Text(
+                  'ingredients'.tr,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 26,
+                      fontWeight: FontWeight.w600),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  color: Colors.black,
+                  size: 16,
+                  weight: 16,
+                )
+              ],
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        Container(
+            height: 120,
+            color: Colors.white,
+            child: Obx(() => ListView.separated(
+                  itemCount: homeController.ingredients.length + 1,
+                  scrollDirection: Axis.horizontal,
+                  padding: EdgeInsets.only(left: 20, right: 20),
+                  separatorBuilder: (context, index) => SizedBox(
+                    width: 25,
+                  ),
+                  itemBuilder: (context, index) {
+                    if (index == homeController.ingredients.length) {
+                      return _ingredientsSectionItemMore(index);
+                    }
+
+                    final Ingredient ingredient =
+                        homeController.ingredients[index];
+                    return _ingredientsSectionItem(ingredient, index);
+                  },
+                ))),
+      ],
+    );
+  }
+
+  Stack _ingredientsSectionItem(Ingredient ingredient, int index) {
+    return Stack(
+      children: [
+        Container(
+          width: 100,
+          decoration: BoxDecoration(
+              color: Color(0xFFBAA9DB).withOpacity(index % 2 == 0 ? 0.6 : 0.3),
+              borderRadius: BorderRadius.circular(16)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                width: 50, // Adjust the width as needed
+                height: 50, // Adjust the height as needed
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                ),
+                child: Center(
+                  child: CachedNetworkImage(
+                    imageUrl: ingredient.getLittleImageUrl(),
+                    imageBuilder: (context, imageProvider) => Container(
+                      height: 40,
+                      width: 40,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    placeholder: (context, url) => Shimmer.fromColors(
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.grey[100]!,
+                      child: Container(
+                        width: 50,
+                        height: 50,
+                        // Adjust the height as needed
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 5, right: 5),
+                child: Text(
+                  ingredient.name,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    color: Colors.black,
+                    fontSize: 14,
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+        Positioned.fill(
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(16),
+              splashColor: Color(0x00542E71).withOpacity(0.2),
+              highlightColor: Color(0x00542E71).withOpacity(0.3),
+              onTapUp: (TapUpDetails details) {
+                Get.toNamed(
+                    '/ingredient/${Uri.encodeComponent(ingredient.name)}');
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Stack _ingredientsSectionItemMore(int index) {
+    return Stack(
+      children: [
+        Container(
+            width: 100,
+            decoration: BoxDecoration(
+                color:
+                    Color(0xFFBAA9DB).withOpacity(index % 2 == 0 ? 0.6 : 0.3),
+                borderRadius: BorderRadius.circular(16)),
+            child: Center(
+                child: Padding(
+              padding: const EdgeInsets.only(left: 5, right: 5),
+              child: Text(
+                'see_all_ingredients'.tr,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black,
+                  fontSize: 14,
+                ),
+              ),
+            ))),
+        Positioned.fill(
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(16),
+              splashColor: Color(0x00542E71).withOpacity(0.2),
+              highlightColor: Color(0x00542E71).withOpacity(0.3),
+              onTapUp: (TapUpDetails details) {
+                Get.toNamed('/ingredients');
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Container _searchField() {
     return Container(
       margin: EdgeInsets.only(top: 20, left: 20, right: 20),
@@ -329,7 +526,7 @@ class _HomePageState extends State<HomePage> {
             filled: true,
             fillColor: Colors.white,
             contentPadding: EdgeInsets.all(15),
-            hintText: 'Search Cocktail',
+            hintText: 'search_cocktail_hint'.tr,
             hintStyle: TextStyle(color: Color(0xffDDDADA)),
             prefixIcon: Icon(
               Icons.search,

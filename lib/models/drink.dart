@@ -68,7 +68,7 @@ class Drink {
       String? name = json['strIngredient$i'];
       if (name == null || name.isEmpty) continue;
       String measure = json['strMeasure$i'] ?? '1x';
-      ingredients.add(Ingredient(name: name, measure: measure));
+      ingredients.add(Ingredient(name: name.capitalizeFirst!, measure: measure));
     }
 
     strImageSource = json['strImageSource'];

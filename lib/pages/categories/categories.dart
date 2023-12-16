@@ -1,9 +1,18 @@
-import 'package:cocktails/controllers/category_controller.dart';
+import 'package:cocktails/controllers/categories_controller.dart';
 import 'package:cocktails/models/category.dart';
 import 'package:cocktails/pages/widgets/cocktails_appbar.dart';
 import 'package:cocktails/pages/widgets/navbar.dart';
+import 'package:cocktails/providers/persistent_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+class CategoriesPageBinding extends Bindings {
+  @override
+  void dependencies() {
+    final dataProvider = Get.find<PersistentDataProvider>();
+    Get.lazyPut(() => CategoriesController(categories: dataProvider.categories));
+  }
+}
 
 class CategoriesPage extends StatefulWidget {
   const CategoriesPage({super.key});
@@ -13,14 +22,15 @@ class CategoriesPage extends StatefulWidget {
 }
 
 class _CategoriesPageState extends State<CategoriesPage> {
-  final CategoryController categoryController = Get.find();
+  final CategoriesController categoriesController = Get.find();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CocktailsAppBar(title: 'categories'.tr, isBackButton: true),
       backgroundColor: Colors.white,
-      body: _categories(),
+      body:
+          Container(constraints: BoxConstraints.expand(), child: _categories()),
       bottomNavigationBar: NavBar(
         animate: false,
       ),
@@ -38,7 +48,8 @@ class _CategoriesPageState extends State<CategoriesPage> {
             child: Obx(() => Wrap(
                   spacing: 15,
                   runSpacing: 15,
-                  children: List.generate(categoryController.categories.length,
+                  alignment: WrapAlignment.spaceEvenly,
+                  children: List.generate(categoriesController.categories.length,
                       (index) {
                     // For scrolling test, uncomment this
                     // if (index >= categoryController.categories.length) {
@@ -46,7 +57,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                     // }
 
                     return _categoriesItem(
-                        categoryController.categories[index], index);
+                        categoriesController.categories[index], index);
                   }),
                 )),
           ),
