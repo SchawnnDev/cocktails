@@ -139,7 +139,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
       child: Column(
         children: [
           Text(
-            'Instructions',
+            'instructions'.tr,
             textAlign: TextAlign.center,
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
           ),
@@ -200,9 +200,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
           Text(
             'ingredients'.tr,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 16,
-            ),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
           ),
           SizedBox(height: 5),
           Row(
@@ -212,7 +210,8 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                 'for'.tr,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                  fontSize: 13,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
               SizedBox(
@@ -420,56 +419,59 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
 
   Container _buildShareContainer() {
     return Container(
-      color: Color(0xFFBAA9DB).withOpacity(0.3),
-      padding: EdgeInsets.only(bottom: 10),
-      child: GestureDetector(
-        onTapUp: (details) {
-          Share.share('Hello');
-        },
-        child: Column(
-          children:[
-            Divider(),
-            Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Row(children: [
-                Icon(
-                  Icons.ios_share,
-                  size: 24,
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-                Text(
-                  'share'.tr,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 16,
+      color: Colors.white,
+      child: Container(
+        color: Color(0xFFBAA9DB).withOpacity(0.3),
+        padding: EdgeInsets.only(bottom: 10),
+        child: GestureDetector(
+          onTapUp: (details) {
+            Share.share('Hello');
+          },
+          child: Column(
+            children:[
+              Divider(),
+              Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Row(children: [
+                  Icon(
+                    Icons.ios_share,
+                    size: 24,
                   ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    'share'.tr,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+                ),
+                Row(children: [
+                  Text(
+                    widget.drink.favorites,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Icon(
+                    Icons.favorite,
+                    color: Colors.redAccent,
+                    size: 24,
+                  ),
+                ],
                 ),
               ],
-              ),
-              Row(children: [
-                Text(
-                  widget.drink.favorites,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-                Icon(
-                  Icons.favorite,
-                  color: Colors.redAccent,
-                  size: 24,
-                ),
-              ],
-              ),
-            ],
+            ),
+            ]
           ),
-          ]
         ),
       ),
     );

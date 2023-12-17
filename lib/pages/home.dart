@@ -38,33 +38,34 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
         appBar: CocktailsAppBar(isBackButton: false),
         backgroundColor: Colors.white,
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _searchField(),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _searchField(),
+              Column(
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  _recommendationSection(),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  _categoriesSection(),
+                  if (homeController.ingredients.isNotEmpty) ...[
                     SizedBox(
                       height: 20,
                     ),
-                    _recommendationSection(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    _categoriesSection(),
-                    if (homeController.ingredients.isNotEmpty) ...[
-                      SizedBox(
-                        height: 20,
-                      ),
-                      _ingredientsSection(),
-                    ],
+                    _ingredientsSection(),
                   ],
-                ),
-              ),
-            )
-          ],
+                  SizedBox(
+                    height: 20,
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
         bottomNavigationBar: NavBar());
   }

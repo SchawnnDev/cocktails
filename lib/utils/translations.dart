@@ -17,6 +17,7 @@ class AppTranslations extends Translations {
       'final_step': 'Final step',
       'for': 'For',
       'share': 'Share',
+      'instructions': 'Instructions',
     },
     'de_DE': {
       'hello': 'Hallo Welt',
@@ -32,6 +33,7 @@ class AppTranslations extends Translations {
       'final_step': 'Letzter Schritt',
       'for': 'Für',
       'share': 'Teilen',
+      'instructions': 'Anweisungen',
     },
     'fr_FR': {
       'hello': 'Bonjour monde',
@@ -47,6 +49,7 @@ class AppTranslations extends Translations {
       'final_step': 'Dernière étape',
       'for': 'Pour',
       'share': 'Partager',
+      'instructions': 'Instructions',
     },
   };
 }
