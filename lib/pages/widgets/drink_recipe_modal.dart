@@ -120,7 +120,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
         SliverFillRemaining(
           hasScrollBody: false,
           child: Container(
-            color: Color(0xFFBAA9DB).withOpacity(0.6),
+            color: Color(0xFFBAA9DB).withOpacity(0.3),
           ),
         )
       ],
@@ -129,7 +129,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
 
   Container _buildInstructionsContainer() {
     return Container(
-      color: Color(0xFFBAA9DB).withOpacity(0.6),
+      color: Color(0xFFBAA9DB).withOpacity(0.3),
       padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 100),
       child: Column(
         children: [
@@ -188,7 +188,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
 
   Container _buildIngredientsContainer() {
     return Container(
-      color: Color(0xFFBAA9DB).withOpacity(0.3),
+      color: Color(0xFFBAA9DB).withOpacity(0.6),
       padding: EdgeInsets.all(10),
       child: Column(
         children: [
@@ -415,30 +415,56 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
 
   Container _buildShareContainer() {
     return Container(
-      color: Color(0xFFBAA9DB).withOpacity(0.6),
-      padding: EdgeInsets.only(top: 10, bottom: 10),
+      color: Color(0xFFBAA9DB).withOpacity(0.3),
+      padding: EdgeInsets.only(bottom: 10),
       child: GestureDetector(
         onTapUp: (details) {
           Share.share('Hello');
         },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.ios_share,
-              size: 24,
-            ),
-            SizedBox(
-              width: 5,
-            ),
-            Text(
-              'share'.tr,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 16,
+        child: Column(
+          children:[
+            Divider(),
+            Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Row(children: [
+                Icon(
+                  Icons.ios_share,
+                  size: 24,
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Text(
+                  'share'.tr,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ],
               ),
-            ),
-          ],
+              Row(children: [
+                Text(
+                  '34.2k'.tr,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Icon(
+                  Icons.favorite,
+                  color: Colors.redAccent,
+                  size: 24,
+                ),
+              ],
+              ),
+            ],
+          ),
+          ]
         ),
       ),
     );
