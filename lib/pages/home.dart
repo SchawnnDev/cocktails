@@ -42,24 +42,26 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _searchField(),
-            SingleChildScrollView(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 20,
-                  ),
-                  _recommendationSection(),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  _categoriesSection(),
-                  if (homeController.ingredients.isNotEmpty) ...[
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
                     SizedBox(
                       height: 20,
                     ),
-                    _ingredientsSection(),
+                    _recommendationSection(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    _categoriesSection(),
+                    if (homeController.ingredients.isNotEmpty) ...[
+                      SizedBox(
+                        height: 20,
+                      ),
+                      _ingredientsSection(),
+                    ],
                   ],
-                ],
+                ),
               ),
             )
           ],
@@ -76,7 +78,10 @@ class _HomePageState extends State<HomePage> {
           child: Text(
             'recommendation'.tr,
             style: TextStyle(
-                color: Colors.black, fontSize: 26, fontWeight: FontWeight.w600),
+                color: Colors.black,
+                fontSize: 26,
+                fontWeight: FontWeight.w600,
+            ),
           ),
         ),
         SizedBox(

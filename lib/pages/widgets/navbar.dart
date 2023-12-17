@@ -46,7 +46,7 @@ class _NavBarState extends State<NavBar> with TickerProviderStateMixin {
     const activeIconColor = Color(0xFF8253DB);
     return SafeArea(
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
         decoration: BoxDecoration(boxShadow: [
           BoxShadow(
               color: Colors.black.withOpacity(0.5),

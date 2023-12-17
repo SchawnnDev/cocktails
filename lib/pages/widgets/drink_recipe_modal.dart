@@ -95,13 +95,18 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                 shape: BoxShape.circle,
                 color: Colors.white,
               ),
-              child: IconButton(
-                icon: Icon(Icons.favorite_outline),
-                color: Colors.black,
-                onPressed: () {
-                  // Add your settings button functionality here
-                },
-              ),
+              child: Obx(() => IconButton(
+                    icon: widget.drink.favorite.value
+                        ? Icon(
+                            Icons.favorite,
+                            color: Colors.redAccent,
+                          )
+                        : Icon(Icons.favorite_border_outlined,
+                            color: Colors.black),
+                    onPressed: () {
+                      // Add your settings button functionality here
+                    },
+                  )),
             )
           ],
         ),
@@ -446,7 +451,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
               ),
               Row(children: [
                 Text(
-                  '34.2k'.tr,
+                  widget.drink.favorites,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 16,
