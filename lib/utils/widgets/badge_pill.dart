@@ -6,18 +6,25 @@ class BadgePill extends StatelessWidget {
   final TextStyle? textStyle;
   final Icon? frontIcon;
   final Icon? backIcon;
+  final double horizontalPadding;
+  final double verticalPadding;
 
   BadgePill(
       {required this.text,
       required this.color,
       this.textStyle,
       this.frontIcon,
-      this.backIcon});
+      this.backIcon,
+      this.horizontalPadding = 8,
+      this.verticalPadding = 4});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        padding: EdgeInsets.symmetric(
+            horizontal: horizontalPadding,
+            vertical: verticalPadding,
+        ),
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(16),

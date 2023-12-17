@@ -7,6 +7,7 @@ import 'package:cocktails/models/drink.dart';
 import 'package:cocktails/utils/widgets/invisible_expanded_header.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:share_plus/share_plus.dart';
 
 class DrinkRecipeModal extends StatefulWidget {
   final Drink drink;
@@ -68,7 +69,8 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
           leadingWidth: 54,
           backgroundColor: Colors.white,
           leading: AnimatedContainer(
-            duration: Duration(milliseconds: 250), // Adjust the duration as needed
+            duration: Duration(milliseconds: 250),
+            // Adjust the duration as needed
             margin: EdgeInsets.only(left: 5, top: headerVisible ? 0 : 5),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
@@ -107,6 +109,9 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
           child: _buildTitleContainer(),
         ),
         SliverToBoxAdapter(
+          child: _buildShareContainer(),
+        ),
+        SliverToBoxAdapter(
           child: _buildIngredientsContainer(),
         ),
         SliverToBoxAdapter(
@@ -115,7 +120,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
         SliverFillRemaining(
           hasScrollBody: false,
           child: Container(
-            color: Color(0xFFBAA9DB).withOpacity(0.3),
+            color: Color(0xFFBAA9DB).withOpacity(0.6),
           ),
         )
       ],
@@ -124,7 +129,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
 
   Container _buildInstructionsContainer() {
     return Container(
-      color: Color(0xFFBAA9DB).withOpacity(0.3),
+      color: Color(0xFFBAA9DB).withOpacity(0.6),
       padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 100),
       child: Column(
         children: [
@@ -159,7 +164,10 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                         SizedBox(
                           height: 3,
                         ),
-                        Text(index >= widget.drink.instructions['EN']!.length ? '' : widget.drink.instructions['EN']![index],
+                        Text(
+                            index >= widget.drink.instructions['EN']!.length
+                                ? ''
+                                : widget.drink.instructions['EN']![index],
                             textAlign: TextAlign.left,
                             style: const TextStyle(
                                 fontSize:
@@ -180,16 +188,44 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
 
   Container _buildIngredientsContainer() {
     return Container(
-      color: Color(0xFFBAA9DB).withOpacity(0.6),
+      color: Color(0xFFBAA9DB).withOpacity(0.3),
       padding: EdgeInsets.all(10),
       child: Column(
         children: [
           Text(
-            'Ingredients',
+            'ingredients'.tr,
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 16,
             ),
+          ),
+          SizedBox(height: 5),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'for'.tr,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 13,
+                ),
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              BadgePill(
+                frontIcon: Icon(
+                  Icons.unfold_more,
+                  size: 14,
+                  color: Colors.white,
+                ),
+                text: '1 x',
+                textStyle: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.w600),
+                color: Color(0xff4472c4),
+                verticalPadding: 1,
+              )
+            ],
           ),
           SizedBox(height: 15),
           Wrap(
@@ -369,6 +405,37 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                   ),
                 ),
                 errorWidget: (context, url, error) => Icon(Icons.error),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Container _buildShareContainer() {
+    return Container(
+      color: Color(0xFFBAA9DB).withOpacity(0.6),
+      padding: EdgeInsets.only(top: 10, bottom: 10),
+      child: GestureDetector(
+        onTapUp: (details) {
+          Share.share('Hello');
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.ios_share,
+              size: 24,
+            ),
+            SizedBox(
+              width: 5,
+            ),
+            Text(
+              'share'.tr,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 16,
               ),
             ),
           ],

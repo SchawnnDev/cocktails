@@ -1,5 +1,4 @@
 import 'package:cocktails/models/setting.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 

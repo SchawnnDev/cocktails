@@ -20,7 +20,7 @@ class _DrinkCardState extends State<DrinkCard> {
     return Stack(children: [
       Container(
         width: 140,
-        height: 210,
+        height: 200,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8.0),
           color:
@@ -66,7 +66,7 @@ class _DrinkCardState extends State<DrinkCard> {
               height: 10,
             ),
             Padding(
-              padding: const EdgeInsets.all(5),
+              padding: const EdgeInsets.only(left: 5, right: 5),
               child: Text(
                 '${widget.drink.strDrink ?? 'No name'}\n',
                 style: TextStyle(
@@ -77,14 +77,16 @@ class _DrinkCardState extends State<DrinkCard> {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            SizedBox(
-              height: 5,
-            ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Icon(
-                Icons.favorite,
-                color: Colors.red,
+            Padding(
+              padding: const EdgeInsets.only(left: 5, right: 5, bottom: 2),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Icon(
+                    Icons.favorite,
+                    color: Colors.redAccent,
+                  ),
+                ],
               ),
             )
           ],

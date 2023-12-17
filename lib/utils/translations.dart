@@ -6,7 +6,7 @@ class AppTranslations extends Translations {
     'en_US': {
       'hello': 'Hello World',
       'welcome': 'Welcome',
-      'recommendation': 'Recommendation',
+      'recommendation': 'Recommendations',
       'categories': 'Categories',
       'search_cocktail_hint': 'Search cocktail',
       'ingredients': 'Ingredients',
@@ -15,11 +15,13 @@ class AppTranslations extends Translations {
       'language': 'Language',
       'step': 'Step',
       'final_step': 'Final step',
+      'for': 'For',
+      'share': 'Share',
     },
     'de_DE': {
       'hello': 'Hallo Welt',
       'welcome': 'Willkommen',
-      'recommendation': 'Empfehlung',
+      'recommendation': 'Empfehlungen',
       'categories': 'Kategorien',
       'search_cocktail_hint': 'Cocktail suchen',
       'ingredients': 'Zutaten',
@@ -28,11 +30,13 @@ class AppTranslations extends Translations {
       'language': 'Sprache',
       'step': 'Schritt',
       'final_step': 'Letzter Schritt',
+      'for': 'Für',
+      'share': 'Teilen',
     },
     'fr_FR': {
       'hello': 'Bonjour monde',
       'welcome': 'Bienvenue',
-      'recommendation': 'Recommendation',
+      'recommendation': 'Recommendations',
       'categories': 'Catégories',
       'search_cocktail_hint': 'Rechercher un cocktail',
       'ingredients': 'Ingrédients',
@@ -41,6 +45,8 @@ class AppTranslations extends Translations {
       'language': 'Langue',
       'step': 'Étape',
       'final_step': 'Dernière étape',
+      'for': 'Pour',
+      'share': 'Partager',
     },
   };
 }
