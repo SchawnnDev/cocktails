@@ -198,7 +198,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
   Container _buildIngredientsContainer() {
     return Container(
       color: Color(0xFFBAA9DB).withOpacity(0.6),
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 20),
       child: Column(
         children: [
           Text(
@@ -212,12 +212,13 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
               showModalBottomSheet(
                   context: context,
                   builder: (context) => QuantitySelectorModal(
-                    onSelected: (int a) {
-                      setState(() {
-                        quantity(a);
-                      });
-                    },
-                  ));
+                        defaultQuantity: quantity.value,
+                        onSelected: (int a) {
+                          setState(() {
+                            quantity(a);
+                          });
+                        },
+                      ));
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -302,13 +303,12 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                       ),
                     ),
                     SizedBox(height: 5),
-                    /*FittedBox(
-                              fit: BoxFit.fitWidth,
-                              child: */
                     Obx(() => Text(
                           multiplyMeasure(
-                              widget.drink.ingredients[index].measure.trim(),
-                              quantity.value, false),
+                            widget.drink.ingredients[index].measure.trim(),
+                            quantity.value,
+                            settingsController.measureInOz.value,
+                          ),
                           style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
@@ -319,15 +319,11 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                         )),
                     // ),
                     SizedBox(height: 5),
-                    /*FittedBox(
-                          fit: BoxFit.fitWidth,
-                          child: */
                     Text(
                       widget.drink.ingredients[index].name.tr,
                       textAlign: TextAlign.center,
                       style: const TextStyle(fontSize: 12),
                     ),
-                    //),
                   ],
                 ),
               ),
@@ -508,20 +504,20 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
     }
   }
 
-  String multiplyMeasure(String measure, int factor, bool convertOzToCl) {
+  String multiplyMeasure(String measure, int factor, bool measureInOz) {
     final regex = RegExp(r"([0-9./]+)\s*([a-zA-Z]+|)");
     final match = regex.firstMatch(measure);
 
     if (match != null && match.group(1) != null && match.group(2) != null) {
       var number = match.group(1)!.contains('/')
           ? double.parse(match.group(1)!.split('/')[0]) /
-          double.parse(match.group(1)!.split('/')[1])
+              double.parse(match.group(1)!.split('/')[1])
           : double.parse(match.group(1)!);
 
       number *= factor;
       var name = (match.group(2) ?? '').tr;
 
-      if (convertOzToCl && name == 'oz') {
+      if (!measureInOz && name == 'oz') {
         number *= 2.95735;
         name = 'cl';
       }
@@ -559,7 +555,4 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
 
     return measure;
   }
-
-
-
 }

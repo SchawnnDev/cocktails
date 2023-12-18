@@ -49,7 +49,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         .map<DropdownMenuItem<String>>(
                             (entry) => DropdownMenuItem<String>(
                                   value: entry.key,
-                                  child: Text(entry.value),
+                                  child: Text(entry.value.tr),
                                 ))
                         .toList(),
                   ),

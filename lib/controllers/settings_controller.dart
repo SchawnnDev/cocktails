@@ -7,6 +7,8 @@ class SettingsController extends GetxController {
   final _settings = <Setting>[].obs;
   List<Setting> get settings => _settings;
 
+  RxBool measureInOz = true.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -17,7 +19,7 @@ class SettingsController extends GetxController {
         boxesService.settingsBox.get('language',
             defaultValue: Get.deviceLocale?.toString() ?? 'en_US'),
         icon: Icons.language,
-        values: {'en_US': 'English', 'fr_FR': 'Français', 'de_DE': 'Deutsch'},
+        values: {'en_US': 'en_US', 'fr_FR': 'fr_FR', 'de_DE': 'de_DE'},
         name: 'language',
         onChange: (newValue) {
           var split = newValue.split('_');
@@ -49,6 +51,17 @@ class SettingsController extends GetxController {
               return newValue;
           }
           
+          return newValue;
+        },
+      ),
+      Setting(
+        boxesService.settingsBox.get('measurementUnit', defaultValue: 'oz'),
+        icon: Icons.precision_manufacturing,
+        values: {'oz': 'Ounces', 'ml': 'Milliliters'},
+        name: 'measurementUnit',
+        onChange: (newValue) {
+          boxesService.settingsBox.put('measurementUnit', newValue);
+          measureInOz(newValue == 'oz');
           return newValue;
         },
       ),

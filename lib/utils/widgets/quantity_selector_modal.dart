@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class QuantitySelectorModal extends StatefulWidget {
+  final int defaultQuantity;
   final Function(int) onSelected;
 
-  const QuantitySelectorModal({super.key, required this.onSelected});
+  const QuantitySelectorModal({super.key, required this.defaultQuantity, required this.onSelected});
 
   @override
   _QuantitySelectorModalState createState() => _QuantitySelectorModalState();
@@ -14,6 +15,14 @@ class _QuantitySelectorModalState extends State<QuantitySelectorModal> {
   int selectedQuantity = 1;
   FixedExtentScrollController fixedExtentScrollController =
       FixedExtentScrollController();
+
+
+  @override
+  void initState() {
+    super.initState();
+    selectedQuantity = widget.defaultQuantity;
+    fixedExtentScrollController = FixedExtentScrollController(initialItem: widget.defaultQuantity - 1);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +70,7 @@ class _QuantitySelectorModalState extends State<QuantitySelectorModal> {
             child: ListWheelScrollView.useDelegate(
               controller: fixedExtentScrollController,
               itemExtent: 50,
+
               // Height of each item
               physics: FixedExtentScrollPhysics(),
               onSelectedItemChanged: (index) {
