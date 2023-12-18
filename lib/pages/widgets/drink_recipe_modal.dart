@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cocktails/controllers/settings_controller.dart';
 import 'package:cocktails/utils/widgets/badge_pill.dart';
+import 'package:cocktails/utils/widgets/quantity_selector_modal.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cocktails/models/drink.dart';
@@ -22,6 +24,8 @@ class DrinkRecipeModal extends StatefulWidget {
 
 class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
   var headerVisible = false;
+  var quantity = 1.obs;
+  final settingsController = Get.find<SettingsController>();
 
   @override
   Widget build(BuildContext context) {
@@ -203,33 +207,46 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
           ),
           SizedBox(height: 5),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'for'.tr,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
+          GestureDetector(
+            onTapUp: (details) {
+              showModalBottomSheet(
+                  context: context,
+                  builder: (context) => QuantitySelectorModal(
+                    onSelected: (int a) {
+                      setState(() {
+                        quantity(a);
+                      });
+                    },
+                  ));
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'for'.tr,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
-              SizedBox(
-                width: 5,
-              ),
-              BadgePill(
-                frontIcon: Icon(
-                  Icons.unfold_more,
-                  size: 14,
-                  color: Colors.white,
+                SizedBox(
+                  width: 5,
                 ),
-                text: '1 x',
-                textStyle: const TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.w600),
-                color: Color(0xff4472c4),
-                verticalPadding: 1,
-              )
-            ],
+                BadgePill(
+                  frontIcon: Icon(
+                    Icons.unfold_more,
+                    size: 14,
+                    color: Colors.white,
+                  ),
+                  text: '$quantity x',
+                  textStyle: const TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.w600),
+                  color: Color(0xff4472c4),
+                  verticalPadding: 1,
+                )
+              ],
+            ),
           ),
           SizedBox(height: 15),
           Wrap(
@@ -288,21 +305,25 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                     /*FittedBox(
                               fit: BoxFit.fitWidth,
                               child: */
-                    Text(
-                      widget.drink.ingredients[index].measure,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
+                    Obx(() => Text(
+                          multiplyMeasure(
+                              widget.drink.ingredients[index].measure.trim(),
+                              quantity.value, false),
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        )),
                     // ),
                     SizedBox(height: 5),
                     /*FittedBox(
                           fit: BoxFit.fitWidth,
                           child: */
                     Text(
-                      widget.drink.ingredients[index].name,
+                      widget.drink.ingredients[index].name.tr,
                       textAlign: TextAlign.center,
                       style: const TextStyle(fontSize: 12),
                     ),
@@ -427,53 +448,118 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
           onTapUp: (details) {
             Share.share('Hello');
           },
-          child: Column(
-            children:[
-              Divider(),
-              Row(
+          child: Column(children: [
+            Divider(),
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Row(children: [
-                  Icon(
-                    Icons.ios_share,
-                    size: 24,
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Text(
-                    'share'.tr,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 16,
+                Row(
+                  children: [
+                    Icon(
+                      Icons.ios_share,
+                      size: 24,
                     ),
-                  ),
-                ],
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      'share'.tr,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
                 ),
-                Row(children: [
-                  Text(
-                    widget.drink.favorites,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 16,
+                Row(
+                  children: [
+                    Text(
+                      widget.drink.favorites,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 16,
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Icon(
-                    Icons.favorite,
-                    color: Colors.redAccent,
-                    size: 24,
-                  ),
-                ],
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Icon(
+                      Icons.favorite,
+                      color: Colors.redAccent,
+                      size: 24,
+                    ),
+                  ],
                 ),
               ],
             ),
-            ]
-          ),
+          ]),
         ),
       ),
     );
   }
+
+  /* ===================== UTILS  ===================== */
+
+  String formatNumber(double number) {
+    if (number == number.toInt().toDouble()) {
+      return number.toInt().toString();
+    } else {
+      return number.toStringAsFixed(2);
+    }
+  }
+
+  String multiplyMeasure(String measure, int factor, bool convertOzToCl) {
+    final regex = RegExp(r"([0-9./]+)\s*([a-zA-Z]+|)");
+    final match = regex.firstMatch(measure);
+
+    if (match != null && match.group(1) != null && match.group(2) != null) {
+      var number = match.group(1)!.contains('/')
+          ? double.parse(match.group(1)!.split('/')[0]) /
+          double.parse(match.group(1)!.split('/')[1])
+          : double.parse(match.group(1)!);
+
+      number *= factor;
+      var name = (match.group(2) ?? '').tr;
+
+      if (convertOzToCl && name == 'oz') {
+        number *= 2.95735;
+        name = 'cl';
+      }
+
+      addName(String name) {
+        if (name.isNotEmpty) {
+          return ' $name';
+        }
+        return '';
+      }
+
+      switch (number) {
+        case 0.1:
+          return '1/10${addName(name)}';
+        case 0.2:
+          return '1/5${addName(name)}';
+        case 0.25:
+          return '1/4${addName(name)}';
+        case 0.33:
+          return '1/3${addName(name)}';
+        case 0.4:
+          return '2/5${addName(name)}';
+        case 0.5:
+          return '1/2${addName(name)}';
+        case 0.67:
+          return '2/3${addName(name)}';
+        case 0.75:
+          return '3/4${addName(name)}';
+        case 0.8:
+          return '4/5${addName(name)}';
+        default:
+          return formatNumber(number) + addName(name);
+      }
+    }
+
+    return measure;
+  }
+
+
+
 }
