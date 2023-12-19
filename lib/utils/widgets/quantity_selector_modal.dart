@@ -28,7 +28,7 @@ class _QuantitySelectorModalState extends State<QuantitySelectorModal> {
   Widget build(BuildContext context) {
     return SizedBox(
       height:
-          MediaQuery.of(context).size.height / 4, // Adjust the height as needed
+          MediaQuery.of(context).size.height / 3, // Adjust the height as needed
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

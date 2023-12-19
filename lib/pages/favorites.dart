@@ -46,23 +46,36 @@ class _FavoritesPageState extends State<FavoritesPage> {
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(5.0),
-          child: Obx(() =>
-              Wrap(
-                spacing: 15,
-                runSpacing: 15,
-                alignment: WrapAlignment.spaceEvenly,
-                children: List.generate(
-                    favoritesController.favorites.length,
-                        (index) {
-                      // For scrolling test, uncomment this
-                      // if (index >= categoryController.categories.length) {
-                      //   return _categoriesItem(Category(name: 'Test'), index);
-                      // }
-                          final drink = favoritesController.favorites[index];
+          child: Column(
+            children: [
+              Center(
+                child: Text(
+                  'today'.tr,
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+              Obx(() =>
+                Wrap(
+                  spacing: 15,
+                  runSpacing: 15,
+                  alignment: WrapAlignment.spaceEvenly,
+                  children: List.generate(
+                      favoritesController.favorites.length,
+                          (index) {
+                        // For scrolling test, uncomment this
+                        // if (index >= categoryController.categories.length) {
+                        //   return _categoriesItem(Category(name: 'Test'), index);
+                        // }
+                            final drink = favoritesController.favorites[index];
 
-                      return DrinkCard( drink, index);
-                    }),
-              )),
+                        return DrinkCard( drink, index);
+                      }),
+                ))],
+          ),
         ),
       ),
     );
