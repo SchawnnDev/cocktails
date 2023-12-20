@@ -8,8 +8,9 @@ import 'package:shimmer/shimmer.dart';
 class DrinkCard extends StatefulWidget {
   final Drink drink;
   final int index;
+  final Color? singleColor;
 
-  const DrinkCard(this.drink, this.index, {super.key});
+  const DrinkCard(this.drink, this.index, {super.key, this.singleColor});
 
   @override
   State<DrinkCard> createState() => _DrinkCardState();
@@ -21,10 +22,10 @@ class _DrinkCardState extends State<DrinkCard> {
     return Stack(children: [
       Container(
           width: 140,
-          height: 200,
+          height: 205,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
-            color: Color(0xFFBAA9DB)
+            color: widget.singleColor ?? Color(0xFFBAA9DB)
                 .withOpacity(widget.index % 2 == 0 ? 0.6 : 0.3),
             boxShadow: [
               BoxShadow(
@@ -87,10 +88,10 @@ class _DrinkCardState extends State<DrinkCard> {
                 ),
               ),
               SizedBox(
-                height: 10,
+                height: 5,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.only(bottom: 10, left: 10),
                 child: Row(
                   children: [
                     Icon(
@@ -169,7 +170,7 @@ class _DrinkCardState extends State<DrinkCard> {
       ),
       Positioned(
         right: 10,
-        bottom: 10,
+        bottom: 12,
         child: GestureDetector(
           onTapUp: (details) {
             widget.drink.favorite.toggle();

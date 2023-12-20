@@ -71,7 +71,8 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         extendBody: true,
-        bottomNavigationBar: NavBar());
+        bottomNavigationBar: NavBar(),
+    );
   }
 
   Column _recommendationSection() {
@@ -94,7 +95,7 @@ class _HomePageState extends State<HomePage> {
         ),
         Container(
           color: Colors.white,
-          height: 200,
+          height: 205,
           child: Obx(() => ListView.separated(
               itemCount: homeController.recommendations.length,
               scrollDirection: Axis.horizontal,

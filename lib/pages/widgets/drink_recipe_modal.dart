@@ -110,7 +110,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                 onPressed: () {
                   widget.drink.favorite.toggle();
                 },
-                splashRadius: 24,
+              //  splashRadius: 26,
               ),
             )
           ],
@@ -538,6 +538,8 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
         }
         return '';
       }
+
+      number = number.toPrecision(2);
 
       switch (number) {
         case 0.1:

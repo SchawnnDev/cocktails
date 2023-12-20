@@ -47,6 +47,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
         child: Padding(
           padding: const EdgeInsets.all(5.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Obx(() =>
                 Wrap(
@@ -62,7 +63,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                         // }
                             final drink = favoritesController.favorites[index];
 
-                        return DrinkCard( drink, index);
+                        return DrinkCard(drink, index, singleColor: Color(0xFFBAA9DB).withOpacity(0.6),);
                       }),
                 )),
               SizedBox(height: 20),
