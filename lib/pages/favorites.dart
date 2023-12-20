@@ -48,16 +48,6 @@ class _FavoritesPageState extends State<FavoritesPage> {
           padding: const EdgeInsets.all(5.0),
           child: Column(
             children: [
-              Center(
-                child: Text(
-                  'today'.tr,
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              SizedBox(height: 10),
               Obx(() =>
                 Wrap(
                   spacing: 15,
@@ -74,7 +64,26 @@ class _FavoritesPageState extends State<FavoritesPage> {
 
                         return DrinkCard( drink, index);
                       }),
-                ))],
+                )),
+              SizedBox(height: 20),
+              Center(
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>( Color(0xFFBAA9DB)),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                  ),
+                  child: Text('more_favorites'.tr),
+                  onPressed: () {
+                    Get.offNamed('/swipe');
+                  },
+                ),
+              ),
+              SizedBox(height: 10),
+            ],
           ),
         ),
       ),

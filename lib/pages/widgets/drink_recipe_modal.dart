@@ -99,18 +99,19 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                 shape: BoxShape.circle,
                 color: Colors.white,
               ),
-              child: Obx(() => IconButton(
-                    icon: widget.drink.favorite.value
-                        ? Icon(
-                            Icons.favorite,
-                            color: Colors.redAccent,
-                          )
-                        : Icon(Icons.favorite_border_outlined,
-                            color: Colors.black),
-                    onPressed: () {
-                      // Add your settings button functionality here
-                    },
-                  )),
+              child: IconButton(
+                icon: Obx(() => widget.drink.favorite.value
+                    ? Icon(
+                        Icons.favorite,
+                        color: Colors.redAccent,
+                      )
+                    : Icon(Icons.favorite_border_outlined,
+                        color: Colors.black)),
+                onPressed: () {
+                  widget.drink.favorite.toggle();
+                },
+                splashRadius: 24,
+              ),
             )
           ],
         ),
@@ -479,11 +480,20 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                     SizedBox(
                       width: 5,
                     ),
-                    Icon(
-                      Icons.favorite,
-                      color: Colors.redAccent,
-                      size: 24,
-                    ),
+                    GestureDetector(
+                      onTapUp: (details) {
+                        widget.drink.favorite.toggle();
+                      },
+                      child: Obx(() => Icon(
+                        widget.drink.favorite.value
+                            ? Icons.favorite
+                            : Icons.favorite_outline,
+                        color: widget.drink.favorite.value
+                            ? Colors.redAccent
+                            : Colors.black,
+                        size: 24,
+                      )),
+                    )
                   ],
                 ),
               ],

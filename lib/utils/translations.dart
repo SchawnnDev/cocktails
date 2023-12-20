@@ -21,6 +21,7 @@ class AppTranslations extends Translations {
           'select_quantity': 'Select quantity',
           'tsp': 'tsp',
           'tbsp': 'tbsp',
+          'tblsp': 'tblsp',
           'part': 'part',
           'Slice': 'Slice',
           'slice': 'slice',
@@ -78,6 +79,7 @@ class AppTranslations extends Translations {
           'Milliliters': 'Milliliters (ml)',
           'measurementUnit': 'Measurement unit',
           'fresh': 'fresh',
+          'more_favorites': '✨Swipe✨ to find more cocktails!',
         },
         'de_DE': {
           'hello': 'Hallo Welt',
@@ -97,6 +99,7 @@ class AppTranslations extends Translations {
           'select_quantity': 'Menge auswählen',
           'tsp': 'TL',
           'tbsp': 'EL',
+          'tblsp': 'EL',
           'part': 'Teil',
           'Slice': 'Scheibe',
           'slice': 'scheibe',
@@ -154,6 +157,7 @@ class AppTranslations extends Translations {
           'Milliliters': 'Milliliter (ml)',
           'measurementUnit': 'Maßeinheit',
           'fresh': 'frische',
+          'more_favorites': '✨Swipen✨ Sie, um mehr Cocktails zu finden!',
         },
         'fr_FR': {
           'hello': 'Bonjour monde',
@@ -173,6 +177,7 @@ class AppTranslations extends Translations {
           'select_quantity': 'Sélectionner la quantité',
           'tsp': 'càc',
           'tbsp': 'càs',
+          'tblsp': 'càs',
           'part': 'part',
           'Slice': 'Tranche',
           'slice': 'tranche',
@@ -230,6 +235,7 @@ class AppTranslations extends Translations {
           'Cocoa powder': 'Poudre de cacao',
           'Cardamom': 'Cardamome',
           'Cloves': 'Clous de girofle',
+          'more_favorites': '✨Swipez✨ pour trouver plus de cocktails!',
         },
       };
 }

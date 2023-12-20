@@ -3,6 +3,7 @@ import 'package:cocktails/controllers/home_controller.dart';
 import 'package:cocktails/models/drink.dart';
 import 'package:cocktails/models/ingredient.dart';
 import 'package:cocktails/pages/widgets/cocktails_appbar.dart';
+import 'package:cocktails/pages/widgets/drink_card.dart';
 import 'package:cocktails/pages/widgets/drink_recipe_modal.dart';
 import 'package:cocktails/pages/widgets/navbar.dart';
 import 'package:cocktails/providers/persistent_data_provider.dart';
@@ -39,34 +40,37 @@ class _HomePageState extends State<HomePage> {
         appBar: CocktailsAppBar(isBackButton: false),
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _searchField(),
-              Column(
-                children: [
-                  SizedBox(
-                    height: 20,
-                  ),
-                  _recommendationSection(),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  _categoriesSection(),
-                  if (homeController.ingredients.isNotEmpty) ...[
+          child: SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _searchField(),
+                Column(
+                  children: [
                     SizedBox(
                       height: 20,
                     ),
-                    _ingredientsSection(),
+                    _recommendationSection(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    _categoriesSection(),
+                    if (homeController.ingredients.isNotEmpty) ...[
+                      SizedBox(
+                        height: 20,
+                      ),
+                      _ingredientsSection(),
+                    ],
+                    SizedBox(
+                      height: 20,
+                    ),
                   ],
-                  SizedBox(
-                    height: 20,
-                  ),
-                ],
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
+        extendBody: true,
         bottomNavigationBar: NavBar());
   }
 
@@ -79,9 +83,9 @@ class _HomePageState extends State<HomePage> {
           child: Text(
             'recommendation'.tr,
             style: TextStyle(
-                color: Colors.black,
-                fontSize: 26,
-                fontWeight: FontWeight.w600,
+              color: Colors.black,
+              fontSize: 26,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),
@@ -90,7 +94,7 @@ class _HomePageState extends State<HomePage> {
         ),
         Container(
           color: Colors.white,
-          height: 220,
+          height: 200,
           child: Obx(() => ListView.separated(
               itemCount: homeController.recommendations.length,
               scrollDirection: Axis.horizontal,
@@ -100,136 +104,12 @@ class _HomePageState extends State<HomePage> {
                   ),
               itemBuilder: (context, index) {
                 final Drink drink = homeController.recommendations[index];
-                return _recommendationSectionItem(index, drink);
-              })),
+                return DrinkCard(drink, index);
+              }),
+          ),
         )
       ],
     );
-  }
-
-  Stack _recommendationSectionItem(int index, Drink drink) {
-    return Stack(children: [
-      Container(
-        width: 150,
-        decoration: BoxDecoration(
-          color: Color(0xFFBAA9DB).withOpacity(index % 2 == 0 ? 0.6 : 0.3),
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              // Use CachedNetworkImage for loading the image with a placeholder
-              SizedBox(
-                height: 120,
-                width: 120,
-                child: CachedNetworkImage(
-                  imageUrl: drink.thumbnail ?? '',
-                  imageBuilder: (context, imageProvider) => Container(
-                    // Adjust the height as needed
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      image: DecorationImage(
-                        image: imageProvider,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  placeholder: (context, url) => Shimmer.fromColors(
-                    baseColor: Colors.grey[300]!,
-                    highlightColor: Colors.grey[100]!,
-                    child: Container(
-                      height: 100,
-                      // Adjust the height as needed
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 2, right: 2),
-                child: Text(
-                  drink.strDrink ?? 'No name',
-                  textAlign: TextAlign.center,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                  style: TextStyle(
-                    //fontWeight: FontWeight.w500,
-                    color: Colors.black,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-              if (drink.strAlcoholic != null) ...[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Icon(
-                      drink.strAlcoholic! == "Alcoholic"
-                          ? Icons.local_bar_outlined
-                          : Icons.no_drinks_outlined,
-                      size: 20,
-                      color: Colors.black,
-                    ),
-                    Spacer(),
-                    if (drink.ingredients.isNotEmpty) ...[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            '${drink.ingredients.length}',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16,
-                            ),
-                          ),
-                          Icon(
-                            Icons.liquor,
-                            size: 20,
-                            color: Colors.black,
-                          )
-                        ],
-                      ),
-                    ],
-                  ],
-                )
-              ],
-            ],
-          ),
-        ),
-      ),
-      Positioned.fill(
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(15),
-            splashColor: Color(0x00542E71).withOpacity(0.2),
-            highlightColor: Color(0x00542E71).withOpacity(0.3),
-            onTapUp: (TapUpDetails details) {
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                enableDrag: true,
-                showDragHandle: false,
-                useSafeArea: true,
-                shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(10))),
-                builder: (context) => DrinkRecipeModal(
-                  drink: drink,
-                ),
-              );
-            },
-          ),
-        ),
-      ),
-    ]);
   }
 
   Column _categoriesSection() {
@@ -281,7 +161,7 @@ class _HomePageState extends State<HomePage> {
                     final Category category = homeController.categories[index];
                     return _categoriesSectionItem(category, index);
                   },
-                ))),
+                )),),
       ],
     );
   }
