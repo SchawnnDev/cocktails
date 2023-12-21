@@ -5,20 +5,34 @@ import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 
 class PersistentDataProvider {
-  late List<Category> categories;
-  late List<Drink> randomDrinks;
+  List<Category> categories = [];
+  List<Drink> randomDrinks = [];
+  RxBool error = false.obs;
+  bool first = true;
 
   Future<void> load() async {
     var cocktailsDBService = Get.find<TheCocktailsDBService>();
 
-    var foundCategories = await cocktailsDBService.getCategories();
-    categories = foundCategories.drinks
-            ?.map((element) => element.strCategory)
-            .whereNotNull()
-            .map((e) => Category(name: e))
-            .toList() ??
-        [];
+    try {
+      var foundCategories = await cocktailsDBService.getCategories();
+      categories = foundCategories.drinks
+          ?.map((element) => element.strCategory)
+          .whereNotNull()
+          .map((e) => Category(name: e))
+          .toList() ??
+          [];
 
-    randomDrinks = (await cocktailsDBService.getRandomDrinks(10)).drinks ?? [];
+      randomDrinks = (await cocktailsDBService.getRandomDrinks(10)).drinks ?? [];
+      print(error);
+      if (first) {
+        first = false;
+        error(true);
+      } else {
+        error(false);
+      }
+    } catch (e) {
+      error(true);
+      print(e);
+    }
   }
 }

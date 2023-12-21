@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cocktails/models/drink.dart';
-import 'package:cocktails/pages/widgets/drink_recipe_modal.dart';
+import 'package:cocktails/views/widgets/drink_recipe_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';

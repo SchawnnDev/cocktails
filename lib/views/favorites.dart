@@ -1,7 +1,7 @@
 import 'package:cocktails/controllers/favorites_controller.dart';
-import 'package:cocktails/pages/widgets/cocktails_appbar.dart';
-import 'package:cocktails/pages/widgets/drink_card.dart';
-import 'package:cocktails/pages/widgets/navbar.dart';
+import 'package:cocktails/views/widgets/cocktails_appbar.dart';
+import 'package:cocktails/views/widgets/drink_card.dart';
+import 'package:cocktails/views/widgets/navbar.dart';
 import 'package:cocktails/providers/persistent_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

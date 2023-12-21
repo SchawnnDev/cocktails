@@ -1,9 +1,9 @@
-import 'package:cocktails/pages/categories/categories.dart';
-import 'package:cocktails/pages/categories/category.dart';
-import 'package:cocktails/pages/favorites.dart';
-import 'package:cocktails/pages/home.dart';
-import 'package:cocktails/pages/settings.dart';
-import 'package:cocktails/pages/swipe.dart';
+import 'package:cocktails/views/categories/categories.dart';
+import 'package:cocktails/views/categories/category.dart';
+import 'package:cocktails/views/favorites.dart';
+import 'package:cocktails/views/home.dart';
+import 'package:cocktails/views/settings.dart';
+import 'package:cocktails/views/swipe.dart';
 import 'package:get/get.dart';
 
 class Routes {
