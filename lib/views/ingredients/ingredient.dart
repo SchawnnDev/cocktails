@@ -11,26 +11,26 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
-class CategoryPageBinding implements Bindings {
+class IngredientPageBinding implements Bindings {
   @override
   void dependencies() {
     final dataProvider = Get.find<PersistentDataProvider>();
-    Get.lazyPut(() => CategoryController(categories: dataProvider.categories));
+    Get.lazyPut(() => IngredientPage());
   }
 }
 
-class CategoryPage extends StatefulWidget {
-  const CategoryPage({super.key});
+class IngredientPage extends StatefulWidget {
+  const IngredientPage({super.key});
 
   @override
-  State<CategoryPage> createState() => _CategoryPageState();
+  State<IngredientPage> createState() => _IngredientPageState();
 }
 
-class _CategoryPageState extends State<CategoryPage> {
+class _IngredientPageState extends State<IngredientPage> {
   @override
   Widget build(BuildContext context) {
     final categoryController = Get.find<CategoryController>();
-    var categoryName = Get.parameters['category_name'];
+    var categoryName = Get.parameters['ingredient_name'];
 
     if (categoryName == null) {
       Get.back();

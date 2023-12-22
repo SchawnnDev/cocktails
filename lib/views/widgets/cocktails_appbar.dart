@@ -4,8 +4,15 @@ import 'package:get/get.dart';
 class CocktailsAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool isBackButton;
+  final bool isFilterButton;
+  final Function(String)? onFilterSelected;
 
-  CocktailsAppBar({super.key, this.title = 'Cocktails', this.isBackButton = false});
+  CocktailsAppBar(
+      {super.key,
+      this.title = 'Cocktails',
+      this.isBackButton = false,
+      this.isFilterButton = false,
+      this.onFilterSelected});
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +43,47 @@ class CocktailsAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
         ),
+        actions: [
+          if (isFilterButton)
+            GestureDetector(
+              onTapUp: (details) {
+                Get.bottomSheet(
+                  Container(
+                    height: 200,
+                    color: Colors.white,
+                    child: Column(
+                      children: [
+                        ListTile(
+                          title: Text('filter'.tr),
+                        ),
+                        ListTile(
+                          title: Text('filter'.tr),
+                        ),
+                        ListTile(
+                          title: Text('filter'.tr),
+                        ),
+                        ListTile(
+                          title: Text('filter'.tr),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+              child: Container(
+                margin: EdgeInsets.all(10),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    color: Color(0xffF7F8F8),
+                    borderRadius: BorderRadius.circular(10)),
+                child: Icon(
+                  Icons.filter_alt,
+                  color: Colors.black,
+                  size: 24.0,
+                ),
+              ),
+            ),
+        ],
       );
     }
 
@@ -54,5 +102,4 @@ class CocktailsAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
-
 }
