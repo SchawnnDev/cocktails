@@ -106,6 +106,19 @@ class Drink {
     instructions[lang] = splitInstructions;
   }
 
+  /// Get instructions by language (default is EN)
+  List<String> getInstructions(String lang) {
+    var result = instructions[lang] ?? [];
+    if (lang == 'EN') {
+      return result;
+    }
+    if (result.isEmpty) { // fallback to EN
+      return instructions['EN'] ?? [];
+    }
+    return result;
+  }
+
+  /// generate random favorites count (because API doesn't provide this)
   static String _generateRandomFavorites() {
     var random = Random();
     var randomPrefix = random.nextInt(100);

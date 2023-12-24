@@ -1,5 +1,7 @@
 import 'package:cocktails/models/category.dart';
 import 'package:cocktails/models/drink.dart';
+import 'package:cocktails/models/glass.dart';
+import 'package:cocktails/models/ingredient.dart';
 import 'package:cocktails/services/thecocktailsdb_service.dart';
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
@@ -7,6 +9,8 @@ import 'package:get/get.dart';
 class PersistentDataProvider {
   List<Drink> _drinks = [];
   List<Category> categories = [];
+  List<Glass> glasses = [];
+  List<Ingredient> ingredients = [];
   List<Drink> randomDrinks = [];
   RxBool error = false.obs;
 
@@ -16,12 +20,7 @@ class PersistentDataProvider {
 
     try {
       var foundCategories = await cocktailsDBService.getCategories();
-      categories = foundCategories.drinks
-              ?.map((element) => element.strCategory)
-              .whereNotNull()
-              .map((e) => Category(name: e))
-              .toList() ??
-          [];
+      categories = foundCategories.drinks ?? [];
 
       var randomDrinks = await cocktailsDBService.getRandomDrinks(10);
       this.randomDrinks = randomDrinks.drinks ?? [];
@@ -42,12 +41,12 @@ class PersistentDataProvider {
   Drink? findDrink(String? id) {
     return id == null
         ? null
-        : _drinks.firstWhereOrNull((element) => element.strDrink == id);
+        : _drinks.firstWhereOrNull((element) => element.idDrink == id);
   }
 
   /// Add drink to cache if it doesn't exist
   void addDrink(Drink drink) {
-    if (findDrink(drink.strDrink) != null) {
+    if (findDrink(drink.idDrink) != null) {
       return;
     }
     _drinks.add(drink);
@@ -81,7 +80,7 @@ class PersistentDataProvider {
   Future<List<Drink>> getDrinks(List<Drink> ids) async {
     var result = <Drink>[];
     for (var id in ids) {
-      var drink = await getDrink(id.strDrink);
+      var drink = await getDrink(id.idDrink);
       if (drink != null) {
         result.add(drink);
       }

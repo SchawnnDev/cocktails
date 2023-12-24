@@ -191,7 +191,7 @@ class _HomePageState extends State<HomePage> {
               Padding(
                 padding: const EdgeInsets.only(left: 5, right: 5),
                 child: Text(
-                  category.name,
+                  category.name ?? 'No name',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.w400,
@@ -211,7 +211,10 @@ class _HomePageState extends State<HomePage> {
               splashColor: Color(0x00542E71).withOpacity(0.2),
               highlightColor: Color(0x00542E71).withOpacity(0.3),
               onTapUp: (TapUpDetails details) {
-                Get.toNamed('/category/${Uri.encodeComponent(category.name)}');
+                if (category.name != null) {
+                  return;
+                }
+                Get.toNamed('/category/${Uri.encodeComponent(category.name!)}');
               },
             ),
           ),

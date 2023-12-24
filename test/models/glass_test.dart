@@ -1,6 +1,7 @@
 // test drink model class
 import 'dart:convert';
 
+import 'package:cocktails/models/glass.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:cocktails/models/drinks.dart';
@@ -11,15 +12,15 @@ void main() {
     // get json from drinkJson and test if parse it
     // Map<string, dynamic>
     Map<String, dynamic> json = jsonDecode(drinksJson);
-    final glasses = Drinks.fromJson(json);
+    final glasses = Drinks.fromJson(json, (json) => Glass.fromJson(json));
 
     expect(glasses.drinks, isNotNull);
     expect(glasses.drinks!, isNotEmpty);
 
     for (var glass in glasses.drinks!) {
-      expect(glass.strGlass, isNotNull);
+      expect(glass.name, isNotNull);
     }
 
-    expect(glasses.drinks![0].strGlass, 'Highball glass');
+    expect(glasses.drinks![0].name, 'Highball glass');
   });
 }

@@ -31,19 +31,23 @@ class Routes {
       binding: CategoryPageBinding(),
     ),
     GetPage(
-        name: '/favorites',
-        page: () => const FavoritesPage(),
-        transition: Transition.fadeIn,
-        transitionDuration: const Duration(milliseconds: 200),
-        binding: FavoritesPageBinding()
+      name: '/favorites',
+      page: () => const FavoritesPage(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 200),
+      binding: FavoritesPageBinding(),
     ),
     GetPage(
-        name: '/swipe',
-        page: () => const SwipePage(),
-        transition: Transition.fadeIn),
+      name: '/swipe',
+      page: () => const SwipePage(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 200),
+      binding: SwipePageBinding(),
+    ),
     GetPage(
-        name: '/settings',
-        page: () => const SettingsPage(),
-        transition: Transition.fadeIn)
+      name: '/settings',
+      page: () => const SettingsPage(),
+      transition: Transition.fadeIn,
+    )
   ];
 }

@@ -80,6 +80,9 @@ class AppTranslations extends Translations {
           'measurementUnit': 'Measurement unit',
           'fresh': 'fresh',
           'more_favorites': '✨Swipe✨ to find more cocktails!',
+          'Alcoholic': 'Alcoholic',
+          'Non alcoholic': 'Non alcoholic',
+          'Optional alcohol': 'Optional alcohol',
         },
         'de_DE': {
           'hello': 'Hallo Welt',
@@ -158,6 +161,9 @@ class AppTranslations extends Translations {
           'measurementUnit': 'Maßeinheit',
           'fresh': 'frische',
           'more_favorites': '✨Swipen✨ Sie, um mehr Cocktails zu finden!',
+          'Alcoholic': 'Alkoholisch',
+          'Non alcoholic': 'Alkoholfrei',
+          'Optional alcohol': 'Optionaler Alkohol',
         },
         'fr_FR': {
           'hello': 'Bonjour monde',
@@ -236,6 +242,9 @@ class AppTranslations extends Translations {
           'Cardamom': 'Cardamome',
           'Cloves': 'Clous de girofle',
           'more_favorites': '✨Swipez✨ pour trouver plus de cocktails!',
+          'Alcoholic': 'Alcoolisé',
+          'Non alcoholic': 'Non alcoolisé',
+          'Optional alcohol': 'Alcool optionnel',
         },
       };
 }

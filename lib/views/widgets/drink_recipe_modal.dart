@@ -110,7 +110,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                 onPressed: () {
                   widget.drink.favorite.toggle();
                 },
-              //  splashRadius: 26,
+                //  splashRadius: 26,
               ),
             )
           ],
@@ -138,6 +138,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
   }
 
   Container _buildInstructionsContainer() {
+    final locale = Rx<Locale?>(Get.locale);
     return Container(
       color: Color(0xFFBAA9DB).withOpacity(0.3),
       padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 100),
@@ -148,8 +149,13 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
             textAlign: TextAlign.center,
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
           ),
-          if (widget.drink.instructions['EN'] != null) // TODO: choose lang
-            Padding(
+          ObxValue((p0) {
+            var instructions = widget.drink
+                .getInstructions(p0.value?.languageCode.toUpperCase() ?? 'EN');
+            if (instructions.isEmpty) {
+              return Text('No instructions :(');
+            }
+            return Padding(
               padding: const EdgeInsets.only(left: 10),
               child: ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
@@ -187,10 +193,8 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                   );
                 },
               ),
-            ),
-          if (widget.drink.instructions['EN'] == null ||
-              widget.drink.instructions['EN']!.isEmpty)
-            Text('No instructions :('),
+            );
+          }, locale),
         ],
       ),
     );
@@ -306,7 +310,8 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                     SizedBox(height: 5),
                     Obx(() => Text(
                           multiplyMeasure(
-                            widget.drink.ingredients[index].measure.trim(),
+                            widget.drink.ingredients[index].measure?.trim() ??
+                                '1x',
                             quantity.value,
                             settingsController.measureInOz.value,
                           ),
@@ -485,14 +490,14 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                         widget.drink.favorite.toggle();
                       },
                       child: Obx(() => Icon(
-                        widget.drink.favorite.value
-                            ? Icons.favorite
-                            : Icons.favorite_outline,
-                        color: widget.drink.favorite.value
-                            ? Colors.redAccent
-                            : Colors.black,
-                        size: 24,
-                      )),
+                            widget.drink.favorite.value
+                                ? Icons.favorite
+                                : Icons.favorite_outline,
+                            color: widget.drink.favorite.value
+                                ? Colors.redAccent
+                                : Colors.black,
+                            size: 24,
+                          )),
                     )
                   ],
                 ),

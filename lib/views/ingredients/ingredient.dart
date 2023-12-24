@@ -49,7 +49,10 @@ class _IngredientPageState extends State<IngredientPage> {
     final cocktailsDBService = Get.find<TheCocktailsDBService>();
 
     return Scaffold(
-      appBar: CocktailsAppBar(title: category.name, isBackButton: true, isFilterButton: true),
+      appBar: CocktailsAppBar(
+          title: category.name ?? 'No name',
+          isBackButton: true,
+          isFilterButton: true),
       backgroundColor: Colors.white,
       body: Container(
         constraints: BoxConstraints.expand(),

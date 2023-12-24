@@ -10,7 +10,8 @@ class CategoriesPageBinding extends Bindings {
   @override
   void dependencies() {
     final dataProvider = Get.find<PersistentDataProvider>();
-    Get.lazyPut(() => CategoriesController(categories: dataProvider.categories));
+    Get.lazyPut(
+        () => CategoriesController(categories: dataProvider.categories));
   }
 }
 
@@ -49,8 +50,8 @@ class _CategoriesPageState extends State<CategoriesPage> {
                   spacing: 15,
                   runSpacing: 15,
                   alignment: WrapAlignment.spaceEvenly,
-                  children: List.generate(categoriesController.categories.length,
-                      (index) {
+                  children: List.generate(
+                      categoriesController.categories.length, (index) {
                     // For scrolling test, uncomment this
                     // if (index >= categoryController.categories.length) {
                     //   return _categoriesItem(Category(name: 'Test'), index);
@@ -93,7 +94,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                 Padding(
                   padding: const EdgeInsets.only(left: 5, right: 5),
                   child: Text(
-                    category.name,
+                    category.name ?? 'No name',
                     textAlign: TextAlign.center,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -115,8 +116,11 @@ class _CategoriesPageState extends State<CategoriesPage> {
                 splashColor: Color(0x00542E71).withOpacity(0.2),
                 highlightColor: Color(0x00542E71).withOpacity(0.3),
                 onTapUp: (TapUpDetails details) {
+                  if (category.name == null) {
+                    return;
+                  }
                   Get.toNamed(
-                      '/category/${Uri.encodeComponent(category.name)}');
+                      '/category/${Uri.encodeComponent(category.name!)}');
                 },
               ),
             ),

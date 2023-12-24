@@ -12,4 +12,12 @@ class BoxesService extends GetxService {
     return this;
   }
 
+  void addFavorite(String id) {
+    favoritesBox.put(id, true);
+  }
+
+  void removeFavorite(String id) {
+    favoritesBox.delete(id);
+  }
+
 }

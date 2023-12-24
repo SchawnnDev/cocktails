@@ -25,8 +25,9 @@ class _DrinkCardState extends State<DrinkCard> {
           height: 205,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
-            color: widget.singleColor ?? Color(0xFFBAA9DB)
-                .withOpacity(widget.index % 2 == 0 ? 0.6 : 0.3),
+            color: widget.singleColor ??
+                Color(0xFFBAA9DB)
+                    .withOpacity(widget.index % 2 == 0 ? 0.6 : 0.3),
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.2),
@@ -60,11 +61,14 @@ class _DrinkCardState extends State<DrinkCard> {
                     baseColor: Colors.grey[300]!,
                     highlightColor: Colors.grey[100]!,
                     child: Container(
-                      height: 130,
-                      width: 130,
+                      height: 110,
+                      width: 140,
                       // Adjust the height as needed
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(8.0),
+                          topRight: Radius.circular(8.0),
+                        ),
                         color: Colors.white,
                       ),
                     ),
@@ -87,46 +91,6 @@ class _DrinkCardState extends State<DrinkCard> {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              SizedBox(
-                height: 5,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10, left: 10),
-                child: Row(
-                  children: [
-                    Icon(
-                      widget.drink.strAlcoholic! == "Alcoholic"
-                          ? Icons.local_bar
-                          : Icons.no_drinks,
-                      size: 20,
-                      color: Colors.black,
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    if (widget.drink.ingredients.isNotEmpty) ...[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            '${widget.drink.ingredients.length}',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16,
-                            ),
-                          ),
-                          Icon(
-                            Icons.liquor,
-                            size: 20,
-                            color: Colors.black,
-                          )
-                        ],
-                      ),
-                    ],
-                  ],
-                ),
-              )
             ],
           )
 
@@ -169,8 +133,48 @@ class _DrinkCardState extends State<DrinkCard> {
         ),
       ),
       Positioned(
+        left: 10,
+        bottom: 10,
+        child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Icon(
+            widget.drink.strAlcoholic! == "Alcoholic"
+                ? Icons.local_bar
+                : Icons.no_drinks,
+            size: 20,
+            color: Colors.black,
+          ),
+          SizedBox(
+            width: 5,
+          ),
+          if (widget.drink.ingredients.isNotEmpty) ...[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  '${widget.drink.ingredients.length}',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
+                  ),
+                ),
+                Icon(
+                  Icons.liquor,
+                  size: 20,
+                  color: Colors.black,
+                )
+              ],
+            ),
+          ],
+        ],
+      ),
+      ),
+      Positioned(
         right: 10,
-        bottom: 12,
+        bottom: 10,
         child: GestureDetector(
           onTapUp: (details) {
             widget.drink.favorite.toggle();

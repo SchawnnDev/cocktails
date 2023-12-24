@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cocktails/models/category.dart';
 import 'package:cocktails/models/drink.dart';
 import 'package:cocktails/models/drinks.dart';
 import 'package:get/get.dart';
@@ -21,17 +22,17 @@ class TheCocktailsDBService extends GetxService {
     final response = await http.get(_buildUri('filter.php?c=$category'));
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
-      return Drinks.fromJson(data);
+      return Drinks.fromJson(data, (json) => Drink.fromJson(json));
     } else {
       return Future.error('Failed to load drinks');
     }
   }
 
-  Future<Drinks> getCategories() async {
+  Future<Drinks<Category>> getCategories() async {
     final response = await http.get(_buildUri('list.php?c=list'));
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
-      return Drinks.fromJson(data);
+      return Drinks.fromJson(data, (json) => Category.fromJson(json));
     } else {
       return Future.error('Failed to load categories');
     }
@@ -41,7 +42,7 @@ class TheCocktailsDBService extends GetxService {
     final response = await http.get(_buildUri('random.php'));
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
-      final drinks = Drinks.fromJson(data);
+      final drinks = Drinks.fromJson(data, (json) => Drink.fromJson(json));
       if (drinks.drinks != null && drinks.drinks!.isNotEmpty) {
         return drinks.drinks![0];
       }
@@ -51,12 +52,12 @@ class TheCocktailsDBService extends GetxService {
     return null;
   }
 
-  Future<Drinks> getRandomDrinks(int count) async {
+  Future<Drinks<Drink>> getRandomDrinks(int count) async {
     if (count <= 0) {
       return Drinks();
     }
 
-    final Drinks drinks = Drinks(drinks: []);
+    final Drinks<Drink> drinks = Drinks(drinks: []);
     var errors = count;
 
     while (count != 0) {
@@ -85,7 +86,7 @@ class TheCocktailsDBService extends GetxService {
     final response = await http.get(_buildUri('lookup.php?i=$id'));
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
-      final drinks = Drinks.fromJson(data);
+      final drinks = Drinks.fromJson(data, (json) => Drink.fromJson(json));
       if (drinks.drinks != null && drinks.drinks!.isNotEmpty) {
         return drinks.drinks![0];
       }

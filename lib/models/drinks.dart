@@ -1,15 +1,15 @@
 import 'package:cocktails/models/drink.dart';
 
-class Drinks {
-  List<Drink>? drinks;
+class Drinks<T> {
+  List<T>? drinks;
 
   Drinks({this.drinks});
 
-  Drinks.fromJson(Map<String, dynamic> json) {
+  Drinks.fromJson(Map<String, dynamic> json, T Function(Map<String, dynamic>) fromJsonT) {
     if (json['drinks'] != null) {
-      drinks = <Drink>[];
+      drinks = <T>[];
       json['drinks'].forEach((v) {
-        drinks!.add(Drink.fromJson(v));
+        drinks!.add(fromJsonT(v));
       });
     }
   }

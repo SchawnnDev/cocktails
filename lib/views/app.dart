@@ -4,6 +4,7 @@ import 'package:cocktails/routes/routes.dart';
 import 'package:cocktails/utils/translations.dart';
 import 'package:cocktails/views/widgets/splash.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import 'widgets/no_internet.dart';
@@ -22,6 +23,10 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     Future<void> data = dataProvider.load();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
 
     return FutureBuilder(
       future: data,

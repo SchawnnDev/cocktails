@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 class Category {
-  String name;
+  String? name;
   late Color boxColor;
   late String? imagePath;
 
@@ -36,6 +36,10 @@ class Category {
         return 'assets/img/soft-drinks.png';
     }
     return 'assets/img/cocktail.png';
+  }
+
+  factory Category.fromJson(Map<String, dynamic> json) {
+    return Category(name: json['strCategory']);
   }
 
 }

@@ -12,7 +12,8 @@ class IngredientsPageBinding extends Bindings {
   @override
   void dependencies() {
     final dataProvider = Get.find<PersistentDataProvider>();
-    Get.lazyPut(() => IngredientsController(ingredients: dataProvider.categories));
+    Get.lazyPut(
+        () => IngredientsController(ingredients: dataProvider.categories));
   }
 }
 
@@ -51,8 +52,8 @@ class _IngredientsPageState extends State<IngredientsPage> {
                   spacing: 15,
                   runSpacing: 15,
                   alignment: WrapAlignment.spaceEvenly,
-                  children: List.generate(ingredients.ingredients.length,
-                      (index) {
+                  children:
+                      List.generate(ingredients.ingredients.length, (index) {
                     // For scrolling test, uncomment this
                     // if (index >= categoryController.ingredients.length) {
                     //   return _ingredientsItem(Category(name: 'Test'), index);
@@ -95,7 +96,7 @@ class _IngredientsPageState extends State<IngredientsPage> {
                 Padding(
                   padding: const EdgeInsets.only(left: 5, right: 5),
                   child: Text(
-                    category.name,
+                    category.name ?? 'No name',
                     textAlign: TextAlign.center,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -117,8 +118,11 @@ class _IngredientsPageState extends State<IngredientsPage> {
                 splashColor: Color(0x00542E71).withOpacity(0.2),
                 highlightColor: Color(0x00542E71).withOpacity(0.3),
                 onTapUp: (TapUpDetails details) {
+                  if (category.name == null) {
+                    return;
+                  }
                   Get.toNamed(
-                      '/ingredient/${Uri.encodeComponent(category.name)}');
+                      '/ingredient/${Uri.encodeComponent(category.name!)}');
                 },
               ),
             ),
