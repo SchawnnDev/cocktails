@@ -10,14 +10,14 @@ class FavoritesPageBinding extends Bindings {
   @override
   void dependencies() {
     final dataProvider = Get.find<PersistentDataProvider>();
-    Get.lazyPut(() =>
-        FavoritesController(
-            favorites: dataProvider.randomDrinks)); // TODO: Change this
+    Get.lazyPut(() => FavoritesController(
+        favorites: dataProvider.drinks
+            .where((element) => element.favorite.value)
+            .toList()));
   }
 }
 
 class FavoritesPage extends StatefulWidget {
-
   const FavoritesPage({super.key});
 
   @override
@@ -31,7 +31,10 @@ class _FavoritesPageState extends State<FavoritesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CocktailsAppBar(title: 'favorites'.tr, isBackButton: false),
-      bottomNavigationBar: NavBar(index: 1, animate: true,),
+      bottomNavigationBar: NavBar(
+        index: 1,
+        animate: true,
+      ),
       backgroundColor: Colors.white,
       body: Container(
         constraints: BoxConstraints.expand(),
@@ -49,28 +52,31 @@ class _FavoritesPageState extends State<FavoritesPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Obx(() =>
-                Wrap(
-                  spacing: 15,
-                  runSpacing: 15,
-                  alignment: WrapAlignment.spaceEvenly,
-                  children: List.generate(
-                      favoritesController.favorites.length,
-                          (index) {
-                        // For scrolling test, uncomment this
-                        // if (index >= categoryController.categories.length) {
-                        //   return _categoriesItem(Category(name: 'Test'), index);
-                        // }
-                            final drink = favoritesController.favorites[index];
+              Obx(() => Wrap(
+                    spacing: 15,
+                    runSpacing: 15,
+                    alignment: WrapAlignment.spaceEvenly,
+                    children: List.generate(
+                        favoritesController.favorites.length, (index) {
+                      // For scrolling test, uncomment this
+                      // if (index >= categoryController.categories.length) {
+                      //   return _categoriesItem(Category(name: 'Test'), index);
+                      // }
+                      final drink = favoritesController.favorites[index];
 
-                        return DrinkCard(drink, index, singleColor: Color(0xFFBAA9DB).withOpacity(0.6),);
-                      }),
-                )),
+                      return DrinkCard(
+                        drink,
+                        index,
+                        singleColor: Color(0xFFBAA9DB).withOpacity(0.6),
+                      );
+                    }),
+                  )),
               SizedBox(height: 20),
               Center(
                 child: ElevatedButton(
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>( Color(0xFFBAA9DB)),
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Color(0xFFBAA9DB)),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),

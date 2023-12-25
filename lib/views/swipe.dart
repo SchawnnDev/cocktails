@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cocktails/controllers/swipe_controller.dart';
 import 'package:cocktails/models/drink.dart';
 import 'package:cocktails/providers/persistent_data_provider.dart';
+import 'package:cocktails/utils/widgets/cocktail_progress_indicator.dart';
 import 'package:cocktails/views/widgets/cocktails_appbar.dart';
 import 'package:cocktails/views/widgets/navbar.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,7 +16,9 @@ class SwipePageBinding extends Bindings {
   void dependencies() {
     final dataProvider = Get.find<PersistentDataProvider>();
     Get.lazyPut(() => SwipeController(
-        drinks: dataProvider.randomDrinks)); // TODO: Change this
+        drinks: dataProvider.drinks
+            .where((element) => element.isRecommended)
+            .toList())); // TODO: Change this
   }
 }
 
@@ -27,8 +30,14 @@ class SwipePage extends StatefulWidget {
 }
 
 class _SwipePageState extends State<SwipePage> {
-  final AppinioSwiperController controller = AppinioSwiperController();
+  late AppinioSwiperController controller = AppinioSwiperController();
   final SwipeController swipeController = Get.find();
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,47 +50,69 @@ class _SwipePageState extends State<SwipePage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Column(
+        child: Stack(
           children: [
-            Expanded(
-              child: ObxValue(
-                (more) => more.value
-                    ? Center(child: CircularProgressIndicator())
-                    : AppinioSwiper(
-                        controller: controller,
-                        cardCount: swipeController.drinks.length,
-                        onEnd: () {
-                          swipeController.loadMore();
-                        },
-                        onSwipeEnd: (index, index2, swipeDirection) {},
-                        cardBuilder: (BuildContext context, int index) {
-                          final drink = swipeController.drinks[index];
-                          return _swipeCard(drink, index);
-                        },
+            FutureBuilder(
+              future: swipeController.loadMore(),
+              builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  Future.delayed(const Duration(seconds: 1)).then((_) {
+                    _shakeCard();
+                  });
+                  return Column(
+                    children: [
+                      Expanded(
+                        child: Obx(
+                          () => AppinioSwiper(
+                            controller: controller,
+                            cardCount: swipeController.drinks.length,
+                            swipeOptions:
+                                SwipeOptions.only(left: true, right: true),
+                            onEnd: () {
+                              swipeController.loadMore();
+                            },
+                            onSwipeEnd: (index, index2, swipeDirection) {},
+                            cardBuilder: (BuildContext context, int index) {
+                              final drink = swipeController.drinks[index];
+                              return _swipeCard(drink, index);
+                            },
+                          ),
+                        ),
                       ),
-                swipeController.loadingMore,
-              ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      IconTheme.merge(
+                        data: const IconThemeData(size: 30),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            swipeLeftButton(controller),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            swipeRightButton(controller),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            unswipeButton(controller),
+                          ],
+                        ),
+                      )
+                    ],
+                  );
+                }
+                return SizedBox();
+              },
             ),
-            const SizedBox(
-              height: 20,
+            Obx(
+              () => swipeController.loadingMore.value
+                  ? const Center(
+                      //child: CocktailProgressIndicator(),
+                      child: CircularProgressIndicator(),
+                    )
+                  : const SizedBox(),
             ),
-            IconTheme.merge(
-              data: const IconThemeData(size: 30),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  swipeLeftButton(controller),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  swipeRightButton(controller),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  unswipeButton(controller),
-                ],
-              ),
-            )
           ],
         ),
       ),
@@ -301,6 +332,29 @@ class _SwipePageState extends State<SwipePage> {
           color: CupertinoColors.systemGrey2,
         ),
       ),
+    );
+  }
+
+  /// Animates the card back and forth to teach the user that it is swipable.
+  Future<void> _shakeCard() async {
+    const double distance = 40;
+    // We can animate back and forth by chaining different animations.
+    await controller.animateTo(
+      const Offset(-distance, 0),
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeInOut,
+    );
+    await controller.animateTo(
+      const Offset(distance, 0),
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
+    );
+    // We need to animate back to the center because `animateTo` does not center
+    // the card for us.
+    await controller.animateTo(
+      const Offset(0, 0),
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeInOut,
     );
   }
 }

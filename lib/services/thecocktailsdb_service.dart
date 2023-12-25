@@ -18,6 +18,7 @@ class TheCocktailsDBService extends GetxService {
     return Uri.parse(apiUrl + script);
   }
 
+  /// Get drinks from API
   Future<Drinks> getDrinks(String category) async {
     final response = await http.get(_buildUri('filter.php?c=$category'));
     if (response.statusCode == 200) {
@@ -28,6 +29,7 @@ class TheCocktailsDBService extends GetxService {
     }
   }
 
+  /// Get all categories from API
   Future<Drinks<Category>> getCategories() async {
     final response = await http.get(_buildUri('list.php?c=list'));
     if (response.statusCode == 200) {
@@ -38,6 +40,7 @@ class TheCocktailsDBService extends GetxService {
     }
   }
 
+  /// Get random drink from API
   Future<Drink?> getRandomDrink() async {
     final response = await http.get(_buildUri('random.php'));
     if (response.statusCode == 200) {
@@ -52,6 +55,7 @@ class TheCocktailsDBService extends GetxService {
     return null;
   }
 
+  /// Get random drinks from API
   Future<Drinks<Drink>> getRandomDrinks(int count) async {
     if (count <= 0) {
       return Drinks();

@@ -19,7 +19,9 @@ class HomePageBinding extends Bindings {
     final dataProvider = Get.find<PersistentDataProvider>();
     Get.lazyPut(() => HomeController(
           categories: dataProvider.categories,
-          recommendations: dataProvider.randomDrinks,
+          recommendations: dataProvider.drinks
+              .where((element) => element.isRecommended)
+              .toList(),
         ));
   }
 }

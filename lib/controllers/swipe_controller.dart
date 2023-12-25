@@ -1,5 +1,6 @@
 import 'package:cocktails/models/drink.dart';
 import 'package:cocktails/providers/persistent_data_provider.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SwipeController extends GetxController {
@@ -14,13 +15,20 @@ class SwipeController extends GetxController {
     }
   }
 
-  void loadMore() {
+  Future<void> loadMore() async {
     loadingMore(true);
     final dataProvider = Get.find<PersistentDataProvider>();
-    // dataProvider.getDrink(id).then((value) {
-    //   _drinks(value);
-    //   loadingMore(false);
-    // });
+    // Get all drinks that are not favorites & not already in the list
+    final toExclude = drinks.map((e) => e.idDrink!).toSet();
+    dataProvider.drinks
+        .where((element) => !element.favorite.value)
+        .forEach((element) {
+      toExclude.add(element.idDrink!);
+    });
+    //await Future.delayed(Duration(seconds: 15));
+    await dataProvider
+        .getRandomDrinks(10, toExclude)
+        .then((value) => drinks.addAll(value))
+        .whenComplete(() { loadingMore(false); });
   }
-
 }

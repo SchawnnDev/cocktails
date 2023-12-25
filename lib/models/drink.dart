@@ -24,6 +24,9 @@ class Drink {
   late String favorites;
   RxBool favorite = false.obs;
 
+  // Flag to indicate if the drink is recommended
+  bool isRecommended = false;
+
   Drink({this.idDrink,
     this.strDrink,
     this.strDrinkAlternate,
