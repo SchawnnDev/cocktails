@@ -1,9 +1,9 @@
+import 'dart:async';
+
 import 'package:appinio_swiper/appinio_swiper.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cocktails/controllers/swipe_controller.dart';
 import 'package:cocktails/models/drink.dart';
-import 'package:cocktails/providers/persistent_data_provider.dart';
-import 'package:cocktails/utils/widgets/cocktail_progress_indicator.dart';
 import 'package:cocktails/views/widgets/cocktails_appbar.dart';
 import 'package:cocktails/views/widgets/navbar.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,11 +14,7 @@ import 'package:shimmer/shimmer.dart';
 class SwipePageBinding extends Bindings {
   @override
   void dependencies() {
-    final dataProvider = Get.find<PersistentDataProvider>();
-    Get.lazyPut(() => SwipeController(
-        drinks: dataProvider.drinks
-            .where((element) => element.isRecommended)
-            .toList())); // TODO: Change this
+    Get.lazyPut(() => SwipeController()); // TODO: Change this
   }
 }
 
@@ -32,9 +28,13 @@ class SwipePage extends StatefulWidget {
 class _SwipePageState extends State<SwipePage> {
   late AppinioSwiperController controller = AppinioSwiperController();
   final SwipeController swipeController = Get.find();
+  Timer? timer;
+  var disposed = false;
 
   @override
   void dispose() {
+    disposed = true;
+    timer?.cancel();
     controller.dispose();
     super.dispose();
   }
@@ -56,8 +56,12 @@ class _SwipePageState extends State<SwipePage> {
               future: swipeController.loadMore(),
               builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
-                  Future.delayed(const Duration(seconds: 1)).then((_) {
-                    _shakeCard();
+                  timer = Timer(Duration(seconds: 1), () {
+                    try {
+                      _shakeCard();
+                    } catch (e) {
+                      print(e);
+                    }
                   });
                   return Column(
                     children: [
@@ -68,10 +72,8 @@ class _SwipePageState extends State<SwipePage> {
                             cardCount: swipeController.drinks.length,
                             swipeOptions:
                                 SwipeOptions.only(left: true, right: true),
-                            onEnd: () {
-                              swipeController.loadMore();
-                            },
-                            onSwipeEnd: (index, index2, swipeDirection) {},
+                            onEnd: () => swipeController.loadMore(),
+                            onSwipeEnd: swipeController.swipeEnd,
                             cardBuilder: (BuildContext context, int index) {
                               final drink = swipeController.drinks[index];
                               return _swipeCard(drink, index);
@@ -339,11 +341,14 @@ class _SwipePageState extends State<SwipePage> {
   Future<void> _shakeCard() async {
     const double distance = 40;
     // We can animate back and forth by chaining different animations.
+    if (disposed) return;
     await controller.animateTo(
       const Offset(-distance, 0),
       duration: const Duration(milliseconds: 200),
       curve: Curves.easeInOut,
     );
+
+    if (disposed) return;
     await controller.animateTo(
       const Offset(distance, 0),
       duration: const Duration(milliseconds: 400),
@@ -351,6 +356,7 @@ class _SwipePageState extends State<SwipePage> {
     );
     // We need to animate back to the center because `animateTo` does not center
     // the card for us.
+    if (disposed) return;
     await controller.animateTo(
       const Offset(0, 0),
       duration: const Duration(milliseconds: 200),

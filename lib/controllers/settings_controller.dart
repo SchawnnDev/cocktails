@@ -1,4 +1,5 @@
 import 'package:cocktails/models/setting.dart';
+import 'package:cocktails/providers/persistent_data_provider.dart';
 import 'package:cocktails/services/boxes_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -65,6 +66,36 @@ class SettingsController extends GetxController {
           return newValue;
         },
       ),
+      Setting(
+        'click_reset_favorites',
+        icon: Icons.favorite_outline,
+        values: {},
+        name: 'reset_favorites',
+        onTap: () {
+          final dataProvider = Get.find<PersistentDataProvider>();
+          dataProvider.clearFavorites();
+        }
+      ),
+      Setting(
+        'click_reset_dislikes',
+        icon: Icons.thumb_down_outlined,
+        values: {},
+        name: 'reset_dislikes',
+        onTap: () {
+          final dataProvider = Get.find<PersistentDataProvider>();
+          dataProvider.clearDislikes();
+        }
+      ),
+      Setting(
+        'click_reset_all',
+        icon: Icons.restart_alt_outlined,
+        values: {},
+        name: 'reset_all',
+        onTap: () {
+          final dataProvider = Get.find<PersistentDataProvider>();
+          dataProvider.clearAll();
+        }
+      )
     ]);
   }
 

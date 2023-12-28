@@ -77,14 +77,25 @@ class PersistentDataProvider {
     if (findDrink(drink.idDrink) != null) {
       return;
     }
-    if (boxesService.favoritesBox.containsKey(drink.idDrink)) {
+    final String idDrink = drink.idDrink!;
+    if (boxesService.isFavorite(idDrink)) {
       drink.favorite(true);
+    }
+    if (boxesService.isDisliked(idDrink)) {
+      drink.disliked(true);
     }
     drink.favorite.listen((p0) {
       if (p0) {
-        boxesService.addFavorite(drink.idDrink!);
+        boxesService.addFavorite(idDrink);
       } else {
-        boxesService.removeFavorite(drink.idDrink!);
+        boxesService.removeFavorite(idDrink);
+      }
+    });
+    drink.disliked.listen((p0) {
+      if (p0) {
+        boxesService.addDislike(idDrink);
+      } else {
+        boxesService.removeDislike(idDrink);
       }
     });
     _drinks.add(drink);
@@ -173,9 +184,10 @@ class PersistentDataProvider {
     while (result.length < count) {
       var drinks =
           await cocktailsDBService.getRandomDrinks(count - result.length);
-      for (var drink in drinks.drinks ?? []) {
+      for (Drink drink in drinks.drinks ?? []) {
+        if (drink.idDrink == null) continue;
         addDrink(drink); // cache drink
-        if (!idsToExclude.contains(drink.idDrink)) {
+        if (!idsToExclude.contains(drink.idDrink!)) {
           result.add(drink);
         }
       }
@@ -195,4 +207,27 @@ class PersistentDataProvider {
     }
     return result;
   }
+
+  /// Clear all boxes (resets favorites & dislikes)
+  void clearAll() {
+    clearDislikes();
+    clearFavorites();
+  }
+
+  /// Clear favorites
+  void clearFavorites() {
+    for (var element in _drinks) {
+      element.favorite(false);
+    }
+    boxesService.favoritesBox.clear();
+  }
+
+  /// Clear dislikes
+  void clearDislikes() {
+    for (var element in _drinks) {
+      element.disliked(false);
+    }
+    boxesService.dislikesBox.clear();
+  }
+
 }

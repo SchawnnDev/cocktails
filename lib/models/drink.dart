@@ -23,6 +23,7 @@ class Drink {
   late Map<String, List<String>> instructions;
   late String favorites;
   RxBool favorite = false.obs;
+  RxBool disliked = false.obs;
 
   // Flag to indicate if the drink is recommended
   bool isRecommended = false;

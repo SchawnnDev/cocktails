@@ -1,4 +1,5 @@
 import 'package:cocktails/controllers/settings_controller.dart';
+import 'package:cocktails/models/setting.dart';
 import 'package:cocktails/views/widgets/cocktails_appbar.dart';
 import 'package:cocktails/views/widgets/navbar.dart';
 import 'package:flutter/material.dart';
@@ -38,21 +39,7 @@ class _SettingsPageState extends State<SettingsPage> {
             child: ListTile(
               leading: Icon(setting.icon),
               title: Text(setting.name.tr),
-              trailing: DropdownButton<String>(
-                value: setting.getValue(),
-                onChanged: (newValue) {
-                  setState(() {
-                    setting.setValue(newValue!);
-                  });
-                },
-                items: setting.values.entries
-                    .map<DropdownMenuItem<String>>(
-                        (entry) => DropdownMenuItem<String>(
-                              value: entry.key,
-                              child: Text(entry.value.tr),
-                            ))
-                    .toList(),
-              ),
+              trailing: _buildTrailing(setting),
             ),
           );
         },
@@ -61,6 +48,35 @@ class _SettingsPageState extends State<SettingsPage> {
         },
         itemCount: settingsController.settings.length,
       ),
+    );
+  }
+
+  Widget _buildTrailing(Setting setting) {
+    if (setting.onTap != null) {
+      return OutlinedButton(
+        onPressed: () => setting.onTap!(),
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        child: Text(setting.getValue().tr),
+      );
+    }
+
+    return DropdownButton<String>(
+      value: setting.getValue(),
+      onChanged: (newValue) {
+        setState(() {
+          setting.setValue(newValue!);
+        });
+      },
+      items: setting.values.entries
+          .map<DropdownMenuItem<String>>((entry) => DropdownMenuItem<String>(
+                value: entry.key,
+                child: Text(entry.value.tr),
+              ))
+          .toList(),
     );
   }
 }

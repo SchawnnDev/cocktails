@@ -83,6 +83,12 @@ class AppTranslations extends Translations {
           'Alcoholic': 'Alcoholic',
           'Non alcoholic': 'Non alcoholic',
           'Optional alcohol': 'Optional alcohol',
+          'reset_favorites': 'Reset favorites',
+          'click_reset_favorites': 'Reset',
+          'reset_dislikes': 'Reset dislikes',
+          'click_reset_dislikes': 'Reset',
+          'reset_all': 'Reset all',
+          'click_reset_all': 'Reset all',
         },
         'de_DE': {
           'hello': 'Hallo Welt',
@@ -164,6 +170,12 @@ class AppTranslations extends Translations {
           'Alcoholic': 'Alkoholisch',
           'Non alcoholic': 'Alkoholfrei',
           'Optional alcohol': 'Optionaler Alkohol',
+          'reset_favorites': 'Favoriten zurücksetzen',
+          'click_reset_favorites': 'Zurücksetzen',
+          'reset_dislikes': 'Dislikes zurücksetzen',
+          'click_reset_dislikes': 'Zurücksetzen',
+          'reset_all': 'Alles zurücksetzen',
+          'click_reset_all': 'Zurücksetzen',
         },
         'fr_FR': {
           'hello': 'Bonjour monde',
@@ -245,6 +257,12 @@ class AppTranslations extends Translations {
           'Alcoholic': 'Alcoolisé',
           'Non alcoholic': 'Non alcoolisé',
           'Optional alcohol': 'Alcool optionnel',
+          'reset_favorites': 'Réinitialiser les favoris',
+          'click_reset_favorites': 'Réinitialiser',
+          'reset_dislikes': 'Réinitialiser les dislikes',
+          'click_reset_dislikes': 'Réinitialiser',
+          'reset_all': 'Réinitialiser tout',
+          'click_reset_all': 'Réinitialiser',
         },
       };
 }
