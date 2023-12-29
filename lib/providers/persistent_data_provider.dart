@@ -20,20 +20,22 @@ class PersistentDataProvider {
   List<Category> _categories = [];
   List<Glass> _glasses = [];
   List<Ingredient> _ingredients = [];
-  RxBool error = false.obs;
 
+  // Getters
   List<Drink> get drinks => _drinks;
-
   List<Category> get categories => _categories;
-
   List<Glass> get glasses => _glasses;
-
   List<Ingredient> get ingredients => _ingredients;
 
+  final RxBool error = false.obs;
+  bool loaded = false;
   final boxesService = Get.find<BoxesService>();
 
   /// Load needed data from API
   Future<void> load() async {
+    if (loaded) {
+      return;
+    }
     var cocktailsDBService = Get.find<TheCocktailsDBService>();
     var boxesService = Get.find<BoxesService>();
 
@@ -56,6 +58,7 @@ class PersistentDataProvider {
         element.isRecommended = true;
       });
 
+      loaded = true;
       error(false);
     } catch (e) {
       error(true);
@@ -98,6 +101,7 @@ class PersistentDataProvider {
         boxesService.removeDislike(idDrink);
       }
     });
+    drink.isFullyLoaded = true;
     _drinks.add(drink);
   }
 

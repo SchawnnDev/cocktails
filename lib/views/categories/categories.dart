@@ -52,11 +52,6 @@ class _CategoriesPageState extends State<CategoriesPage> {
                   alignment: WrapAlignment.spaceEvenly,
                   children: List.generate(
                       categoriesController.categories.length, (index) {
-                    // For scrolling test, uncomment this
-                    // if (index >= categoryController.categories.length) {
-                    //   return _categoriesItem(Category(name: 'Test'), index);
-                    // }
-
                     return _categoriesItem(
                         categoriesController.categories[index], index);
                   }),

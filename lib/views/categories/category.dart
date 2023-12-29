@@ -1,15 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cocktails/controllers/category_controller.dart';
-import 'package:cocktails/models/drink.dart';
-import 'package:cocktails/models/drinks.dart';
+import 'package:cocktails/models/filter.dart';
 import 'package:cocktails/views/widgets/cocktails_appbar.dart';
-import 'package:cocktails/views/widgets/drink_recipe_modal.dart';
+import 'package:cocktails/views/widgets/drink_card.dart';
 import 'package:cocktails/views/widgets/navbar.dart';
 import 'package:cocktails/providers/persistent_data_provider.dart';
-import 'package:cocktails/services/thecocktailsdb_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shimmer/shimmer.dart';
 
 class CategoryPageBinding implements Bindings {
   @override
@@ -27,37 +23,38 @@ class CategoryPage extends StatefulWidget {
 }
 
 class _CategoryPageState extends State<CategoryPage> {
+  final CategoryController categoryController = Get.find();
+  final Rx<Filter> currentFilter = Filter.defaultFilter.obs;
   @override
   Widget build(BuildContext context) {
-    final categoryController = Get.find<CategoryController>();
-    var categoryName = Get.parameters['category_name'];
-
-    if (categoryName == null) {
-      Get.back();
-      return Scaffold();
-    }
-
-    categoryName = Uri.decodeComponent(categoryName);
-    final category = categoryController.categories
-        .firstWhereOrNull((element) => element.name == categoryName);
+    final category = categoryController.findCategory();
 
     if (category == null) {
       Get.back();
       return Scaffold();
     }
 
-    final cocktailsDBService = Get.find<TheCocktailsDBService>();
-
     return Scaffold(
       appBar: CocktailsAppBar(
           title: category.name ?? 'No name',
           isBackButton: true,
-          isFilterButton: true),
+          isFilterButton: true,
+          defaultFilter: Filter.defaultFilter,
+          filters: [
+            Filter.defaultFilter,
+            Filter.alcoholicFilter,
+            Filter.glassFilter,
+            Filter.ingredientFilter,
+            Filter.nameFilter,
+          ],
+          onFilterSelected: (filter) {
+            print(filter);
+          }),
       backgroundColor: Colors.white,
       body: Container(
         constraints: BoxConstraints.expand(),
         child: FutureBuilder(
-          future: cocktailsDBService.getDrinks(categoryName),
+          future: categoryController.loadDrinks(category.name!),
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.none:
@@ -71,7 +68,7 @@ class _CategoryPageState extends State<CategoryPage> {
                   Get.back();
                   return Center(child: Text('Error'));
                 }
-                return _drinks(snapshot.data);
+                return _drinks();
             }
           },
         ),
@@ -84,116 +81,38 @@ class _CategoryPageState extends State<CategoryPage> {
     );
   }
 
-  SafeArea _drinks(Drinks? data) {
-    return SafeArea(
-      child: CustomScrollView(slivers: [
-        SliverFillRemaining(
-            child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: ListView.separated(
-            itemCount: data?.drinks?.length ?? 0,
-            itemBuilder: (context, index) {
-              return _drinkItem(data!.drinks![index], index);
-            },
-            separatorBuilder: (context, index) {
-              return SizedBox(height: 16); // Adjust the height as needed
-            },
-          ),
-        )),
-      ]),
-    );
-  }
-
-  Stack _drinkItem(Drink drink, int index) {
-    return Stack(children: [
-      Container(
-        width: MediaQuery.of(context).size.width,
-        height: 120,
-        decoration: BoxDecoration(
-          color: Color(0xFFBAA9DB).withOpacity(0.6),
-          borderRadius: BorderRadius.circular(10),
-        ),
+  SingleChildScrollView _drinks() {
+    return SingleChildScrollView(
+      child: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Row(
+          padding: const EdgeInsets.all(5.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Use CachedNetworkImage for loading the image with a placeholder
-              SizedBox(
-                height: 100,
-                width: 100,
-                child: CachedNetworkImage(
-                  imageUrl: drink.thumbnail ?? '',
-                  imageBuilder: (context, imageProvider) => Container(
-                    // Adjust the height as needed
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      image: DecorationImage(
-                        image: imageProvider,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  placeholder: (context, url) => Shimmer.fromColors(
-                    baseColor: Colors.grey[300]!,
-                    highlightColor: Colors.grey[100]!,
-                    child: Container(
-                      height: 100,
-                      // Adjust the height as needed
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                ),
-              ),
-              SizedBox(width: 5),
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 2, right: 2),
-                  child: Text(
-                    (drink.strDrink ?? 'No name').toUpperCase(),
-                    textAlign: TextAlign.center,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      color: Colors.black,
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-              ),
+              Obx(() => Wrap(
+                spacing: 15,
+                runSpacing: 15,
+                alignment: WrapAlignment.spaceEvenly,
+                children: List.generate(
+                    categoryController.drinks.length, (index) {
+                  // For scrolling test, uncomment this
+                  // if (index >= categoryController.categories.length) {
+                  //   return _categoriesItem(Category(name: 'Test'), index);
+                  // }
+                  final drink = categoryController.drinks[index];
+
+                  return DrinkCard(
+                    drink,
+                    index,
+                    singleColor: Color(0xFFBAA9DB).withOpacity(0.6),
+                  );
+                }),
+              )),
+              SizedBox(height: 10),
             ],
           ),
         ),
       ),
-      Positioned.fill(
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(15),
-            splashColor: Color(0x00542E71).withOpacity(0.2),
-            highlightColor: Color(0x00542E71).withOpacity(0.3),
-            onTapUp: (TapUpDetails details) {
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                enableDrag: true,
-                showDragHandle: false,
-                useSafeArea: true,
-                shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(10))),
-                builder: (context) => DrinkRecipeModal(
-                  drink: drink,
-                ),
-              );
-            },
-          ),
-        ),
-      ),
-    ]);
+    );
   }
 }

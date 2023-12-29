@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cocktails/controllers/settings_controller.dart';
+import 'package:cocktails/providers/persistent_data_provider.dart';
 import 'package:cocktails/utils/widgets/badge_pill.dart';
 import 'package:cocktails/utils/widgets/quantity_selector_modal.dart';
 import 'package:flutter/material.dart';
@@ -26,9 +27,39 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
   var headerVisible = false;
   var quantity = 1.obs;
   final settingsController = Get.find<SettingsController>();
+  Drink? drink;
 
   @override
   Widget build(BuildContext context) {
+    final dataProvider = Get.find<PersistentDataProvider>();
+    drink ??= widget.drink;
+
+    if (drink!.isFullyLoaded) {
+      return _buildModal(drink!, context);
+    }
+
+    return FutureBuilder(
+        future: dataProvider.getDrink(widget.drink.idDrink),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+              return Center(child: Text('No connection'));
+            case ConnectionState.waiting:
+              return Center(child: CircularProgressIndicator());
+            case ConnectionState.active:
+              return Center(child: CircularProgressIndicator());
+            case ConnectionState.done:
+              if (snapshot.hasError || snapshot.data == null) {
+                Navigator.pop(context);
+                return Center(child: Text('Error'));
+              }
+              drink = snapshot.data;
+              return _buildModal(drink!, context);
+          }
+        });
+  }
+
+  CustomScrollView _buildModal(Drink drink, BuildContext context) {
     return CustomScrollView(
       physics: ClampingScrollPhysics(),
       slivers: [
@@ -47,7 +78,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                   children: [
                     InvisibleExpandedHeader(
                         child: Text(
-                          widget.drink.strDrink!,
+                          drink.strDrink!,
                           style: const TextStyle(
                               color: Colors.black, fontWeight: FontWeight.w600),
                           textAlign: TextAlign.center,
@@ -66,7 +97,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
             ),
             titlePadding: EdgeInsets.zero,
             centerTitle: true,
-            background: _buildSpaceBarBackground(),
+            background: _buildSpaceBarBackground(drink),
             collapseMode: CollapseMode.pin,
           ),
           automaticallyImplyLeading: false,
@@ -100,7 +131,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                 color: Colors.white,
               ),
               child: IconButton(
-                icon: Obx(() => widget.drink.favorite.value
+                icon: Obx(() => drink.favorite.value
                     ? Icon(
                         Icons.favorite,
                         color: Colors.redAccent,
@@ -108,7 +139,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                     : Icon(Icons.favorite_border_outlined,
                         color: Colors.black)),
                 onPressed: () {
-                  widget.drink.favorite.toggle();
+                  drink.favorite.toggle();
                 },
                 //  splashRadius: 26,
               ),
@@ -116,16 +147,16 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
           ],
         ),
         SliverToBoxAdapter(
-          child: _buildTitleContainer(),
+          child: _buildTitleContainer(drink),
         ),
         SliverToBoxAdapter(
-          child: _buildShareContainer(),
+          child: _buildShareContainer(drink),
         ),
         SliverToBoxAdapter(
-          child: _buildIngredientsContainer(),
+          child: _buildIngredientsContainer(drink),
         ),
         SliverToBoxAdapter(
-          child: _buildInstructionsContainer(),
+          child: _buildInstructionsContainer(drink),
         ),
         SliverFillRemaining(
           hasScrollBody: false,
@@ -137,7 +168,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
     );
   }
 
-  Container _buildInstructionsContainer() {
+  Container _buildInstructionsContainer(Drink drink) {
     final locale = Rx<Locale?>(Get.locale);
     return Container(
       color: Color(0xFFBAA9DB).withOpacity(0.3),
@@ -150,7 +181,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
           ),
           ObxValue((p0) {
-            var instructions = widget.drink
+            var instructions = drink
                 .getInstructions(p0.value?.languageCode.toUpperCase() ?? 'EN');
             if (instructions.isEmpty) {
               return Text('No instructions :(');
@@ -160,7 +191,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
               child: ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                itemCount: widget.drink.instructions['EN']!.length,
+                itemCount: drink.instructions['EN']!.length,
                 itemBuilder: (context, index) {
                   return Container(
                     margin: EdgeInsets.only(top: 10),
@@ -168,7 +199,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          index + 1 == widget.drink.instructions['EN']!.length
+                          index + 1 == drink.instructions['EN']!.length
                               ? 'final_step'.tr
                               : '${'step'.tr} ${index + 1}',
                           style: const TextStyle(
@@ -181,9 +212,9 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                           height: 3,
                         ),
                         Text(
-                            index >= widget.drink.instructions['EN']!.length
+                            index >= drink.instructions['EN']!.length
                                 ? ''
-                                : widget.drink.instructions['EN']![index],
+                                : drink.instructions['EN']![index],
                             textAlign: TextAlign.left,
                             style: const TextStyle(
                                 fontSize:
@@ -200,7 +231,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
     );
   }
 
-  Container _buildIngredientsContainer() {
+  Container _buildIngredientsContainer(Drink drink) {
     return Container(
       color: Color(0xFFBAA9DB).withOpacity(0.6),
       padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 20),
@@ -261,7 +292,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
             runSpacing: 10,
             // Adjust the run spacing (spacing between rows)
             children: List.generate(
-              widget.drink.ingredients.length,
+              drink.ingredients.length,
               (index) => SizedBox(
                 width: 80, // Adjust the width as needed
                 child: Column(
@@ -276,8 +307,8 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                       ),
                       child: Center(
                         child: CachedNetworkImage(
-                          imageUrl: widget.drink.ingredients[index]
-                              .getLittleImageUrl(),
+                          imageUrl:
+                              drink.ingredients[index].getLittleImageUrl(),
                           imageBuilder: (context, imageProvider) => Container(
                             height: 70,
                             width: 70,
@@ -310,8 +341,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                     SizedBox(height: 5),
                     Obx(() => Text(
                           multiplyMeasure(
-                            widget.drink.ingredients[index].measure?.trim() ??
-                                '1x',
+                            drink.ingredients[index].measure?.trim() ?? '1x',
                             quantity.value,
                             settingsController.measureInOz.value,
                           ),
@@ -326,7 +356,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                     // ),
                     SizedBox(height: 5),
                     Text(
-                      widget.drink.ingredients[index].name.tr,
+                      drink.ingredients[index].name.tr,
                       textAlign: TextAlign.center,
                       style: const TextStyle(fontSize: 12),
                     ),
@@ -340,7 +370,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
     );
   }
 
-  Container _buildTitleContainer() {
+  Container _buildTitleContainer(Drink drink) {
     return Container(
       color: Colors.white,
       child: Container(
@@ -350,7 +380,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
           child: Column(
             children: [
               Text(
-                widget.drink.strDrink!,
+                drink.strDrink!,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                     color: Colors.black,
@@ -372,9 +402,9 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
               const SizedBox(
                 height: 10,
               ),
-              if (widget.drink.strGlass != null)
+              if (drink.strGlass != null)
                 BadgePill(
-                  text: widget.drink.strGlass!,
+                  text: drink.strGlass!,
                   color: Colors.black,
                   textStyle: const TextStyle(
                       color: Colors.white, fontWeight: FontWeight.w200),
@@ -385,7 +415,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                   ),
                 ),
               SizedBox(
-                height: widget.drink.strGlass == null ? 10 : 15,
+                height: drink.strGlass == null ? 10 : 15,
               ),
             ],
           ),
@@ -394,7 +424,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
     );
   }
 
-  Container _buildSpaceBarBackground() {
+  Container _buildSpaceBarBackground(Drink drink) {
     return Container(
       color: Color(0xFFBAA9DB).withOpacity(0.3),
       child: Padding(
@@ -405,7 +435,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
               width: 180,
               height: 180,
               child: CachedNetworkImage(
-                imageUrl: widget.drink.strDrinkThumb ?? '',
+                imageUrl: drink.strDrinkThumb ?? '',
                 imageBuilder: (context, imageProvider) => Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
@@ -440,7 +470,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
     );
   }
 
-  Container _buildShareContainer() {
+  Container _buildShareContainer(Drink drink) {
     return Container(
       color: Colors.white,
       child: Container(
@@ -476,7 +506,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                 Row(
                   children: [
                     Text(
-                      widget.drink.favorites,
+                      drink.favorites,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         fontSize: 16,
@@ -487,13 +517,13 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                     ),
                     GestureDetector(
                       onTapUp: (details) {
-                        widget.drink.favorite.toggle();
+                        drink.favorite.toggle();
                       },
                       child: Obx(() => Icon(
-                            widget.drink.favorite.value
+                            drink.favorite.value
                                 ? Icons.favorite
                                 : Icons.favorite_outline,
-                            color: widget.drink.favorite.value
+                            color: drink.favorite.value
                                 ? Colors.redAccent
                                 : Colors.black,
                             size: 24,

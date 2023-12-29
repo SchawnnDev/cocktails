@@ -19,7 +19,7 @@ class TheCocktailsDBService extends GetxService {
   }
 
   /// Get drinks from API
-  Future<Drinks> getDrinks(String category) async {
+  Future<Drinks<Drink>> getDrinks(String category) async {
     final response = await http.get(_buildUri('filter.php?c=$category'));
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);

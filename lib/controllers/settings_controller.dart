@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 
 class SettingsController extends GetxController {
   final _settings = <Setting>[].obs;
+
   List<Setting> get settings => _settings;
 
   RxBool measureInOz = true.obs;
@@ -47,11 +48,11 @@ class SettingsController extends GetxController {
             case 'dark':
               Get.changeThemeMode(ThemeMode.dark);
               return newValue;
-              case 'system':
+            case 'system':
               Get.changeThemeMode(ThemeMode.system);
               return newValue;
           }
-          
+
           return newValue;
         },
       ),
@@ -66,36 +67,57 @@ class SettingsController extends GetxController {
           return newValue;
         },
       ),
-      Setting(
-        'click_reset_favorites',
-        icon: Icons.favorite_outline,
-        values: {},
-        name: 'reset_favorites',
-        onTap: () {
-          final dataProvider = Get.find<PersistentDataProvider>();
-          dataProvider.clearFavorites();
+      Setting('click_reset_favorites',
+          icon: Icons.favorite_outline,
+          values: {},
+          name: 'reset_favorites', onTap: (BuildContext ctx) async {
+        bool result = await showAlertDialog(
+          ctx,
+          'reset_favorites'.tr,
+          'are_you_sure_reset'.tr,
+        );
+
+        if (!result) {
+          return;
         }
-      ),
-      Setting(
-        'click_reset_dislikes',
-        icon: Icons.thumb_down_outlined,
-        values: {},
-        name: 'reset_dislikes',
-        onTap: () {
-          final dataProvider = Get.find<PersistentDataProvider>();
-          dataProvider.clearDislikes();
-        }
-      ),
-      Setting(
-        'click_reset_all',
-        icon: Icons.restart_alt_outlined,
-        values: {},
-        name: 'reset_all',
-        onTap: () {
-          final dataProvider = Get.find<PersistentDataProvider>();
-          dataProvider.clearAll();
-        }
-      )
+
+        final dataProvider = Get.find<PersistentDataProvider>();
+        dataProvider.clearFavorites();
+      }),
+      Setting('click_reset_dislikes',
+          icon: Icons.thumb_down_outlined,
+          values: {},
+          name: 'reset_dislikes', onTap: (BuildContext ctx) async {
+            bool result = await showAlertDialog(
+              ctx,
+              'reset_dislikes'.tr,
+              'are_you_sure_reset'.tr,
+            );
+
+            if (!result) {
+              return;
+            }
+
+            final dataProvider = Get.find<PersistentDataProvider>();
+            dataProvider.clearDislikes();
+          }),
+      Setting('click_reset_all',
+          icon: Icons.restart_alt_outlined,
+          values: {},
+          name: 'reset_all', onTap: (BuildContext ctx) async {
+            bool result = await showAlertDialog(
+              ctx,
+              'reset_all'.tr,
+              'are_you_sure_reset'.tr,
+            );
+
+            if (!result) {
+              return;
+            }
+
+            final dataProvider = Get.find<PersistentDataProvider>();
+            dataProvider.clearAll();
+          }),
     ]);
   }
 
@@ -121,4 +143,35 @@ class SettingsController extends GetxController {
     return const Locale('en', 'US');
   }
 
+  Future<bool> showAlertDialog(
+      BuildContext context, String title, String message) async {
+    Widget cancelButton = TextButton(
+      child: Text("cancel".tr),
+      onPressed: () {
+        Navigator.of(context).pop(false);
+      },
+    );
+    Widget continueButton = TextButton(
+      child: Text("ok".tr),
+      onPressed: () {
+        Navigator.of(context).pop(true);
+      },
+    );
+
+    bool result = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title.tr),
+          content: Text(message.tr),
+          actions: [
+            cancelButton,
+            continueButton,
+          ],
+        );
+      },
+    );
+
+    return result;
+  }
 }

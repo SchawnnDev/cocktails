@@ -1,3 +1,5 @@
+import 'package:cocktails/models/filter.dart';
+import 'package:cocktails/utils/widgets/filter_selector_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -5,14 +7,18 @@ class CocktailsAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool isBackButton;
   final bool isFilterButton;
-  final Function(String)? onFilterSelected;
+  final Function(Filter)? onFilterSelected;
+  final Filter? defaultFilter;
+  final List<Filter>? filters;
 
   CocktailsAppBar(
       {super.key,
       this.title = 'Cocktails',
       this.isBackButton = false,
       this.isFilterButton = false,
-      this.onFilterSelected});
+      this.onFilterSelected,
+      this.defaultFilter,
+      this.filters});
 
   @override
   Widget build(BuildContext context) {
@@ -44,30 +50,21 @@ class CocktailsAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
         actions: [
-          if (isFilterButton)
+          if (isFilterButton &&
+              onFilterSelected != null &&
+              filters != null &&
+              filters!.isNotEmpty)
             GestureDetector(
               onTapUp: (details) {
-                Get.bottomSheet(
-                  Container(
-                    height: 200,
-                    color: Colors.white,
-                    child: Column(
-                      children: [
-                        ListTile(
-                          title: Text('filter'.tr),
-                        ),
-                        ListTile(
-                          title: Text('filter'.tr),
-                        ),
-                        ListTile(
-                          title: Text('filter'.tr),
-                        ),
-                        ListTile(
-                          title: Text('filter'.tr),
-                        ),
-                      ],
-                    ),
-                  ),
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return FilterSelectorModal(
+                      filters: filters!,
+                      defaultFilter: defaultFilter ?? Filter.defaultFilter,
+                      onSelected: onFilterSelected!,
+                    );
+                  },
                 );
               },
               child: Container(
@@ -89,7 +86,7 @@ class CocktailsAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     return AppBar(
       title: Text(
-        'Cocktails',
+        title,
         style: TextStyle(
             color: Colors.black, fontSize: 26, fontWeight: FontWeight.bold),
       ),

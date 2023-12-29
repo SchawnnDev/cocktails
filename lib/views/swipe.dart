@@ -43,7 +43,7 @@ class _SwipePageState extends State<SwipePage> {
   Widget build(BuildContext context) {
     final SwipeController swipeController = Get.find();
     return Scaffold(
-      appBar: CocktailsAppBar(title: 'swipe'.tr, isBackButton: false),
+      appBar: CocktailsAppBar(title: 'Swipe'.tr, isBackButton: false),
       bottomNavigationBar: NavBar(
         index: 2,
         animate: true,

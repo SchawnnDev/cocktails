@@ -34,13 +34,10 @@ class _SettingsPageState extends State<SettingsPage> {
       child: ListView.separated(
         itemBuilder: (context, index) {
           final setting = settingsController.settings[index];
-          return SizedBox(
-            height: 50,
-            child: ListTile(
-              leading: Icon(setting.icon),
-              title: Text(setting.name.tr),
-              trailing: _buildTrailing(setting),
-            ),
+          return ListTile(
+            leading: Icon(setting.icon),
+            title: Text(setting.name.tr),
+            trailing: _buildTrailing(context, setting),
           );
         },
         separatorBuilder: (context, index) {
@@ -51,10 +48,10 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  Widget _buildTrailing(Setting setting) {
+  Widget _buildTrailing(BuildContext ctx, Setting setting) {
     if (setting.onTap != null) {
       return OutlinedButton(
-        onPressed: () => setting.onTap!(),
+        onPressed: () => setting.onTap!(ctx),
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),

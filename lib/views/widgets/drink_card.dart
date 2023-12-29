@@ -92,21 +92,7 @@ class _DrinkCardState extends State<DrinkCard> {
                 ),
               ),
             ],
-          )
-
-          // Padding(
-          //   padding: const EdgeInsets.only(left: 5, right: 5, bottom: 2),
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.end,
-          //     children: [
-          //       Obx(() => Icon(
-          //         widget.drink.favorite.value ? Icons.favorite : Icons.favorite_outline,
-          //         color: widget.drink.favorite.value ? Colors.redAccent : Colors.black,
-          //       )),
-          //     ],
-          //   ),
-          // )
-          ),
+          )),
       Positioned.fill(
         child: Material(
           color: Colors.transparent,
@@ -136,41 +122,43 @@ class _DrinkCardState extends State<DrinkCard> {
         left: 10,
         bottom: 10,
         child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Icon(
-            widget.drink.strAlcoholic! == "Alcoholic"
-                ? Icons.local_bar
-                : Icons.no_drinks,
-            size: 20,
-            color: Colors.black,
-          ),
-          SizedBox(
-            width: 5,
-          ),
-          if (widget.drink.ingredients.isNotEmpty) ...[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  '${widget.drink.ingredients.length}',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 16,
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            if (widget.drink.strAlcoholic != null) ...[
+              Icon(
+                widget.drink.strAlcoholic == "Alcoholic"
+                    ? Icons.local_bar
+                    : Icons.no_drinks,
+                size: 20,
+                color: Colors.black,
+              ),
+              SizedBox(
+                width: 5,
+              ),
+            ],
+            if (widget.drink.ingredients.isNotEmpty) ...[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    '${widget.drink.ingredients.length}',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                    ),
                   ),
-                ),
-                Icon(
-                  Icons.liquor,
-                  size: 20,
-                  color: Colors.black,
-                )
-              ],
-            ),
+                  Icon(
+                    Icons.liquor,
+                    size: 20,
+                    color: Colors.black,
+                  )
+                ],
+              ),
+            ],
           ],
-        ],
-      ),
+        ),
       ),
       Positioned(
         right: 10,

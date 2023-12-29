@@ -108,6 +108,12 @@ flutter:
     - assets/img/soft-drinks.png
     - assets/img/tequila-shot.png
     - assets/img/no-wifi.png
+    - assets/img/bar-counter.png
+    - assets/img/beverage.png
+    - assets/img/drink.png
+    - assets/img/grocery.png
+    - assets/img/letter.png
+    - assets/img/drunk.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -6,7 +6,7 @@ class Setting {
   final IconData? icon;
   final Map<String, String> values; // key: value
   final String Function(String newValue)? onChange;
-  final Function? onTap; // in case of a button
+  final Function(BuildContext ctx)? onTap; // in case of a button
 
   Setting(String value,
       {required this.name,

@@ -27,22 +27,24 @@ class Drink {
 
   // Flag to indicate if the drink is recommended
   bool isRecommended = false;
+  bool isFullyLoaded = false;
 
-  Drink({this.idDrink,
-    this.strDrink,
-    this.strDrinkAlternate,
-    this.strTags,
-    this.strVideo,
-    this.strCategory,
-    this.strIBA,
-    this.strAlcoholic,
-    this.strGlass,
-    this.strDrinkThumb,
-    this.strImageSource,
-    this.strImageAttribution,
-    this.strCreativeCommonsConfirmed,
-    this.dateModified,
-    this.thumbnail})
+  Drink(
+      {this.idDrink,
+      this.strDrink,
+      this.strDrinkAlternate,
+      this.strTags,
+      this.strVideo,
+      this.strCategory,
+      this.strIBA,
+      this.strAlcoholic,
+      this.strGlass,
+      this.strDrinkThumb,
+      this.strImageSource,
+      this.strImageAttribution,
+      this.strCreativeCommonsConfirmed,
+      this.dateModified,
+      this.thumbnail})
       : ingredients = [],
         instructions = <String, List<String>>{},
         favorites = _generateRandomFavorites();
@@ -78,8 +80,8 @@ class Drink {
       String? name = json['strIngredient$i'];
       if (name == null || name.isEmpty) continue;
       String measure = json['strMeasure$i'] ?? '1x';
-      ingredients.add(
-          Ingredient(name: name.capitalizeFirst!, measure: measure));
+      ingredients
+          .add(Ingredient(name: name.capitalizeFirst!, measure: measure));
     }
 
     strImageSource = json['strImageSource'];
@@ -98,9 +100,8 @@ class Drink {
     List<String> splitInstructions = value.split('.');
     splitInstructions = splitInstructions
         .where((element) => element.isNotEmpty)
-        .map((instruction) => '${instruction
-        .trim()
-        .capitalizeFirst}.').toList();
+        .map((instruction) => '${instruction.trim().capitalizeFirst}.')
+        .toList();
 
     // for scroll testing
     // for (int i = 0; i < 100; i++) {
@@ -116,7 +117,8 @@ class Drink {
     if (lang == 'EN') {
       return result;
     }
-    if (result.isEmpty) { // fallback to EN
+    if (result.isEmpty) {
+      // fallback to EN
       return instructions['EN'] ?? [];
     }
     return result;
@@ -130,4 +132,18 @@ class Drink {
     return '$randomPrefix.${randomSuffix}k';
   }
 
+  @override
+  String toString() {
+    return 'Drink{idDrink: $idDrink, strDrink: $strDrink,'
+        ' strDrinkAlternate: $strDrinkAlternate, strTags: $strTags,'
+        ' strVideo: $strVideo, strCategory: $strCategory, strIBA: $strIBA,'
+        ' strAlcoholic: $strAlcoholic, strGlass: $strGlass,'
+        ' strDrinkThumb: $strDrinkThumb, strImageSource: $strImageSource,'
+        ' strImageAttribution: $strImageAttribution,'
+        ' strCreativeCommonsConfirmed: $strCreativeCommonsConfirmed,'
+        ' dateModified: $dateModified, ingredients: $ingredients,'
+        ' instructions: $instructions, favorites: $favorites,'
+        ' favorite: $favorite, disliked: $disliked,'
+        ' isRecommended: $isRecommended, isFullyLoaded: $isFullyLoaded}';
+  }
 }
