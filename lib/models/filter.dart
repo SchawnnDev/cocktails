@@ -6,6 +6,11 @@ class Filter {
 
 
   @override
+  String toString() {
+    return 'Filter{name: $name, imagePath: $imagePath}';
+  }
+
+  @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is Filter && runtimeType == other.runtimeType && name == other.name;

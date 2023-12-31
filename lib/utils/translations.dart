@@ -102,6 +102,7 @@ class AppTranslations extends Translations {
           'category': 'Category',
           'ingredient': 'Ingredient',
           'name': 'Name',
+          'sort_by': 'Sort by',
         },
         'de_DE': {
           'hello': 'Hallo Welt',
@@ -202,6 +203,7 @@ class AppTranslations extends Translations {
           'category': 'Kategorien',
           'ingredient': 'Zutaten',
           'name': 'Namen',
+          'sort_by': 'Sortieren nach',
         },
         'fr_FR': {
           'hello': 'Bonjour monde',
@@ -302,6 +304,7 @@ class AppTranslations extends Translations {
           'category': 'Catégorie',
           'ingredient': 'Ingrédient',
           'name': 'Nom',
+          'sort_by': 'Trier par',
         },
       };
 }

@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class FilterSelectorModal extends StatefulWidget {
+  final bool isFilter; // true if filter, false if sort
   final Filter defaultFilter;
   final Function(Filter) onSelected;
   final List<Filter> filters;
 
   const FilterSelectorModal(
       {super.key,
+      required this.isFilter,
       required this.filters,
       required this.defaultFilter,
       required this.onSelected});
@@ -18,12 +20,29 @@ class FilterSelectorModal extends StatefulWidget {
 }
 
 class _FilterSelectorModalState extends State<FilterSelectorModal> {
+  ScrollController _scrollController = ScrollController();
   late Rx<Filter> selectedFilter = Filter.defaultFilter.obs;
+  bool canClick = false;
 
   @override
   void initState() {
     super.initState();
     selectedFilter(widget.defaultFilter);
+    canClick = true;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollController.animateTo(
+        widget.filters.indexOf(widget.defaultFilter) * 125.0,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -50,19 +69,20 @@ class _FilterSelectorModalState extends State<FilterSelectorModal> {
                 ),
               ),
               child: Center(
-                child: Text('filter_by'.tr,
+                child: Text(widget.isFilter ? 'filter_by'.tr : 'sort_by'.tr,
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       color: Colors.black,
                       fontSize: 17,
-                    )),
-              )),
+                    ),),
+              ),),
           Expanded(
             child: Container(
               color: Colors.white,
               child: ListView.separated(
                 itemCount: widget.filters.length,
                 scrollDirection: Axis.horizontal,
+                controller: _scrollController,
                 padding: EdgeInsets.all(15),
                 separatorBuilder: (context, index) => SizedBox(
                   width: 25,
@@ -80,11 +100,17 @@ class _FilterSelectorModalState extends State<FilterSelectorModal> {
   }
 
   Widget _filterItem(final Filter filter) {
-    return Obx(() => InkWell(
+    return Obx(
+      () => InkWell(
         onTap: () {
+          if (!canClick) return;
+          canClick = false;
           selectedFilter(filter);
           widget.onSelected(filter);
-          //Get.back();
+          // click effect before closing
+          Future.delayed(Duration(milliseconds: 250), () {
+            Get.back();
+          });
         },
         child: Container(
           width: 100,
@@ -126,6 +152,8 @@ class _FilterSelectorModalState extends State<FilterSelectorModal> {
               )
             ],
           ),
-        )));
+        ),
+      ),
+    );
   }
 }

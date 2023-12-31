@@ -8,14 +8,16 @@ class CocktailsAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isBackButton;
   final bool isFilterButton;
   final Function(Filter)? onFilterSelected;
-  final Filter? defaultFilter;
+  final Rx<Filter>? defaultFilter;
   final List<Filter>? filters;
+  final bool isFilter; // true if filter, false if sort
 
   CocktailsAppBar(
       {super.key,
       this.title = 'Cocktails',
       this.isBackButton = false,
       this.isFilterButton = false,
+        this.isFilter = true,
       this.onFilterSelected,
       this.defaultFilter,
       this.filters});
@@ -59,9 +61,13 @@ class CocktailsAppBar extends StatelessWidget implements PreferredSizeWidget {
                 showModalBottomSheet(
                   context: context,
                   builder: (context) {
+                    if(defaultFilter != null) {
+                      print(defaultFilter!.value);
+                    }
                     return FilterSelectorModal(
+                      isFilter: isFilter,
                       filters: filters!,
-                      defaultFilter: defaultFilter ?? Filter.defaultFilter,
+                      defaultFilter: defaultFilter?.value ?? Filter.defaultFilter,
                       onSelected: onFilterSelected!,
                     );
                   },
@@ -73,10 +79,13 @@ class CocktailsAppBar extends StatelessWidget implements PreferredSizeWidget {
                 decoration: BoxDecoration(
                     color: Color(0xffF7F8F8),
                     borderRadius: BorderRadius.circular(10)),
-                child: Icon(
-                  Icons.filter_alt,
-                  color: Colors.black,
-                  size: 24.0,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                  child: Icon(
+                    isFilter ? Icons.filter_alt : Icons.sort,
+                    color: Colors.black,
+                    size: 24.0,
+                  ),
                 ),
               ),
             ),

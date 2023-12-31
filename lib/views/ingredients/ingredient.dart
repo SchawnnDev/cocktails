@@ -14,7 +14,6 @@ import 'package:shimmer/shimmer.dart';
 class IngredientPageBinding implements Bindings {
   @override
   void dependencies() {
-    final dataProvider = Get.find<PersistentDataProvider>();
     Get.lazyPut(() => IngredientPage());
   }
 }

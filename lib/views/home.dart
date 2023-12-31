@@ -213,10 +213,11 @@ class _HomePageState extends State<HomePage> {
               splashColor: Color(0x00542E71).withOpacity(0.2),
               highlightColor: Color(0x00542E71).withOpacity(0.3),
               onTapUp: (TapUpDetails details) {
-                if (category.name != null) {
+                if (category.name == null) {
                   return;
                 }
-                Get.toNamed('/category/${Uri.encodeComponent(category.name!)}');
+                Get.toNamed(
+                    '/category/${Uri.encodeComponent(category.name!)}');
               },
             ),
           ),
