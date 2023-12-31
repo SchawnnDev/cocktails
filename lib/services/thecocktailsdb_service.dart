@@ -86,6 +86,7 @@ class TheCocktailsDBService extends GetxService {
     return drinks;
   }
 
+  /// Get drink from API
   Future<Drink?> getDrink(String id) async {
     final response = await http.get(_buildUri('lookup.php?i=$id'));
     if (response.statusCode == 200) {
@@ -99,4 +100,20 @@ class TheCocktailsDBService extends GetxService {
     }
     return null;
   }
+
+  /// Get alcoholic filters from API
+  Future<List<String>> getAlcoholicFilters() async {
+    final response = await http.get(_buildUri('list.php?a=list'));
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      final drinks = Drinks.fromJson(data, (json) => Drink.fromJson(json));
+      if (drinks.drinks != null && drinks.drinks!.isNotEmpty) {
+        return drinks.drinks!.map((e) => e.strAlcoholic!).toList();
+      }
+    } else {
+      return Future.error('Failed to load drink');
+    }
+    return [];
+  }
+
 }

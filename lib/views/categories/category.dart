@@ -1,10 +1,15 @@
+import 'dart:math';
+
 import 'package:cocktails/controllers/category_controller.dart';
+import 'package:cocktails/models/category.dart';
 import 'package:cocktails/models/drink.dart';
 import 'package:cocktails/models/filter.dart';
 import 'package:cocktails/views/widgets/cocktails_appbar.dart';
 import 'package:cocktails/views/widgets/drink_card.dart';
+import 'package:cocktails/views/widgets/more_card.dart';
 import 'package:cocktails/views/widgets/navbar.dart';
 import 'package:cocktails/providers/persistent_data_provider.dart';
+import 'package:cocktails/views/widgets/see_more_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
@@ -57,42 +62,39 @@ class _CategoryPageState extends State<CategoryPage> {
         },
       ),
       backgroundColor: Colors.white,
-      body: Container(
-        constraints: BoxConstraints.expand(),
-        child: FutureBuilder(
-          future: categoryController.loadDrinks(category.name!),
-          builder: (context, snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.none:
-                return Center(child: Text('No connection'));
-              case ConnectionState.waiting:
-                return Center(child: CircularProgressIndicator());
-              case ConnectionState.active:
-                return Center(child: CircularProgressIndicator());
-              case ConnectionState.done:
-                if (snapshot.hasError) {
-                  Get.back();
-                  return Center(child: Text('Error'));
-                }
+      body: FutureBuilder(
+        future: categoryController.loadDrinks(category.name!),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+              return Center(child: Text('No connection'));
+            case ConnectionState.waiting:
+              return Center(child: CircularProgressIndicator());
+            case ConnectionState.active:
+              return Center(child: CircularProgressIndicator());
+            case ConnectionState.done:
+              if (snapshot.hasError) {
+                Get.back();
+                return Center(child: Text('Error'));
+              }
 
-                return AnimatedSwitcher(
-                  duration: const Duration(seconds: 1),
-                  child: ObxValue(
-                    (filter) {
-                      return _drinks();
-                    },
-                    categoryController.currentFilter,
-                  ),
-                  transitionBuilder: (child, animation) {
-                    return FadeTransition(
-                      opacity: animation,
-                      child: child,
-                    );
+              return AnimatedSwitcher(
+                duration: const Duration(seconds: 1),
+                child: ObxValue(
+                  (filter) {
+                    return _drinks(category);
                   },
-                );
-            }
-          },
-        ),
+                  categoryController.currentFilter,
+                ),
+                transitionBuilder: (child, animation) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  );
+                },
+              );
+          }
+        },
       ),
       bottomNavigationBar: NavBar(
         animate: false,
@@ -102,123 +104,218 @@ class _CategoryPageState extends State<CategoryPage> {
     );
   }
 
-  SingleChildScrollView _drinks() {
+  Widget _drinks(Category category) {
     return SingleChildScrollView(
       child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(15),
-          child: Column(
-            // crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (categoryController.currentFilter.value ==
-                  Filter.defaultFilter)
-                _allDrinks(),
-              if (categoryController.currentFilter.value ==
-                  Filter.alcoholicFilter)
-                _alcoholicDrinks(),
-              if (categoryController.currentFilter.value == Filter.glassFilter)
-                _glassDrinks(),
-              if (categoryController.currentFilter.value ==
-                  Filter.ingredientFilter)
-                _ingredientDrinks(),
-              if (categoryController.currentFilter.value == Filter.nameFilter)
-                _nameDrinks(),
-              SizedBox(height: 10),
-            ],
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment:
+              categoryController.currentFilter.value == Filter.defaultFilter
+                  ? CrossAxisAlignment.stretch
+                  : CrossAxisAlignment.start,
+          children: [
+            if (categoryController.currentFilter.value ==
+                Filter.defaultFilter)
+              _allDrinks(),
+            if (categoryController.currentFilter.value ==
+                Filter.alcoholicFilter)
+              _alcoholicDrinks(category),
+            if (categoryController.currentFilter.value == Filter.glassFilter)
+              _glassDrinks(),
+            if (categoryController.currentFilter.value ==
+                Filter.ingredientFilter)
+              _ingredientDrinks(),
+            if (categoryController.currentFilter.value == Filter.nameFilter)
+              _nameDrinks(),
+            SizedBox(height: 10),
+          ],
         ),
       ),
     );
   }
 
   Widget _allDrinks() {
-    return Obx(
-      () => Wrap(
-        spacing: 15,
-        runSpacing: 15,
-        alignment: WrapAlignment.spaceEvenly,
-        children: List.generate(
-          categoryController.drinks.length,
-          (index) {
-            // For scrolling test, uncomment this
-            // if (index >= categoryController.categories.length) {
-            //   return _categoriesItem(Category(name: 'Test'), index);
-            // }
-            final drink = categoryController.drinks[index];
+    return Padding(
+      padding: const EdgeInsets.all(15),
+      child: Obx(
+        () => Wrap(
+          spacing: 15,
+          runSpacing: 15,
+          alignment: WrapAlignment.spaceEvenly,
+          children: List.generate(
+            categoryController.drinks.length,
+            (index) {
+              // For scrolling test, uncomment this
+              // if (index >= categoryController.categories.length) {
+              //   return _categoriesItem(Category(name: 'Test'), index);
+              // }
+              final drink = categoryController.drinks[index];
 
-            return DrinkCard(
-              drink,
-              index,
-              singleColor: Color(0xFFBAA9DB).withOpacity(0.6),
-            );
-          },
+              return DrinkCard(
+                drink,
+                index,
+                singleColor: Color(0xFFBAA9DB).withOpacity(0.6),
+              );
+            },
+          ),
         ),
       ),
     );
   }
 
-  Widget _alcoholicDrinks() {
+  Widget _alcoholicDrinks(Category category) {
     final dataProvider = Get.find<PersistentDataProvider>();
-    final drinksByAlcoholic = categoryController.drinksByAlcoholic;
-    final children = <Widget>[];
 
-    for (var category in drinksByAlcoholic.keys) {
-      final drinks = drinksByAlcoholic[category]!;
-      children.add(
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            category.tr,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
+    return FutureBuilder(
+        future: dataProvider.getAlcoholicFilters(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasError || snapshot.data == null) {
+              return Center(child: Text('Error'));
+            }
+
+            return _createAlcoholicFilters(category, snapshot.data);
+          }
+
+          return Center(child: CircularProgressIndicator());
+        });
+  }
+
+  Widget _createAlcoholicFilters(Category category, List<String>? alcoholicFilters) {
+    if (alcoholicFilters == null) {
+      return Center(
+        child: Text('No drinks'),
       );
-      children.add(SizedBox(
-        height: 205,
-        child: ListView.separated(
-          separatorBuilder: (context, index) => SizedBox(width: 25),
-          scrollDirection: Axis.horizontal,
-          itemCount: drinks.length,
-          itemBuilder: (context, index) {
-            final drink = drinks[index];
-
-            return FutureBuilder(
-              future: dataProvider.getDrink(drink.idDrink),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  if (snapshot.hasError || snapshot.data == null) {
-                    return Container();
-                  }
-
-                  return DrinkCard(
-                    drink,
-                    index,
-                    singleColor: Color(0xFFBAA9DB).withOpacity(0.6),
-                  );
-                }
-
-                return Shimmer.fromColors(
-                  baseColor: Colors.grey[300]!,
-                  highlightColor: Colors.grey[100]!,
-                  child: SizedBox(
-                    height: 110,
-                    width: 140,
-                  ),
-                );
-              },
-            );
-          },
-        ),
-      ));
     }
 
-    return Column(
-      children: children,
+    final dataProvider = Get.find<PersistentDataProvider>();
+
+    return FutureBuilder(
+      future: Future.wait([
+        Future.wait(categoryController.drinks
+            .map((e) async => dataProvider.getDrink(e.idDrink))
+            .toList()),
+        Future.delayed(const Duration(seconds: 1))
+      ]),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasError || snapshot.data == null) {
+            return Center(child: Text('Error'));
+          }
+
+          final data = snapshot.data?[0] as List<Drink?>?;
+          final children = <Widget>[];
+          children.add(SizedBox(height: 20));
+
+          for (var filter in alcoholicFilters) {
+            final drinks = data
+                    ?.where((element) => element?.strAlcoholic == filter)
+                    .map((e) => e!)
+                    .toList() ??
+                [];
+
+            if (drinks.isEmpty) {
+              continue;
+            }
+
+            children.add(
+              Padding(
+                padding: EdgeInsets.only(left: 20, right: 10),
+                child: GestureDetector(
+                  onTapUp: (details) {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      enableDrag: true,
+                      showDragHandle: false,
+                      useSafeArea: true,
+                      shape: RoundedRectangleBorder(
+                          borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(10))),
+                      builder: (context) => SeeMoreModal(
+                        drinks: drinks, title: '${category.name}: ${filter.tr}',
+                      ),
+                    );
+                  },
+                  child: Row(
+                    children: [
+                      Text(
+                        filter.tr,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Spacer(),
+                      Text(
+                        '${'see_all'.tr} >',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+            children.add(SizedBox(height: 10));
+            children.add(
+              SizedBox(
+                height: 205,
+                child: ListView.separated(
+                  separatorBuilder: (context, index) => SizedBox(width: 25),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: min(drinks.length, 16),
+                  padding: EdgeInsets.only(left: 20, right: 20),
+                  itemBuilder: (context, index) {
+                    final drink = drinks[index];
+
+                    if (index == 15) {
+                      return MoreCard(
+                          'see_all',
+                          () {
+                            showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              enableDrag: true,
+                              showDragHandle: false,
+                              useSafeArea: true,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.vertical(top: Radius.circular(10))),
+                              builder: (context) => SeeMoreModal(
+                                drinks: drinks, title: 'filter'.tr,
+                              ),
+                            );
+                          },
+                          Color(0xFFBAA9DB)
+                              .withOpacity(index % 2 == 0 ? 0.6 : 0.3),
+                          140,
+                          205);
+                    }
+
+                    return DrinkCard(drink, index,
+                        singleColor: Color(0xFFBAA9DB)
+                            .withOpacity(index % 2 == 0 ? 0.6 : 0.3));
+                  },
+                ),
+              ),
+            );
+            children.add(SizedBox(height: 20));
+          }
+
+          return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: children);
+        }
+
+        return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: _createShimmers(alcoholicFilters));
+      },
     );
   }
 
@@ -232,5 +329,71 @@ class _CategoryPageState extends State<CategoryPage> {
 
   Widget _nameDrinks() {
     return Container();
+  }
+
+  /// Create shimmers
+  List<Widget> _createShimmers(List<String> titles) {
+    final children = <Widget>[];
+    children.add(SizedBox(height: 20));
+
+    for (var title in titles) {
+      children.add(
+        Padding(
+          padding: EdgeInsets.only(left: 20, right: 10),
+          child: Row(
+            children: [
+              Text(
+                title.tr,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Spacer(),
+              Text(
+                '${'see_all'.tr} >',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+      children.add(SizedBox(height: 10));
+      children.add(
+        SizedBox(
+          height: 205,
+          child: ListView.separated(
+            separatorBuilder: (context, index) => SizedBox(width: 25),
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.only(left: 20, right: 20),
+            itemCount: 5,
+            itemBuilder: (context, index) {
+              return SizedBox(
+                width: 150,
+                height: 205,
+                child: Shimmer.fromColors(
+                  baseColor: Colors.grey[300]!,
+                  highlightColor: Colors.grey[100]!,
+                  child: Container(
+                    width: 150,
+                    height: 205,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      );
+      children.add(SizedBox(height: 20));
+    }
+
+    return children;
   }
 }

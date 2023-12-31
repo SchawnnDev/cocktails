@@ -56,7 +56,8 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
               drink = snapshot.data;
               return _buildModal(drink!, context);
           }
-        });
+        },
+    );
   }
 
   CustomScrollView _buildModal(Drink drink, BuildContext context) {
@@ -77,20 +78,23 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     InvisibleExpandedHeader(
-                        child: Text(
-                          drink.strDrink!,
-                          style: const TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.w600),
-                          textAlign: TextAlign.center,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        onVisibilityChanged: (v) {
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                      child: Text(
+                        drink.strDrink!,
+                        style: const TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.w600),
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      onVisibilityChanged: (v) {
+                        WidgetsBinding.instance.addPostFrameCallback(
+                          (_) {
                             setState(() {
                               headerVisible = v;
                             });
-                          });
-                        }),
+                          },
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),

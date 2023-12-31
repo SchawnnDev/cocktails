@@ -20,12 +20,14 @@ class PersistentDataProvider {
   List<Category> _categories = [];
   List<Glass> _glasses = [];
   List<Ingredient> _ingredients = [];
+  List<String> _alcoholicFilters = [];
 
   // Getters
   List<Drink> get drinks => _drinks;
   List<Category> get categories => _categories;
   List<Glass> get glasses => _glasses;
   List<Ingredient> get ingredients => _ingredients;
+  List<String> get alcoholicFilters => _alcoholicFilters;
 
   final RxBool error = false.obs;
   bool loaded = false;
@@ -210,6 +212,15 @@ class PersistentDataProvider {
       }
     }
     return result;
+  }
+
+  /// Get all alcoholic filters from cache or from API
+  Future<List<String>> getAlcoholicFilters() async {
+    final cocktailsDBService = Get.find<TheCocktailsDBService>();
+    if (_alcoholicFilters.isEmpty) {
+      _alcoholicFilters = await cocktailsDBService.getAlcoholicFilters();
+    }
+    return _alcoholicFilters;
   }
 
   /// Clear all boxes (resets favorites & dislikes)

@@ -4,7 +4,7 @@ import 'package:cocktails/models/drink.dart';
 import 'package:cocktails/models/ingredient.dart';
 import 'package:cocktails/views/widgets/cocktails_appbar.dart';
 import 'package:cocktails/views/widgets/drink_card.dart';
-import 'package:cocktails/views/widgets/drink_recipe_modal.dart';
+import 'package:cocktails/views/widgets/more_card.dart';
 import 'package:cocktails/views/widgets/navbar.dart';
 import 'package:cocktails/providers/persistent_data_provider.dart';
 import 'package:flutter/material.dart';
@@ -39,41 +39,41 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CocktailsAppBar(isBackButton: false),
-        backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-          child: SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _searchField(),
-                Column(
-                  children: [
+      appBar: CocktailsAppBar(isBackButton: false),
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _searchField(),
+              Column(
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  _recommendationSection(),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  _categoriesSection(),
+                  if (homeController.ingredients.isNotEmpty) ...[
                     SizedBox(
                       height: 20,
                     ),
-                    _recommendationSection(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    _categoriesSection(),
-                    if (homeController.ingredients.isNotEmpty) ...[
-                      SizedBox(
-                        height: 20,
-                      ),
-                      _ingredientsSection(),
-                    ],
-                    SizedBox(
-                      height: 20,
-                    ),
+                    _ingredientsSection(),
                   ],
-                )
-              ],
-            ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                ],
+              )
+            ],
           ),
         ),
-        extendBody: true,
-        bottomNavigationBar: NavBar(),
+      ),
+      extendBody: true,
+      bottomNavigationBar: NavBar(),
     );
   }
 
@@ -98,17 +98,18 @@ class _HomePageState extends State<HomePage> {
         Container(
           color: Colors.white,
           height: 205,
-          child: Obx(() => ListView.separated(
-              itemCount: homeController.recommendations.length,
-              scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.only(left: 20, right: 20),
-              separatorBuilder: (context, index) => SizedBox(
-                    width: 25,
-                  ),
-              itemBuilder: (context, index) {
-                final Drink drink = homeController.recommendations[index];
-                return DrinkCard(drink, index);
-              }),
+          child: Obx(
+            () => ListView.separated(
+                itemCount: homeController.recommendations.length,
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.only(left: 20, right: 20),
+                separatorBuilder: (context, index) => SizedBox(
+                      width: 25,
+                    ),
+                itemBuilder: (context, index) {
+                  final Drink drink = homeController.recommendations[index];
+                  return DrinkCard(drink, index);
+                }),
           ),
         )
       ],
@@ -130,9 +131,10 @@ class _HomePageState extends State<HomePage> {
                 Text(
                   'categories'.tr,
                   style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 26,
-                      fontWeight: FontWeight.w600),
+                    color: Colors.black,
+                    fontSize: 26,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 SizedBox(
                   width: 5,
@@ -151,20 +153,21 @@ class _HomePageState extends State<HomePage> {
           height: 15,
         ),
         Container(
-            height: 120,
-            color: Colors.white,
-            child: Obx(() => ListView.separated(
-                  itemCount: homeController.categories.length,
-                  scrollDirection: Axis.horizontal,
-                  padding: EdgeInsets.only(left: 20, right: 20),
-                  separatorBuilder: (context, index) => SizedBox(
-                    width: 25,
-                  ),
-                  itemBuilder: (context, index) {
-                    final Category category = homeController.categories[index];
-                    return _categoriesSectionItem(category, index);
-                  },
-                )),),
+          height: 120,
+          color: Colors.white,
+          child: Obx(() => ListView.separated(
+                itemCount: homeController.categories.length,
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.only(left: 20, right: 20),
+                separatorBuilder: (context, index) => SizedBox(
+                  width: 25,
+                ),
+                itemBuilder: (context, index) {
+                  final Category category = homeController.categories[index];
+                  return _categoriesSectionItem(category, index);
+                },
+              )),
+        ),
       ],
     );
   }
@@ -193,7 +196,7 @@ class _HomePageState extends State<HomePage> {
               Padding(
                 padding: const EdgeInsets.only(left: 5, right: 5),
                 child: Text(
-                  category.name ?? 'No name',
+                  category.name?.tr ?? 'No name',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.w400,
@@ -216,8 +219,7 @@ class _HomePageState extends State<HomePage> {
                 if (category.name == null) {
                   return;
                 }
-                Get.toNamed(
-                    '/category/${Uri.encodeComponent(category.name!)}');
+                Get.toNamed('/category/${Uri.encodeComponent(category.name!)}');
               },
             ),
           ),
@@ -262,25 +264,35 @@ class _HomePageState extends State<HomePage> {
           height: 15,
         ),
         Container(
-            height: 120,
-            color: Colors.white,
-            child: Obx(() => ListView.separated(
-                  itemCount: homeController.ingredients.length + 1,
-                  scrollDirection: Axis.horizontal,
-                  padding: EdgeInsets.only(left: 20, right: 20),
-                  separatorBuilder: (context, index) => SizedBox(
-                    width: 25,
-                  ),
-                  itemBuilder: (context, index) {
-                    if (index == homeController.ingredients.length) {
-                      return _ingredientsSectionItemMore(index);
-                    }
+          height: 120,
+          color: Colors.white,
+          child: Obx(
+            () => ListView.separated(
+              itemCount: homeController.ingredients.length + 1,
+              scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.only(left: 20, right: 20),
+              separatorBuilder: (context, index) => SizedBox(
+                width: 25,
+              ),
+              itemBuilder: (context, index) {
+                if (index == homeController.ingredients.length) {
+                  return MoreCard(
+                    'see_all_ingredients',
+                    () {
+                      Get.toNamed('/ingredients');
+                    },
+                    Color(0xFFBAA9DB).withOpacity(index % 2 == 0 ? 0.6 : 0.3),
+                    100,
+                    null,
+                  );
+                }
 
-                    final Ingredient ingredient =
-                        homeController.ingredients[index];
-                    return _ingredientsSectionItem(ingredient, index);
-                  },
-                ))),
+                final Ingredient ingredient = homeController.ingredients[index];
+                return _ingredientsSectionItem(ingredient, index);
+              },
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -337,7 +349,7 @@ class _HomePageState extends State<HomePage> {
               Padding(
                 padding: const EdgeInsets.only(left: 5, right: 5),
                 child: Text(
-                  ingredient.name,
+                  ingredient.name.tr,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.w400,
@@ -359,47 +371,6 @@ class _HomePageState extends State<HomePage> {
               onTapUp: (TapUpDetails details) {
                 Get.toNamed(
                     '/ingredient/${Uri.encodeComponent(ingredient.name)}');
-              },
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Stack _ingredientsSectionItemMore(int index) {
-    return Stack(
-      children: [
-        Container(
-            width: 100,
-            decoration: BoxDecoration(
-                color:
-                    Color(0xFFBAA9DB).withOpacity(index % 2 == 0 ? 0.6 : 0.3),
-                borderRadius: BorderRadius.circular(16)),
-            child: Center(
-                child: Padding(
-              padding: const EdgeInsets.only(left: 5, right: 5),
-              child: Text(
-                'see_all_ingredients'.tr,
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  color: Colors.black,
-                  fontSize: 14,
-                ),
-              ),
-            ))),
-        Positioned.fill(
-          child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              borderRadius: BorderRadius.circular(16),
-              splashColor: Color(0x00542E71).withOpacity(0.2),
-              highlightColor: Color(0x00542E71).withOpacity(0.3),
-              onTapUp: (TapUpDetails details) {
-                Get.toNamed('/ingredients');
               },
             ),
           ),

@@ -34,7 +34,7 @@ class CategoryController extends GetxController {
 
     // enrich with cached data
     dataProvider.getDrinksByCategory(categoryName).forEach((element) {
-      if(!result.any((element) => element.idDrink == element.idDrink)) {
+      if (!result.any((element) => element.idDrink == element.idDrink)) {
         result.add(element);
       }
     });
@@ -131,5 +131,4 @@ class CategoryController extends GetxController {
     }
     return result;
   }
-
 }
