@@ -15,5 +15,4 @@ class Ingredient {
   factory Ingredient.fromJson(Map<String, dynamic> json) {
     return Ingredient(name: json['strIngredient1']);
   }
-
 }

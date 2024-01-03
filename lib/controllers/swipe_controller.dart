@@ -29,18 +29,20 @@ class SwipeController extends GetxController {
     await dataProvider
         .getRandomDrinks(10, toExclude)
         .then((value) => drinks.addAll(value))
-        .whenComplete(() { loadingMore(false); });
+        .whenComplete(() {
+      loadingMore(false);
+    });
   }
 
   void swipeEnd(int previousIndex, int targetIndex, SwiperActivity activity) {
     final Drink drink = drinks[previousIndex];
     switch (activity) {
       case Swipe():
-        if(activity.direction == AxisDirection.left){
+        if (activity.direction == AxisDirection.left) {
           drink.disliked(true);
           drink.favorite(false);
           break;
-        } else if(activity.direction == AxisDirection.right){
+        } else if (activity.direction == AxisDirection.right) {
           drink.disliked(false);
           drink.favorite(true);
           break;
@@ -54,5 +56,4 @@ class SwipeController extends GetxController {
         break;
     }
   }
-
 }

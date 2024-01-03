@@ -5,10 +5,12 @@ class CocktailProgressIndicator extends StatefulWidget {
   const CocktailProgressIndicator({super.key});
 
   @override
-  State<CocktailProgressIndicator> createState() => _CocktailProgressIndicatorState();
+  State<CocktailProgressIndicator> createState() =>
+      _CocktailProgressIndicatorState();
 }
 
-class _CocktailProgressIndicatorState extends State<CocktailProgressIndicator> with SingleTickerProviderStateMixin {
+class _CocktailProgressIndicatorState extends State<CocktailProgressIndicator>
+    with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
 
   @override
@@ -31,20 +33,19 @@ class _CocktailProgressIndicatorState extends State<CocktailProgressIndicator> w
         controller: _controller,
         delegates: LottieDelegates(
           values: [
-              ValueDelegate.strokeColor(
-                const ['BG', '**'],
-                value: Colors.white,
-              ),
-              ValueDelegate.color(
-                const ['BG', '**'],
-                value: Colors.white,
-              ),
+            ValueDelegate.strokeColor(
+              const ['BG', '**'],
+              value: Colors.white,
+            ),
+            ValueDelegate.color(
+              const ['BG', '**'],
+              value: Colors.white,
+            ),
           ],
-        ),
-        onLoaded: (composition) async {
-          _controller
-            ..duration = Duration(seconds: 3)
-            ..repeat();
-        });
+        ), onLoaded: (composition) async {
+      _controller
+        ..duration = Duration(seconds: 3)
+        ..repeat();
+    });
   }
 }

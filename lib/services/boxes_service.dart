@@ -43,5 +43,4 @@ class BoxesService extends GetxService {
   void removeDislike(String id) {
     dislikesBox.delete(id);
   }
-
 }

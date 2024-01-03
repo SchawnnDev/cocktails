@@ -31,12 +31,11 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
       child: Lottie.asset('assets/lottie/cocktail_loading.json',
           frameRate: FrameRate(60),
           repeat: true,
-          controller: _controller,
-          onLoaded: (composition) async {
-            _controller
-                ..duration = Duration(seconds: 3)
-                ..repeat();
-          }),
+          controller: _controller, onLoaded: (composition) async {
+        _controller
+          ..duration = Duration(seconds: 3)
+          ..repeat();
+      }),
     );
   }
 }

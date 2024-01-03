@@ -9,7 +9,9 @@ class HomeController extends GetxController {
   final _ingredients = <Ingredient>[].obs;
 
   List<Category> get categories => _categories;
+
   List<Drink> get recommendations => _recommendations;
+
   List<Ingredient> get ingredients => _ingredients;
 
   HomeController({List<Category>? categories, List<Drink>? recommendations}) {
@@ -18,8 +20,8 @@ class HomeController extends GetxController {
     }
     if (recommendations != null) {
       _recommendations(recommendations);
-      _ingredients(recommendations.expand((e) => e.ingredients).take(10).toList());
+      _ingredients(
+          recommendations.expand((e) => e.ingredients).take(10).toList());
     }
   }
-
 }

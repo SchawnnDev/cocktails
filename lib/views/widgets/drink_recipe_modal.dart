@@ -1,16 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cocktails/controllers/settings_controller.dart';
+import 'package:cocktails/models/drink.dart';
 import 'package:cocktails/providers/persistent_data_provider.dart';
 import 'package:cocktails/utils/widgets/badge_pill.dart';
+import 'package:cocktails/utils/widgets/invisible_expanded_header.dart';
 import 'package:cocktails/utils/widgets/quantity_selector_modal.dart';
 import 'package:flutter/material.dart';
-
-import 'package:cocktails/models/drink.dart';
-
-import 'package:cocktails/utils/widgets/invisible_expanded_header.dart';
 import 'package:get/get.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shimmer/shimmer.dart';
 
 class DrinkRecipeModal extends StatefulWidget {
   final Drink drink;
@@ -39,24 +37,24 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
     }
 
     return FutureBuilder(
-        future: dataProvider.getDrink(widget.drink.idDrink),
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-              return Center(child: Text('No connection'));
-            case ConnectionState.waiting:
-              return Center(child: CircularProgressIndicator());
-            case ConnectionState.active:
-              return Center(child: CircularProgressIndicator());
-            case ConnectionState.done:
-              if (snapshot.hasError || snapshot.data == null) {
-                Navigator.pop(context);
-                return Center(child: Text('Error'));
-              }
-              drink = snapshot.data;
-              return _buildModal(drink!, context);
-          }
-        },
+      future: dataProvider.getDrink(widget.drink.idDrink),
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+            return Center(child: Text('No connection'));
+          case ConnectionState.waiting:
+            return Center(child: CircularProgressIndicator());
+          case ConnectionState.active:
+            return Center(child: CircularProgressIndicator());
+          case ConnectionState.done:
+            if (snapshot.hasError || snapshot.data == null) {
+              Navigator.pop(context);
+              return Center(child: Text('Error'));
+            }
+            drink = snapshot.data;
+            return _buildModal(drink!, context);
+        }
+      },
     );
   }
 

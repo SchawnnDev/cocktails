@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class NoInternet extends StatefulWidget {
-
   final Function retry;
 
   const NoInternet({super.key, required this.retry});

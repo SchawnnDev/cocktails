@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class TheCocktailsDBService extends GetxService {
-
   final String apiUrl = 'https://www.thecocktaildb.com/api/json/v1/1/';
 
   Future<TheCocktailsDBService> init() async {
@@ -127,5 +126,4 @@ class TheCocktailsDBService extends GetxService {
       return Future.error('Failed to load glasses');
     }
   }
-
 }

@@ -15,8 +15,8 @@ class Setting {
       this.onChange,
       this.onTap})
       : _value = value {
-    assert(onTap == null && onChange != null
-            || onTap != null && onChange == null);
+    assert(
+        onTap == null && onChange != null || onTap != null && onChange == null);
   }
 
   String? getLabel() {

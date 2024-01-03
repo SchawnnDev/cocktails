@@ -134,12 +134,12 @@ class _NavBarState extends State<NavBar> with TickerProviderStateMixin {
                         controller: _controllers[1],
                         delegates: LottieDelegates(
                           values: [
-                            if(currentIndex == 1)
+                            if (currentIndex == 1)
                               ValueDelegate.strokeColor(
                                 const ['**'],
                                 value: activeIconColor,
                               ),
-                            if(currentIndex == 1)
+                            if (currentIndex == 1)
                               ValueDelegate.color(
                                 const ['**'],
                                 value: activeIconColor,

@@ -5,7 +5,8 @@ class QuantitySelectorModal extends StatefulWidget {
   final int defaultQuantity;
   final Function(int) onSelected;
 
-  const QuantitySelectorModal({super.key, required this.defaultQuantity, required this.onSelected});
+  const QuantitySelectorModal(
+      {super.key, required this.defaultQuantity, required this.onSelected});
 
   @override
   _QuantitySelectorModalState createState() => _QuantitySelectorModalState();
@@ -16,12 +17,12 @@ class _QuantitySelectorModalState extends State<QuantitySelectorModal> {
   FixedExtentScrollController fixedExtentScrollController =
       FixedExtentScrollController();
 
-
   @override
   void initState() {
     super.initState();
     selectedQuantity = widget.defaultQuantity;
-    fixedExtentScrollController = FixedExtentScrollController(initialItem: widget.defaultQuantity - 1);
+    fixedExtentScrollController =
+        FixedExtentScrollController(initialItem: widget.defaultQuantity - 1);
   }
 
   @override
@@ -33,38 +34,40 @@ class _QuantitySelectorModalState extends State<QuantitySelectorModal> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            color: Color(0xFF8253DB),
-            height: 50,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(Icons.cancel_outlined, color: Colors.white),
-                  iconSize: 28,
-                ),
-                Text(
-                  'select_quantity'.tr,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+              color: Color(0xFF8253DB),
+              height: 50,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(Icons.cancel_outlined, color: Colors.white),
+                    iconSize: 28,
                   ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    widget.onSelected(selectedQuantity);
-                    Navigator.pop(context);
-                  },
-                  splashColor: Colors.blueGrey,
-                  icon: Icon(Icons.check_circle_outline, color: Colors.white,),
-                  iconSize: 28,
-                ),
-              ],
-            )
-          ),
+                  Text(
+                    'select_quantity'.tr,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      widget.onSelected(selectedQuantity);
+                      Navigator.pop(context);
+                    },
+                    splashColor: Colors.blueGrey,
+                    icon: Icon(
+                      Icons.check_circle_outline,
+                      color: Colors.white,
+                    ),
+                    iconSize: 28,
+                  ),
+                ],
+              )),
           //SizedBox(height: 16),
           Expanded(
             child: ListWheelScrollView.useDelegate(
@@ -83,7 +86,9 @@ class _QuantitySelectorModalState extends State<QuantitySelectorModal> {
                   return Container(
                     padding: EdgeInsets.symmetric(vertical: 8.0),
                     decoration: BoxDecoration(
-                      color: index + 1 != selectedQuantity ? Colors.white : Colors.grey[200],
+                      color: index + 1 != selectedQuantity
+                          ? Colors.white
+                          : Colors.grey[200],
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: Center(

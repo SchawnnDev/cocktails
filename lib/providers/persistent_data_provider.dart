@@ -24,9 +24,13 @@ class PersistentDataProvider {
 
   // Getters
   List<Drink> get drinks => _drinks;
+
   List<Category> get categories => _categories;
+
   List<Glass> get glasses => _glasses;
+
   List<Ingredient> get ingredients => _ingredients;
+
   List<String> get alcoholicFilters => _alcoholicFilters;
 
   final RxBool error = false.obs;
@@ -254,5 +258,4 @@ class PersistentDataProvider {
     }
     boxesService.dislikesBox.clear();
   }
-
 }

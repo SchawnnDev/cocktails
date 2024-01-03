@@ -11,6 +11,7 @@ class CategoryController extends GetxController {
   final currentFilter = Filter.defaultFilter.obs;
 
   List<Category> get categories => _categories;
+
   List<Drink> get drinks => _drinks;
 
   CategoryController({List<Category>? categories}) {

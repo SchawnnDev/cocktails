@@ -88,36 +88,36 @@ class SettingsController extends GetxController {
           icon: Icons.thumb_down_outlined,
           values: {},
           name: 'reset_dislikes', onTap: (BuildContext ctx) async {
-            bool result = await showAlertDialog(
-              ctx,
-              'reset_dislikes'.tr,
-              'are_you_sure_reset'.tr,
-            );
+        bool result = await showAlertDialog(
+          ctx,
+          'reset_dislikes'.tr,
+          'are_you_sure_reset'.tr,
+        );
 
-            if (!result) {
-              return;
-            }
+        if (!result) {
+          return;
+        }
 
-            final dataProvider = Get.find<PersistentDataProvider>();
-            dataProvider.clearDislikes();
-          }),
+        final dataProvider = Get.find<PersistentDataProvider>();
+        dataProvider.clearDislikes();
+      }),
       Setting('click_reset_all',
           icon: Icons.restart_alt_outlined,
           values: {},
           name: 'reset_all', onTap: (BuildContext ctx) async {
-            bool result = await showAlertDialog(
-              ctx,
-              'reset_all'.tr,
-              'are_you_sure_reset'.tr,
-            );
+        bool result = await showAlertDialog(
+          ctx,
+          'reset_all'.tr,
+          'are_you_sure_reset'.tr,
+        );
 
-            if (!result) {
-              return;
-            }
+        if (!result) {
+          return;
+        }
 
-            final dataProvider = Get.find<PersistentDataProvider>();
-            dataProvider.clearAll();
-          }),
+        final dataProvider = Get.find<PersistentDataProvider>();
+        dataProvider.clearAll();
+      }),
     ]);
   }
 

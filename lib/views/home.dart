@@ -1,16 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cocktails/controllers/home_controller.dart';
+import 'package:cocktails/models/category.dart';
 import 'package:cocktails/models/drink.dart';
 import 'package:cocktails/models/ingredient.dart';
+import 'package:cocktails/providers/persistent_data_provider.dart';
 import 'package:cocktails/views/widgets/cocktails_appbar.dart';
 import 'package:cocktails/views/widgets/drink_card.dart';
 import 'package:cocktails/views/widgets/more_card.dart';
 import 'package:cocktails/views/widgets/navbar.dart';
-import 'package:cocktails/providers/persistent_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import 'package:cocktails/models/category.dart';
 import 'package:shimmer/shimmer.dart';
 
 class HomePageBinding extends Bindings {

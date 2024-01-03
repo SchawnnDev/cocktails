@@ -5,11 +5,11 @@ import 'package:cocktails/models/category.dart';
 import 'package:cocktails/models/drink.dart';
 import 'package:cocktails/models/filter.dart';
 import 'package:cocktails/models/glass.dart';
+import 'package:cocktails/providers/persistent_data_provider.dart';
 import 'package:cocktails/views/widgets/cocktails_appbar.dart';
 import 'package:cocktails/views/widgets/drink_card.dart';
 import 'package:cocktails/views/widgets/more_card.dart';
 import 'package:cocktails/views/widgets/navbar.dart';
-import 'package:cocktails/providers/persistent_data_provider.dart';
 import 'package:cocktails/views/widgets/see_more_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -115,8 +115,7 @@ class _CategoryPageState extends State<CategoryPage> {
                   ? CrossAxisAlignment.stretch
                   : CrossAxisAlignment.start,
           children: [
-            if (categoryController.currentFilter.value ==
-                Filter.defaultFilter)
+            if (categoryController.currentFilter.value == Filter.defaultFilter)
               _allDrinks(),
             if (categoryController.currentFilter.value ==
                 Filter.alcoholicFilter)
@@ -168,22 +167,23 @@ class _CategoryPageState extends State<CategoryPage> {
     final dataProvider = Get.find<PersistentDataProvider>();
 
     return FutureBuilder(
-        future: dataProvider.getAlcoholicFilters(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasError || snapshot.data == null) {
-              return Center(child: Text('Error'));
-            }
-
-            return _createAlcoholicFilters(category, snapshot.data);
+      future: dataProvider.getAlcoholicFilters(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasError || snapshot.data == null) {
+            return Center(child: Text('Error'));
           }
 
-          return Center(child: CircularProgressIndicator());
-        },
+          return _createAlcoholicFilters(category, snapshot.data);
+        }
+
+        return Center(child: CircularProgressIndicator());
+      },
     );
   }
 
-  Widget _createAlcoholicFilters(Category category, List<String>? alcoholicFilters) {
+  Widget _createAlcoholicFilters(
+      Category category, List<String>? alcoholicFilters) {
     if (alcoholicFilters == null) {
       return Center(
         child: Text('No drinks'),
@@ -233,9 +233,10 @@ class _CategoryPageState extends State<CategoryPage> {
                       useSafeArea: true,
                       shape: RoundedRectangleBorder(
                           borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(10))),
+                              BorderRadius.vertical(top: Radius.circular(10))),
                       builder: (context) => SeeMoreModal(
-                        drinks: drinks, title: '${category.name}: ${filter.tr}',
+                        drinks: drinks,
+                        title: '${category.name}: ${filter.tr}',
                       ),
                     );
                   },
@@ -274,23 +275,22 @@ class _CategoryPageState extends State<CategoryPage> {
                     final drink = drinks[index];
 
                     if (index == 15) {
-                      return MoreCard(
-                          'see_all',
-                          () {
-                            showModalBottomSheet(
-                              context: context,
-                              isScrollControlled: true,
-                              enableDrag: true,
-                              showDragHandle: false,
-                              useSafeArea: true,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.vertical(top: Radius.circular(10))),
-                              builder: (context) => SeeMoreModal(
-                                drinks: drinks, title: 'filter'.tr,
-                              ),
-                            );
-                          },
+                      return MoreCard('see_all', () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          enableDrag: true,
+                          showDragHandle: false,
+                          useSafeArea: true,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(10))),
+                          builder: (context) => SeeMoreModal(
+                            drinks: drinks,
+                            title: 'filter'.tr,
+                          ),
+                        );
+                      },
                           Color(0xFFBAA9DB)
                               .withOpacity(index % 2 == 0 ? 0.6 : 0.3),
                           140,

@@ -11,5 +11,4 @@ class CategoriesController extends GetxController {
       _categories(categories);
     }
   }
-
 }

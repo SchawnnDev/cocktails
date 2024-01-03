@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 class FavoritesController extends GetxController {
   final _favorites = <Drink>[].obs;
+
   List<Drink> get favorites => _favorites;
 
   FavoritesController({List<Drink>? favorites}) {
@@ -10,5 +11,4 @@ class FavoritesController extends GetxController {
       _favorites(favorites);
     }
   }
-
 }

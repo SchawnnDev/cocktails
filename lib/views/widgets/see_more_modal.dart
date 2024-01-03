@@ -1,7 +1,6 @@
 import 'package:cocktails/models/drink.dart';
 import 'package:cocktails/views/widgets/drink_card.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class SeeMoreModal extends StatelessWidget {
   final String title;

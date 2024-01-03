@@ -60,22 +60,25 @@ class _FilterSelectorModalState extends State<FilterSelectorModal> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-              height: 40,
-              decoration: BoxDecoration(
-                color: Color(0xFF8253DB),
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(20.0),
-                  topRight: Radius.circular(20.0),
+            height: 40,
+            decoration: BoxDecoration(
+              color: Color(0xFF8253DB),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(20.0),
+                topRight: Radius.circular(20.0),
+              ),
+            ),
+            child: Center(
+              child: Text(
+                widget.isFilter ? 'filter_by'.tr : 'sort_by'.tr,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                  fontSize: 17,
                 ),
               ),
-              child: Center(
-                child: Text(widget.isFilter ? 'filter_by'.tr : 'sort_by'.tr,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black,
-                      fontSize: 17,
-                    ),),
-              ),),
+            ),
+          ),
           Expanded(
             child: Container(
               color: Colors.white,

@@ -11,5 +11,4 @@ class IngredientsController extends GetxController {
       _ingredients(ingredients);
     }
   }
-
 }

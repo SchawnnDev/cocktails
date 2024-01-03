@@ -1,10 +1,8 @@
-import 'package:cocktails/controllers/categories_controller.dart';
-import 'package:cocktails/controllers/ingredients_controller.dart';
 import 'package:cocktails/controllers/ingredients_controller.dart';
 import 'package:cocktails/models/category.dart';
+import 'package:cocktails/providers/persistent_data_provider.dart';
 import 'package:cocktails/views/widgets/cocktails_appbar.dart';
 import 'package:cocktails/views/widgets/navbar.dart';
-import 'package:cocktails/providers/persistent_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

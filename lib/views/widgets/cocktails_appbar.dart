@@ -17,7 +17,7 @@ class CocktailsAppBar extends StatelessWidget implements PreferredSizeWidget {
       this.title = 'Cocktails',
       this.isBackButton = false,
       this.isFilterButton = false,
-        this.isFilter = true,
+      this.isFilter = true,
       this.onFilterSelected,
       this.defaultFilter,
       this.filters});
@@ -61,13 +61,14 @@ class CocktailsAppBar extends StatelessWidget implements PreferredSizeWidget {
                 showModalBottomSheet(
                   context: context,
                   builder: (context) {
-                    if(defaultFilter != null) {
+                    if (defaultFilter != null) {
                       print(defaultFilter!.value);
                     }
                     return FilterSelectorModal(
                       isFilter: isFilter,
                       filters: filters!,
-                      defaultFilter: defaultFilter?.value ?? Filter.defaultFilter,
+                      defaultFilter:
+                          defaultFilter?.value ?? Filter.defaultFilter,
                       onSelected: onFilterSelected!,
                     );
                   },

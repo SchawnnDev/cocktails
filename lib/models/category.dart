@@ -7,7 +7,7 @@ class Category {
 
   Category({required this.name}) {
     imagePath = _getImagePath();
-    boxColor = Color(0xFFBAA9DB);//generateRandomPastelColor();
+    boxColor = Color(0xFFBAA9DB); //generateRandomPastelColor();
   }
 
   String? _getImagePath() {
@@ -41,5 +41,4 @@ class Category {
   factory Category.fromJson(Map<String, dynamic> json) {
     return Category(name: json['strCategory']);
   }
-
 }

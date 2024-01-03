@@ -191,7 +191,8 @@ class AppTranslations extends Translations {
           'click_reset_dislikes': 'Zurücksetzen',
           'reset_all': 'Alles zurücksetzen',
           'click_reset_all': 'Zurücksetzen',
-          'are_you_sure_reset': 'Sind Sie sicher, dass Sie zurücksetzen möchten?',
+          'are_you_sure_reset':
+              'Sind Sie sicher, dass Sie zurücksetzen möchten?',
           'cancel': 'Abbrechen',
           'ok': 'OK',
           'favorites': 'Favoriten',
