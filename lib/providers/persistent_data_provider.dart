@@ -223,6 +223,16 @@ class PersistentDataProvider {
     return _alcoholicFilters;
   }
 
+  /// Get all glasses from cache or from API
+  Future<List<Glass>> getGlasses() async {
+    final cocktailsDBService = Get.find<TheCocktailsDBService>();
+    if (_glasses.isEmpty) {
+      final glasses = await cocktailsDBService.getGlasses();
+      _glasses = glasses.drinks ?? [];
+    }
+    return _glasses;
+  }
+
   /// Clear all boxes (resets favorites & dislikes)
   void clearAll() {
     clearDislikes();

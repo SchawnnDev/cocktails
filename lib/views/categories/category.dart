@@ -4,6 +4,7 @@ import 'package:cocktails/controllers/category_controller.dart';
 import 'package:cocktails/models/category.dart';
 import 'package:cocktails/models/drink.dart';
 import 'package:cocktails/models/filter.dart';
+import 'package:cocktails/models/glass.dart';
 import 'package:cocktails/views/widgets/cocktails_appbar.dart';
 import 'package:cocktails/views/widgets/drink_card.dart';
 import 'package:cocktails/views/widgets/more_card.dart';
@@ -178,7 +179,8 @@ class _CategoryPageState extends State<CategoryPage> {
           }
 
           return Center(child: CircularProgressIndicator());
-        });
+        },
+    );
   }
 
   Widget _createAlcoholicFilters(Category category, List<String>? alcoholicFilters) {
@@ -320,6 +322,25 @@ class _CategoryPageState extends State<CategoryPage> {
   }
 
   Widget _glassDrinks() {
+    final dataProvider = Get.find<PersistentDataProvider>();
+
+    return FutureBuilder(
+      future: dataProvider.getGlasses(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasError || snapshot.data == null) {
+            return Center(child: Text('Error'));
+          }
+
+          return _createGlasses(snapshot.data ?? []);
+        }
+
+        return Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+
+  Widget _createGlasses(List<Glass> glasses) {
     return Container();
   }
 
