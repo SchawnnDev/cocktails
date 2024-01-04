@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cocktails/controllers/home_controller.dart';
 import 'package:cocktails/models/category.dart';
 import 'package:cocktails/models/drink.dart';
+import 'package:cocktails/models/glass.dart';
 import 'package:cocktails/models/ingredient.dart';
 import 'package:cocktails/providers/persistent_data_provider.dart';
 import 'package:cocktails/utils/themes.dart';
@@ -19,6 +20,7 @@ class HomePageBinding extends Bindings {
     final dataProvider = Get.find<PersistentDataProvider>();
     Get.lazyPut(() => HomeController(
           categories: dataProvider.categories,
+          glasses: dataProvider.glasses,
           recommendations: dataProvider.drinks
               .where((element) => element.isRecommended)
               .toList(),
@@ -61,6 +63,12 @@ class _HomePageState extends State<HomePage> {
                       height: 20,
                     ),
                     _ingredientsSection(),
+                  ],
+                  if (homeController.glasses.isNotEmpty) ...[
+                    SizedBox(
+                      height: 20,
+                    ),
+                    _glassesSection(),
                   ],
                   SizedBox(
                     height: 20,
@@ -172,7 +180,7 @@ class _HomePageState extends State<HomePage> {
         Container(
           width: 100,
           decoration: BoxDecoration(
-              color: category.boxColor.withOpacity(index % 2 == 0 ? 0.6 : 0.3),
+              color: primColor(context, index),
               borderRadius: BorderRadius.circular(16)),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -360,6 +368,125 @@ class _HomePageState extends State<HomePage> {
               onTapUp: (TapUpDetails details) {
                 Get.toNamed(
                     '/ingredient/${Uri.encodeComponent(ingredient.name)}');
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column _glassesSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 20),
+          child: GestureDetector(
+            onTapUp: (details) {
+              Get.toNamed('/glasses');
+            },
+            child: Row(
+              children: [
+                Text(
+                  'glasses'.tr,
+                  style: TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.w600),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  size: 16,
+                  weight: 16,
+                )
+              ],
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        SizedBox(
+          height: 120,
+          child: Obx(
+                () => ListView.separated(
+              itemCount: homeController.ingredients.length + 1,
+              scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.only(left: 20, right: 20),
+              separatorBuilder: (context, index) => SizedBox(
+                width: 25,
+              ),
+              itemBuilder: (context, index) {
+                if (index == homeController.ingredients.length) {
+                  return MoreCard(
+                    'see_all_glasses',
+                        () {
+                      Get.toNamed('/glasses');
+                    },
+                    primColor(context, index),
+                    100,
+                    null,
+                  );
+                }
+
+                final Glass glass = homeController.glasses[index];
+                return _glassSectionItem(glass, index);
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Stack _glassSectionItem(Glass glass, int index) {
+    return Stack(
+      children: [
+        Container(
+          width: 100,
+          decoration: BoxDecoration(
+              color: primColor(context, index),
+              borderRadius: BorderRadius.circular(16),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                width: 50,
+                height: 50,
+                decoration:
+                BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+                child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child:
+                    Image.asset(glass.getIcon() ?? 'img/cocktail.png'),),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 5, right: 5),
+                child: Text(
+                  glass.name.tr,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+        Positioned.fill(
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(16),
+              splashColor: Color(0x00542E71).withOpacity(0.2),
+              highlightColor: Color(0x00542E71).withOpacity(0.3),
+              onTapUp: (TapUpDetails details) {
+                Get.toNamed('/glass/${Uri.encodeComponent(glass.name)}');
               },
             ),
           ),

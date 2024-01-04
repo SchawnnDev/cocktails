@@ -1,6 +1,7 @@
 import 'package:cocktails/controllers/ingredients_controller.dart';
 import 'package:cocktails/models/category.dart';
 import 'package:cocktails/providers/persistent_data_provider.dart';
+import 'package:cocktails/utils/themes.dart';
 import 'package:cocktails/views/widgets/cocktails_appbar.dart';
 import 'package:cocktails/views/widgets/navbar.dart';
 import 'package:flutter/material.dart';
@@ -75,8 +76,7 @@ class _IngredientsPageState extends State<IngredientsPage> {
           Container(
             width: 105,
             decoration: BoxDecoration(
-                color:
-                    category.boxColor.withOpacity(index % 2 == 0 ? 0.6 : 0.3),
+                color: primColor(context, index),
                 borderRadius: BorderRadius.circular(16)),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,

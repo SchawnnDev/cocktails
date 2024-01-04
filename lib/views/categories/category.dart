@@ -297,8 +297,7 @@ class _CategoryPageState extends State<CategoryPage> {
                     }
 
                     return DrinkCard(drink, index,
-                        singleColor: Color(0xFFBAA9DB)
-                            .withOpacity(index % 2 == 0 ? 0.6 : 0.3));
+                        singleColor: primColor(context, index));
                   },
                 ),
               ),

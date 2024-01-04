@@ -104,6 +104,8 @@ class AppTranslations extends Translations {
           'name': 'Name',
           'sort_by': 'Sort by',
           'see_all': 'See all',
+          'glasses': 'Glasses',
+          'see_all_glasses': 'See all glasses',
         },
         'de_DE': {
           'hello': 'Hallo Welt',
@@ -207,6 +209,8 @@ class AppTranslations extends Translations {
           'name': 'Namen',
           'sort_by': 'Sortieren nach',
           'see_all': 'Alles anzeigen',
+          'glasses': 'Gläser',
+          'see_all_glasses': 'Alle Gläser anzeigen',
         },
         'fr_FR': {
           'hello': 'Bonjour monde',
@@ -309,6 +313,8 @@ class AppTranslations extends Translations {
           'name': 'Nom',
           'sort_by': 'Trier par',
           'see_all': 'Tout afficher',
+          'glasses': 'Verres',
+          'see_all_glasses': 'Voir tous les verres',
         },
       };
 }

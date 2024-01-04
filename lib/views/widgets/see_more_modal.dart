@@ -1,6 +1,8 @@
 import 'package:cocktails/models/drink.dart';
+import 'package:cocktails/utils/themes.dart';
 import 'package:cocktails/views/widgets/drink_card.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SeeMoreModal extends StatelessWidget {
   final String title;
@@ -21,6 +23,24 @@ class SeeMoreModal extends StatelessWidget {
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
+          ),
+        ),
+        leadingWidth: 54,
+        leading: AnimatedContainer(
+          duration: Duration(milliseconds: 250),
+          // Adjust the duration as needed
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: getPrimColor(context).withOpacity(0.6),
+          ),
+          child: IconButton(
+            padding: EdgeInsets.zero,
+            icon: Icon(Icons.close_outlined),
+            color: Get.isDarkMode ? Colors.white : Colors.black,
+            style: ButtonStyle(),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
         ),
       ),

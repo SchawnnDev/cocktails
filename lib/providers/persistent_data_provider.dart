@@ -64,6 +64,9 @@ class PersistentDataProvider {
         element.isRecommended = true;
       });
 
+      // load glasses
+      await getGlasses();
+
       loaded = true;
       error(false);
     } catch (e) {

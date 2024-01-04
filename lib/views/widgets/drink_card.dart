@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cocktails/models/drink.dart';
+import 'package:cocktails/utils/themes.dart';
 import 'package:cocktails/views/widgets/drink_recipe_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,8 +27,7 @@ class _DrinkCardState extends State<DrinkCard> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
             color: widget.singleColor ??
-                Color(0xFFBAA9DB)
-                    .withOpacity(widget.index % 2 == 0 ? 0.6 : 0.3),
+                primColor(context, widget.index),
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.2),
