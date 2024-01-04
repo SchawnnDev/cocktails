@@ -2,6 +2,8 @@ import 'package:cocktails/views/categories/categories.dart';
 import 'package:cocktails/views/categories/category.dart';
 import 'package:cocktails/views/favorites.dart';
 import 'package:cocktails/views/home.dart';
+import 'package:cocktails/views/ingredients/ingredient.dart';
+import 'package:cocktails/views/ingredients/ingredients.dart';
 import 'package:cocktails/views/settings.dart';
 import 'package:cocktails/views/swipe.dart';
 import 'package:get/get.dart';
@@ -29,6 +31,20 @@ class Routes {
       transition: Transition.rightToLeft,
       transitionDuration: const Duration(milliseconds: 200),
       binding: CategoryPageBinding(),
+    ),
+    GetPage(
+      name: '/ingredients',
+      page: () => const IngredientsPage(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 200),
+      binding: IngredientsPageBinding(),
+    ),
+    GetPage(
+      name: '/ingredient/:ingredient_name',
+      page: () => const IngredientPage(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 200),
+      binding: IngredientPageBinding(),
     ),
     GetPage(
       name: '/favorites',

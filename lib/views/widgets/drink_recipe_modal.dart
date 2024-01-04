@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cocktails/controllers/settings_controller.dart';
 import 'package:cocktails/models/drink.dart';
 import 'package:cocktails/providers/persistent_data_provider.dart';
+import 'package:cocktails/utils/consts.dart';
 import 'package:cocktails/utils/themes.dart';
 import 'package:cocktails/utils/widgets/badge_pill.dart';
 import 'package:cocktails/utils/widgets/invisible_expanded_header.dart';
@@ -27,6 +28,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
   var quantity = 1.obs;
   final settingsController = Get.find<SettingsController>();
   Drink? drink;
+  var canShare = true;
 
   @override
   Widget build(BuildContext context) {
@@ -477,7 +479,16 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
         padding: EdgeInsets.only(bottom: 10),
         child: GestureDetector(
           onTapUp: (details) {
-            Share.share('Hello');
+            if(!canShare) { return; }
+            setState(() {
+              canShare = false;
+            });
+            Share.share("🍹 ${'share_1'.tr} ${drink.strDrink!} 🎉🥳\n ${'share_2'.tr} 🍸🌟 ${'share_3'.tr}\n\n📲 ${getAppUrl()}");
+            Future.delayed(Duration(seconds: 2), () {
+              setState(() {
+                canShare = true;
+              });
+            });
           },
           child: Column(children: [
             Divider(),

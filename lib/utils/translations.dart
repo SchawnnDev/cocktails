@@ -106,6 +106,11 @@ class AppTranslations extends Translations {
           'see_all': 'See all',
           'glasses': 'Glasses',
           'see_all_glasses': 'See all glasses',
+          'share_1': 'Check out this delicious cocktail recipe:',
+          'share_2': 'Let\'s mix things up and enjoy the perfect blend of flavors.',
+          'share_3': '#CocktailMagic #MixologyMasterpiece #Cheers',
+          'nameAsc': 'Names A->Z',
+          'nameDesc': 'Names Z->A',
         },
         'de_DE': {
           'hello': 'Hallo Welt',
@@ -211,6 +216,11 @@ class AppTranslations extends Translations {
           'see_all': 'Alles anzeigen',
           'glasses': 'Gläser',
           'see_all_glasses': 'Alle Gläser anzeigen',
+          'share_1': 'Probieren Sie dieses köstliche Cocktailrezept aus:',
+          'share_2': 'Lassen Sie uns die Aromen mischen und die perfekte Mischung genießen.',
+          'share_3': '#Cocktail #Magie #Prost',
+          'nameAsc': 'Namen A->Z',
+          'nameDesc': 'Namen Z->A',
         },
         'fr_FR': {
           'hello': 'Bonjour monde',
@@ -315,6 +325,11 @@ class AppTranslations extends Translations {
           'see_all': 'Tout afficher',
           'glasses': 'Verres',
           'see_all_glasses': 'Voir tous les verres',
+          'share_1': 'Découvrez cette recette de cocktail délicieuse :',
+          'share_2': 'Mélangeons les saveurs pour savourer une combinaison parfaite.',
+          'share_3': '#Cocktail #Mixologue #BonneCuite #Santé',
+          'nameAsc': 'Noms A->Z',
+          'nameDesc': 'Noms Z->A',
         },
       };
 }

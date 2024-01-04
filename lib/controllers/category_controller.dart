@@ -12,7 +12,7 @@ class CategoryController extends GetxController {
 
   List<Category> get categories => _categories;
 
-  List<Drink> get drinks => _drinks;
+  RxList<Drink> get drinks => _drinks;
 
   CategoryController({List<Category>? categories}) {
     if (categories != null) {

@@ -4,6 +4,7 @@ import 'package:cocktails/models/category.dart';
 import 'package:cocktails/models/drink.dart';
 import 'package:cocktails/models/drinks.dart';
 import 'package:cocktails/models/glass.dart';
+import 'package:cocktails/models/ingredient.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -126,4 +127,16 @@ class TheCocktailsDBService extends GetxService {
       return Future.error('Failed to load glasses');
     }
   }
+
+  /// Get ingredients from API
+  Future<Drinks<Ingredient>> getIngredients() async {
+    final response = await http.get(_buildUri('list.php?i=list'));
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      return Drinks.fromJson(data, (json) => Ingredient.fromJson(json));
+    } else {
+      return Future.error('Failed to load ingredients');
+    }
+  }
+
 }

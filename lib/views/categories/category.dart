@@ -58,7 +58,8 @@ class _CategoryPageState extends State<CategoryPage> {
           Filter.alcoholicFilter,
           Filter.glassFilter,
           Filter.ingredientFilter,
-          Filter.nameFilter,
+          Filter.nameAscFilter,
+          Filter.nameDescFilter,
         ],
         onFilterSelected: (filter) {
           categoryController.currentFilter(filter);
@@ -106,18 +107,23 @@ class _CategoryPageState extends State<CategoryPage> {
     );
   }
 
+  bool _drinkIsStretch(Filter filter) =>
+      filter == Filter.defaultFilter ||
+      filter == Filter.nameAscFilter ||
+      filter == Filter.nameDescFilter;
+
   Widget _drinks(Category category) {
     return SingleChildScrollView(
       child: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment:
-              categoryController.currentFilter.value == Filter.defaultFilter
+              _drinkIsStretch(categoryController.currentFilter.value)
                   ? CrossAxisAlignment.stretch
                   : CrossAxisAlignment.start,
           children: [
             if (categoryController.currentFilter.value == Filter.defaultFilter)
-              _allDrinks(),
+              _allDrinks(Filter.defaultFilter),
             if (categoryController.currentFilter.value ==
                 Filter.alcoholicFilter)
               _alcoholicDrinks(category),
@@ -126,8 +132,10 @@ class _CategoryPageState extends State<CategoryPage> {
             if (categoryController.currentFilter.value ==
                 Filter.ingredientFilter)
               _ingredientDrinks(),
-            if (categoryController.currentFilter.value == Filter.nameFilter)
-              _nameDrinks(),
+            if (categoryController.currentFilter.value == Filter.nameAscFilter)
+              _allDrinks(Filter.nameAscFilter),
+            if (categoryController.currentFilter.value == Filter.nameDescFilter)
+              _allDrinks(Filter.nameDescFilter),
             SizedBox(height: 10),
           ],
         ),
@@ -135,27 +143,38 @@ class _CategoryPageState extends State<CategoryPage> {
     );
   }
 
-  Widget _allDrinks() {
+  Widget _allDrinks(Filter filter) {
     return Padding(
       padding: const EdgeInsets.all(15),
-      child: Obx(
-        () => Wrap(
-          spacing: 15,
-          runSpacing: 15,
-          alignment: WrapAlignment.spaceEvenly,
-          children: List.generate(
-            categoryController.drinks.length,
-            (index) {
-              final drink = categoryController.drinks[index];
+      child: ObxValue(
+        (drinks) {
+          List<Drink> sortedDrinks = drinks;
 
-              return DrinkCard(
-                drink,
-                index,
-                singleColor: getPrimColor(context).withOpacity(0.6),
-              );
-            },
-          ),
-        ),
+          if (filter == Filter.nameAscFilter) {
+            sortedDrinks = sortedDrinks.sorted((a, b) => a.strDrink!.compareTo(b.strDrink!));
+          } else if (filter == Filter.nameDescFilter) {
+            sortedDrinks = sortedDrinks.sorted((a, b) => b.strDrink!.compareTo(a.strDrink!));
+          }
+
+          return Wrap(
+            spacing: 15,
+            runSpacing: 15,
+            alignment: WrapAlignment.spaceEvenly,
+            children: List.generate(
+              sortedDrinks.length,
+                  (index) {
+                final drink = sortedDrinks[index];
+
+                return DrinkCard(
+                  drink,
+                  index,
+                  singleColor: getPrimColor(context).withOpacity(0.6),
+                );
+              },
+            ),
+          );
+        },
+        categoryController.drinks,
       ),
     );
   }
@@ -218,10 +237,9 @@ class _CategoryPageState extends State<CategoryPage> {
               continue;
             }
 
-            children.addAll(_createSection(filter.tr,
-                '${category.name}: ${filter.tr}', null, drinks));
+            children.addAll(_createSection(
+                filter.tr, '${category.name}: ${filter.tr}', null, drinks));
           }
-
         } else {
           children.addAll(_createShimmers(alcoholicFilters));
         }
@@ -319,7 +337,6 @@ class _CategoryPageState extends State<CategoryPage> {
             children.addAll(_createSection(glass.name.tr,
                 '${category.name}: ${glass.name.tr}', glass.getIcon(), drinks));
           }
-
         } else {
           final shimmerGlasses = glasses.sample(10).toList();
           children.addAll(_createShimmers(
@@ -338,10 +355,6 @@ class _CategoryPageState extends State<CategoryPage> {
   }
 
   Widget _ingredientDrinks() {
-    return Container();
-  }
-
-  Widget _nameDrinks() {
     return Container();
   }
 
