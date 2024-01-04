@@ -198,8 +198,10 @@ class _HomePageState extends State<HomePage> {
               Padding(
                 padding: const EdgeInsets.only(left: 5, right: 5),
                 child: Text(
-                  category.name?.tr ?? 'No name',
+                  '${category.name?.tr ?? 'No name'}\n',
                   textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 14,
@@ -347,8 +349,10 @@ class _HomePageState extends State<HomePage> {
               Padding(
                 padding: const EdgeInsets.only(left: 5, right: 5),
                 child: Text(
-                  ingredient.name.tr,
+                  '${ingredient.name.tr}\n',
                   textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 14,
@@ -460,15 +464,19 @@ class _HomePageState extends State<HomePage> {
                 decoration:
                 BoxDecoration(color: Colors.white, shape: BoxShape.circle),
                 child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child:
-                    Image.asset(glass.getIcon() ?? 'img/cocktail.png'),),
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                      child:
+                      Image.asset(glass.getIcon() ?? 'img/cocktail.png'),),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 5, right: 5),
                 child: Text(
-                  glass.name.tr,
+                  '${glass.name.tr}\n',
                   textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 14,

@@ -146,16 +146,12 @@ class _CategoryPageState extends State<CategoryPage> {
           children: List.generate(
             categoryController.drinks.length,
             (index) {
-              // For scrolling test, uncomment this
-              // if (index >= categoryController.categories.length) {
-              //   return _categoriesItem(Category(name: 'Test'), index);
-              // }
               final drink = categoryController.drinks[index];
 
               return DrinkCard(
                 drink,
                 index,
-                singleColor: Theme.of(context).primaryColor.withOpacity(0.6),
+                singleColor: getPrimColor(context).withOpacity(0.6),
               );
             },
           ),
@@ -198,16 +194,17 @@ class _CategoryPageState extends State<CategoryPage> {
         Future.wait(categoryController.drinks
             .map((e) async => dataProvider.getDrink(e.idDrink))
             .toList()),
-        Future.delayed(const Duration(seconds: 1))
+        Future.delayed(const Duration(seconds: 1)) // smooth
       ]),
       builder: (context, snapshot) {
+        final children = <Widget>[];
+
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError || snapshot.data == null) {
             return Center(child: Text('Error'));
           }
 
           final data = snapshot.data?[0] as List<Drink?>?;
-          final children = <Widget>[];
           children.add(SizedBox(height: 20));
 
           for (var filter in alcoholicFilters) {
@@ -221,100 +218,19 @@ class _CategoryPageState extends State<CategoryPage> {
               continue;
             }
 
-            children.add(
-              Padding(
-                padding: EdgeInsets.only(left: 20, right: 10),
-                child: GestureDetector(
-                  onTapUp: (details) {
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      enableDrag: true,
-                      showDragHandle: false,
-                      useSafeArea: true,
-                      shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.vertical(top: Radius.circular(10))),
-                      builder: (context) => SeeMoreModal(
-                        drinks: drinks,
-                        title: '${category.name}: ${filter.tr}',
-                      ),
-                    );
-                  },
-                  child: Row(
-                    children: [
-                      Text(
-                        filter.tr,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Spacer(),
-                      Text(
-                        '${'see_all'.tr} >',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-            children.add(SizedBox(height: 10));
-            children.add(
-              SizedBox(
-                height: 205,
-                child: ListView.separated(
-                  separatorBuilder: (context, index) => SizedBox(width: 25),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: min(drinks.length, 16),
-                  padding: EdgeInsets.only(left: 20, right: 20),
-                  itemBuilder: (context, index) {
-                    final drink = drinks[index];
-
-                    if (index == 15) {
-                      return MoreCard('see_all', () {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          enableDrag: true,
-                          showDragHandle: false,
-                          useSafeArea: true,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(10),
-                            ),
-                          ),
-                          builder: (context) => SeeMoreModal(
-                            drinks: drinks,
-                            title: 'filter'.tr,
-                          ),
-                        );
-                      }, primColor(context, index), 140, 205);
-                    }
-
-                    return DrinkCard(drink, index,
-                        singleColor: primColor(context, index));
-                  },
-                ),
-              ),
-            );
-            children.add(SizedBox(height: 20));
+            children.addAll(_createSection(filter.tr,
+                '${category.name}: ${filter.tr}', null, drinks));
           }
 
-          return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: children);
+        } else {
+          children.addAll(_createShimmers(alcoholicFilters));
         }
 
         return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: _createShimmers(alcoholicFilters));
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: children,
+        );
       },
     );
   }
@@ -355,14 +271,39 @@ class _CategoryPageState extends State<CategoryPage> {
         Future.delayed(const Duration(seconds: 1))
       ]),
       builder: (context, snapshot) {
+        final children = <Widget>[];
+
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError || snapshot.data == null) {
             return Center(child: Text('Error'));
           }
 
           final data = snapshot.data?[0] as List<Drink?>?;
-          final children = <Widget>[];
           children.add(SizedBox(height: 20));
+
+          // sort glasses
+          glasses.sort((a, b) {
+            if (data == null) {
+              return b.name.compareTo(a.name);
+            }
+
+            int aCount = 0;
+            int bCount = 0;
+
+            for (var drink in data) {
+              if (drink == null) continue;
+              if (drink.strGlass == a.name) aCount++;
+              if (drink.strGlass == b.name) bCount++;
+            }
+
+            final int result = bCount.compareTo(aCount);
+
+            if (result == 0) {
+              return b.name.compareTo(a.name);
+            }
+
+            return result;
+          });
 
           for (var glass in glasses) {
             final drinks = data
@@ -375,118 +316,22 @@ class _CategoryPageState extends State<CategoryPage> {
               continue;
             }
 
-            children.add(
-              Padding(
-                padding: EdgeInsets.only(left: 20, right: 10),
-                child: GestureDetector(
-                  onTapUp: (details) {
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      enableDrag: true,
-                      showDragHandle: false,
-                      useSafeArea: true,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(10),
-                        ),
-                      ),
-                      builder: (context) => SeeMoreModal(
-                        drinks: drinks,
-                        title: '${category.name}: ${glass.name.tr}',
-                      ),
-                    );
-                  },
-                  child: Row(
-                    children: [
-                      if (glass.getIcon() != null) ...[
-                        SizedBox(
-                          width: 45,
-                          height: 45,
-                          child: Image.asset(
-                            glass.getIcon()!,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                      ],
-                      Text(
-                        glass.name.tr,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      if (drinks.length >= 15) ...[
-                        Spacer(),
-                        Text(
-                          '${'see_all'.tr} >',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-              ),
-            );
-            children.add(SizedBox(height: 10));
-            children.add(
-              SizedBox(
-                height: 205,
-                child: ListView.separated(
-                  separatorBuilder: (context, index) => SizedBox(width: 25),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: min(drinks.length, 16),
-                  padding: EdgeInsets.only(left: 20, right: 20),
-                  itemBuilder: (context, index) {
-                    final drink = drinks[index];
-
-                    if (index == 15) {
-                      return MoreCard('see_all', () {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          enableDrag: true,
-                          showDragHandle: false,
-                          useSafeArea: true,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(10))),
-                          builder: (context) => SeeMoreModal(
-                            drinks: drinks,
-                            title: 'filter'.tr,
-                          ),
-                        );
-                      }, primColor(context, index), 140, 205);
-                    }
-
-                    return DrinkCard(drink, index,
-                        singleColor: primColor(context, index));
-                  },
-                ),
-              ),
-            );
-            children.add(SizedBox(height: 20));
+            children.addAll(_createSection(glass.name.tr,
+                '${category.name}: ${glass.name.tr}', glass.getIcon(), drinks));
           }
 
-          return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: children);
+        } else {
+          final shimmerGlasses = glasses.sample(10).toList();
+          children.addAll(_createShimmers(
+            shimmerGlasses.map((e) => e.name).toList(),
+            images: shimmerGlasses.map((e) => e.getIcon() ?? '').toList(),
+          ));
         }
-
-        final shimmerGlasses = glasses.sample(10).toList();
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
-          children: _createShimmers(
-            shimmerGlasses.map((e) => e.name).toList(),
-            images: shimmerGlasses.map((e) => e.getIcon() ?? '').toList(),
-          ),
+          children: children,
         );
       },
     );
@@ -532,14 +377,6 @@ class _CategoryPageState extends State<CategoryPage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                // Spacer(),
-                // Text(
-                //   '${'see_all'.tr} >',
-                //   style: TextStyle(
-                //     fontSize: 20,
-                //     fontWeight: FontWeight.bold,
-                //   ),
-                // ),
               ],
             ),
           ),
@@ -605,5 +442,97 @@ class _CategoryPageState extends State<CategoryPage> {
     }
 
     return children;
+  }
+
+  List<Widget> _createSection(
+      String title, String seeMoreTitle, String? image, List<Drink> drinks) {
+    var result = <Widget>[];
+    result.add(
+      Padding(
+        padding: EdgeInsets.only(left: 20, right: 10),
+        child: GestureDetector(
+          onTapUp: (details) {
+            _openSeeMore(drinks, seeMoreTitle);
+          },
+          child: Row(
+            children: [
+              if (image != null) ...[
+                SizedBox(
+                  width: 45,
+                  height: 45,
+                  child: Image.asset(
+                    image,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+                SizedBox(width: 10),
+              ],
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              if (drinks.length >= 15) ...[
+                Spacer(),
+                Text(
+                  '${'see_all'.tr} >',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+    result.add(SizedBox(height: 10));
+    result.add(
+      SizedBox(
+        height: 205,
+        child: ListView.separated(
+          separatorBuilder: (context, index) => SizedBox(width: 25),
+          scrollDirection: Axis.horizontal,
+          itemCount: min(drinks.length, 16),
+          padding: EdgeInsets.only(left: 20, right: 20),
+          itemBuilder: (context, index) {
+            final drink = drinks[index];
+
+            if (index == 15) {
+              return MoreCard('see_all', () {
+                _openSeeMore(drinks, seeMoreTitle);
+              }, primColor(context, index), 140, 205);
+            }
+
+            return DrinkCard(drink, index,
+                singleColor: primColor(context, index));
+          },
+        ),
+      ),
+    );
+    result.add(SizedBox(height: 20));
+    return result;
+  }
+
+  _openSeeMore(List<Drink> drinks, String title) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      enableDrag: true,
+      showDragHandle: false,
+      useSafeArea: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(10),
+        ),
+      ),
+      builder: (context) => SeeMoreModal(
+        drinks: drinks,
+        title: title,
+      ),
+    );
   }
 }
