@@ -43,7 +43,7 @@ class _QuantitySelectorModalState extends State<QuantitySelectorModal> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    icon: Icon(Icons.cancel_outlined, color: Colors.white),
+                    icon: Icon(Icons.cancel_outlined, color: Get.isDarkMode ? Colors.black: Colors.white),
                     iconSize: 28,
                   ),
                   Text(
@@ -62,7 +62,7 @@ class _QuantitySelectorModalState extends State<QuantitySelectorModal> {
                     splashColor: Colors.blueGrey,
                     icon: Icon(
                       Icons.check_circle_outline,
-                      color: Colors.white,
+                      color: Get.isDarkMode ? Colors.black: Colors.white,
                     ),
                     iconSize: 28,
                   ),
@@ -87,8 +87,8 @@ class _QuantitySelectorModalState extends State<QuantitySelectorModal> {
                     padding: EdgeInsets.symmetric(vertical: 8.0),
                     decoration: BoxDecoration(
                       color: index + 1 != selectedQuantity
-                          ? Colors.white
-                          : Colors.grey[200],
+                          ? (Get.isDarkMode ? Colors.black.withOpacity(0.6) : Colors.white)
+                          : (Get.isDarkMode ? Colors.white.withOpacity(0.6) : Colors.grey[200]),
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: Center(
@@ -96,7 +96,6 @@ class _QuantitySelectorModalState extends State<QuantitySelectorModal> {
                         '${index + 1}',
                         style: TextStyle(
                           fontSize: 20,
-                          color: Colors.black,
                         ),
                       ),
                     ),

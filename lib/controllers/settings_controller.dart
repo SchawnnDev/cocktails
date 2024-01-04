@@ -132,6 +132,21 @@ class SettingsController extends GetxController {
     }
   }
 
+  ThemeMode getThemeMode() {
+    final setting = getSetting('theme');
+    if (setting != null) {
+      switch (setting.getValue()) {
+        case 'light':
+          return ThemeMode.light;
+        case 'dark':
+          return ThemeMode.dark;
+        case 'system':
+          return ThemeMode.system;
+      }
+    }
+    return ThemeMode.system;
+  }
+
   Locale getLocale() {
     final setting = getSetting('language');
     if (setting != null) {

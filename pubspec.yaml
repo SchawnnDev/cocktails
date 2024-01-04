@@ -114,6 +114,33 @@ flutter:
     - assets/img/grocery.png
     - assets/img/letter.png
     - assets/img/drunk.png
+    - assets/img/glass/balloon.png
+    - assets/img/glass/beer.png
+    - assets/img/glass/brandy.png
+    - assets/img/glass/champagne.png
+    - assets/img/glass/cocktail.png
+    - assets/img/glass/coffee-cup.png
+    - assets/img/glass/collins.png
+    - assets/img/glass/copper-mug.png
+    - assets/img/glass/cordial.png
+    - assets/img/glass/coupe.png
+    - assets/img/glass/highball.png
+    - assets/img/glass/hurricane.png
+    - assets/img/glass/irish-coffee.png
+    - assets/img/glass/jar.png
+    - assets/img/glass/margarita.png
+    - assets/img/glass/martini.png
+    - assets/img/glass/old-fashioned.png
+    - assets/img/glass/parfait.png
+    - assets/img/glass/pilsner.png
+    - assets/img/glass/pint.png
+    - assets/img/glass/pitcher.png
+    - assets/img/glass/smoothie.png
+    - assets/img/glass/tequila-shot.png
+    - assets/img/glass/whiskey.png
+    - assets/img/glass/whiskey-sour.png
+    - assets/img/glass/white-wine.png
+    - assets/img/glass/wine-glass.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

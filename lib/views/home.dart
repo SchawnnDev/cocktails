@@ -4,6 +4,7 @@ import 'package:cocktails/models/category.dart';
 import 'package:cocktails/models/drink.dart';
 import 'package:cocktails/models/ingredient.dart';
 import 'package:cocktails/providers/persistent_data_provider.dart';
+import 'package:cocktails/utils/themes.dart';
 import 'package:cocktails/views/widgets/cocktails_appbar.dart';
 import 'package:cocktails/views/widgets/drink_card.dart';
 import 'package:cocktails/views/widgets/more_card.dart';
@@ -39,7 +40,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CocktailsAppBar(isBackButton: false),
-      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: SafeArea(
           child: Column(
@@ -85,7 +85,6 @@ class _HomePageState extends State<HomePage> {
           child: Text(
             'recommendation'.tr,
             style: TextStyle(
-              color: Colors.black,
               fontSize: 26,
               fontWeight: FontWeight.w600,
             ),
@@ -94,8 +93,7 @@ class _HomePageState extends State<HomePage> {
         SizedBox(
           height: 15,
         ),
-        Container(
-          color: Colors.white,
+        SizedBox(
           height: 205,
           child: Obx(
             () => ListView.separated(
@@ -130,7 +128,6 @@ class _HomePageState extends State<HomePage> {
                 Text(
                   'categories'.tr,
                   style: TextStyle(
-                    color: Colors.black,
                     fontSize: 26,
                     fontWeight: FontWeight.w600,
                   ),
@@ -140,7 +137,6 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Icon(
                   Icons.arrow_forward_ios_rounded,
-                  color: Colors.black,
                   size: 16,
                   weight: 16,
                 )
@@ -151,9 +147,8 @@ class _HomePageState extends State<HomePage> {
         SizedBox(
           height: 15,
         ),
-        Container(
+        SizedBox(
           height: 120,
-          color: Colors.white,
           child: Obx(() => ListView.separated(
                 itemCount: homeController.categories.length,
                 scrollDirection: Axis.horizontal,
@@ -199,7 +194,6 @@ class _HomePageState extends State<HomePage> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.w400,
-                    color: Colors.black,
                     fontSize: 14,
                   ),
                 ),
@@ -242,7 +236,6 @@ class _HomePageState extends State<HomePage> {
                 Text(
                   'ingredients'.tr,
                   style: TextStyle(
-                      color: Colors.black,
                       fontSize: 26,
                       fontWeight: FontWeight.w600),
                 ),
@@ -251,7 +244,6 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Icon(
                   Icons.arrow_forward_ios_rounded,
-                  color: Colors.black,
                   size: 16,
                   weight: 16,
                 )
@@ -262,9 +254,8 @@ class _HomePageState extends State<HomePage> {
         SizedBox(
           height: 15,
         ),
-        Container(
+        SizedBox(
           height: 120,
-          color: Colors.white,
           child: Obx(
             () => ListView.separated(
               itemCount: homeController.ingredients.length + 1,
@@ -280,7 +271,7 @@ class _HomePageState extends State<HomePage> {
                     () {
                       Get.toNamed('/ingredients');
                     },
-                    Color(0xFFBAA9DB).withOpacity(index % 2 == 0 ? 0.6 : 0.3),
+                    primColor(context, index),
                     100,
                     null,
                   );
@@ -302,7 +293,7 @@ class _HomePageState extends State<HomePage> {
         Container(
           width: 100,
           decoration: BoxDecoration(
-              color: Color(0xFFBAA9DB).withOpacity(index % 2 == 0 ? 0.6 : 0.3),
+              color: primColor(context, index),
               borderRadius: BorderRadius.circular(16)),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -352,7 +343,6 @@ class _HomePageState extends State<HomePage> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.w400,
-                    color: Colors.black,
                     fontSize: 14,
                   ),
                 ),

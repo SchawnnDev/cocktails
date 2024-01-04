@@ -1,6 +1,7 @@
 import 'package:cocktails/controllers/settings_controller.dart';
 import 'package:cocktails/providers/persistent_data_provider.dart';
 import 'package:cocktails/routes/routes.dart';
+import 'package:cocktails/utils/themes.dart';
 import 'package:cocktails/utils/translations.dart';
 import 'package:cocktails/views/widgets/splash.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +47,9 @@ class _AppState extends State<App> {
               key: const Key('app'),
               translations: AppTranslations(),
               debugShowCheckedModeBanner: false,
-              theme: ThemeData(fontFamily: 'Karla'),
+              theme: lightTheme,
+              darkTheme: darkTheme,
+              themeMode: settingsController.getThemeMode(),
               locale: settingsController.getLocale(),
               initialRoute: Routes.initialRoute,
               getPages: Routes.routes,

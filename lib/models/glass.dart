@@ -8,7 +8,7 @@ class Glass {
   }
 
   String? getIcon() {
-    const String prefix = '/assets/img';
+    const String prefix = 'assets/img';
     switch (name.toLowerCase()) {
       case "highball glass":
         return "$prefix/glass/highball.png";

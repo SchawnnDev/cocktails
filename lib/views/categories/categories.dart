@@ -29,7 +29,6 @@ class _CategoriesPageState extends State<CategoriesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CocktailsAppBar(title: 'categories'.tr, isBackButton: true),
-      backgroundColor: Colors.white,
       body:
           Container(constraints: BoxConstraints.expand(), child: _categories()),
       bottomNavigationBar: NavBar(

@@ -50,7 +50,6 @@ class _FilterSelectorModalState extends State<FilterSelectorModal> {
     return Container(
       height: MediaQuery.of(context).size.height / 4,
       decoration: BoxDecoration(
-        color: Colors.white,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(20.0),
           topRight: Radius.circular(20.0),
@@ -80,21 +79,18 @@ class _FilterSelectorModalState extends State<FilterSelectorModal> {
             ),
           ),
           Expanded(
-            child: Container(
-              color: Colors.white,
-              child: ListView.separated(
-                itemCount: widget.filters.length,
-                scrollDirection: Axis.horizontal,
-                controller: _scrollController,
-                padding: EdgeInsets.all(15),
-                separatorBuilder: (context, index) => SizedBox(
-                  width: 25,
-                ),
-                itemBuilder: (context, index) {
-                  final filter = widget.filters[index];
-                  return _filterItem(filter);
-                },
+            child: ListView.separated(
+              itemCount: widget.filters.length,
+              scrollDirection: Axis.horizontal,
+              controller: _scrollController,
+              padding: EdgeInsets.all(15),
+              separatorBuilder: (context, index) => SizedBox(
+                width: 25,
               ),
+              itemBuilder: (context, index) {
+                final filter = widget.filters[index];
+                return _filterItem(filter);
+              },
             ),
           )
         ],
@@ -118,14 +114,13 @@ class _FilterSelectorModalState extends State<FilterSelectorModal> {
         child: Container(
           width: 100,
           decoration: BoxDecoration(
-            color: Colors.white,
             borderRadius: BorderRadius.circular(10),
             border: filter == selectedFilter.value
                 ? Border.all(
                     color: Color(0xFF8253DB),
                     width: 3,
                   )
-                : Border.all(color: Colors.black, width: 1),
+                : Border.all(color: Get.isDarkMode ? Colors.white : Colors.black, width: 1),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -148,7 +143,6 @@ class _FilterSelectorModalState extends State<FilterSelectorModal> {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontWeight: FontWeight.w400,
-                    color: Colors.black,
                     fontSize: 16,
                   ),
                 ),

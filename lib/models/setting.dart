@@ -24,7 +24,7 @@ class Setting {
   }
 
   void setValue(String value) {
-    if (onChange != null) {
+    if (onChange != null && value != _value) {
       _value = onChange!(value);
     }
   }

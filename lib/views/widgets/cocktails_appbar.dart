@@ -28,10 +28,8 @@ class CocktailsAppBar extends StatelessWidget implements PreferredSizeWidget {
       return AppBar(
         title: Text(
           title,
-          style: TextStyle(
-              color: Colors.black, fontSize: 26, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.white,
         elevation: 0.0,
         centerTitle: true,
         leading: GestureDetector(
@@ -61,9 +59,6 @@ class CocktailsAppBar extends StatelessWidget implements PreferredSizeWidget {
                 showModalBottomSheet(
                   context: context,
                   builder: (context) {
-                    if (defaultFilter != null) {
-                      print(defaultFilter!.value);
-                    }
                     return FilterSelectorModal(
                       isFilter: isFilter,
                       filters: filters!,
@@ -84,7 +79,6 @@ class CocktailsAppBar extends StatelessWidget implements PreferredSizeWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 5.0),
                   child: Icon(
                     isFilter ? Icons.filter_alt : Icons.sort,
-                    color: Colors.black,
                     size: 24.0,
                   ),
                 ),
@@ -97,11 +91,9 @@ class CocktailsAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       title: Text(
         title,
-        style: TextStyle(
-            color: Colors.black, fontSize: 26, fontWeight: FontWeight.bold),
+        style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
       ),
       automaticallyImplyLeading: false,
-      backgroundColor: Colors.white,
       elevation: 0.0,
       centerTitle: true,
     );

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cocktails/controllers/settings_controller.dart';
 import 'package:cocktails/models/drink.dart';
 import 'package:cocktails/providers/persistent_data_provider.dart';
+import 'package:cocktails/utils/themes.dart';
 import 'package:cocktails/utils/widgets/badge_pill.dart';
 import 'package:cocktails/utils/widgets/invisible_expanded_header.dart';
 import 'package:cocktails/utils/widgets/quantity_selector_modal.dart';
@@ -68,7 +69,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
           floating: false,
           flexibleSpace: FlexibleSpaceBar(
             title: Container(
-              color: Colors.white.withOpacity(headerVisible ? 1 : 0),
+              color: (Get.isDarkMode ? Colors.black : Colors.white).withOpacity(headerVisible ? 1 : 0),
               child: Padding(
                 padding: const EdgeInsets.only(left: 65, right: 65),
                 child: Column(
@@ -78,8 +79,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                     InvisibleExpandedHeader(
                       child: Text(
                         drink.strDrink!,
-                        style: const TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.w600),
+                        style: const TextStyle(fontWeight: FontWeight.w600),
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -104,19 +104,18 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
           ),
           automaticallyImplyLeading: false,
           leadingWidth: 54,
-          backgroundColor: Colors.white,
           leading: AnimatedContainer(
             duration: Duration(milliseconds: 250),
             // Adjust the duration as needed
             margin: EdgeInsets.only(left: 5, top: headerVisible ? 0 : 5),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.white,
+              color: Get.isDarkMode ? Colors.black : Colors.white,
             ),
             child: IconButton(
               padding: EdgeInsets.zero,
               icon: Icon(Icons.close_outlined),
-              color: Colors.black,
+              color: Get.isDarkMode ? Colors.white : Colors.black,
               style: ButtonStyle(),
               onPressed: () {
                 Navigator.pop(context);
@@ -130,7 +129,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
               margin: EdgeInsets.only(right: 5, top: headerVisible ? 0 : 5),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white,
+                color: Get.isDarkMode ? Colors.black : Colors.white,
               ),
               child: IconButton(
                 icon: Obx(() => drink.favorite.value
@@ -138,8 +137,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                         Icons.favorite,
                         color: Colors.redAccent,
                       )
-                    : Icon(Icons.favorite_border_outlined,
-                        color: Colors.black)),
+                    : Icon(Icons.favorite_border_outlined),),
                 onPressed: () {
                   drink.favorite.toggle();
                 },
@@ -276,11 +274,11 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                   frontIcon: Icon(
                     Icons.unfold_more,
                     size: 14,
-                    color: Colors.white,
+                    color: Get.isDarkMode ? Colors.black : Colors.white,
                   ),
                   text: '$quantity x',
-                  textStyle: const TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.w600),
+                  textStyle: TextStyle(
+                      color: Get.isDarkMode ? Colors.black : Colors.white, fontWeight: FontWeight.w600),
                   color: Color(0xff4472c4),
                   verticalPadding: 1,
                 )
@@ -374,7 +372,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
 
   Container _buildTitleContainer(Drink drink) {
     return Container(
-      color: Colors.white,
+      color: Theme.of(context).colorScheme.background,
       child: Container(
         color: Color(0xFFBAA9DB).withOpacity(0.3),
         child: Padding(
@@ -385,7 +383,6 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                 drink.strDrink!,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                    color: Colors.black,
                     fontSize: 22,
                     fontWeight: FontWeight.w600),
                 maxLines: 2,
@@ -394,11 +391,11 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
               const SizedBox(
                 height: 5,
               ),
-              const SizedBox(
+              SizedBox(
                 width: 120,
                 child: Divider(
                   thickness: 4,
-                  color: Color(0xFFBAA9DB),
+                  color: getPrimColor(context),
                 ),
               ),
               const SizedBox(
@@ -407,12 +404,12 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
               if (drink.strGlass != null)
                 BadgePill(
                   text: drink.strGlass!,
-                  color: Colors.black,
-                  textStyle: const TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.w200),
+                  color: Get.isDarkMode ? Colors.white : Colors.black,
+                  textStyle: TextStyle(
+                      color: Get.isDarkMode ? Colors.black : Colors.white, fontWeight: FontWeight.w200),
                   backIcon: Icon(
                     Icons.wine_bar_outlined,
-                    color: Colors.white,
+                    color: Get.isDarkMode ? Colors.black : Colors.white,
                     size: 16,
                   ),
                 ),
@@ -474,7 +471,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
 
   Container _buildShareContainer(Drink drink) {
     return Container(
-      color: Colors.white,
+      color: Theme.of(context).colorScheme.background,
       child: Container(
         color: Color(0xFFBAA9DB).withOpacity(0.3),
         padding: EdgeInsets.only(bottom: 10),
@@ -527,7 +524,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                                 : Icons.favorite_outline,
                             color: drink.favorite.value
                                 ? Colors.redAccent
-                                : Colors.black,
+                                : (Get.isDarkMode ? Colors.white : Colors.black),
                             size: 24,
                           )),
                     )

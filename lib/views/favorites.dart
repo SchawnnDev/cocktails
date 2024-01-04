@@ -1,5 +1,6 @@
 import 'package:cocktails/controllers/favorites_controller.dart';
 import 'package:cocktails/providers/persistent_data_provider.dart';
+import 'package:cocktails/utils/themes.dart';
 import 'package:cocktails/views/widgets/cocktails_appbar.dart';
 import 'package:cocktails/views/widgets/drink_card.dart';
 import 'package:cocktails/views/widgets/navbar.dart';
@@ -35,7 +36,6 @@ class _FavoritesPageState extends State<FavoritesPage> {
         index: 1,
         animate: true,
       ),
-      backgroundColor: Colors.white,
       body: Container(
         constraints: BoxConstraints.expand(),
         child: _favorites(),
@@ -67,7 +67,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                       return DrinkCard(
                         drink,
                         index,
-                        singleColor: Color(0xFFBAA9DB).withOpacity(0.6),
+                        singleColor: Theme.of(context).primaryColor.withOpacity(0.6),
                       );
                     }),
                   )),
@@ -76,7 +76,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                 child: ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor:
-                        MaterialStateProperty.all<Color>(Color(0xFFBAA9DB)),
+                        MaterialStateProperty.all<Color>(getPrimColor(context)),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),

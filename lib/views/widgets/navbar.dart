@@ -43,7 +43,12 @@ class _NavBarState extends State<NavBar> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    const activeIconColor = Color(0xFF8253DB);
+    final activeIconColor =
+        Get.isDarkMode ? Color(0xFF8253DB) : Color(0xFF8253DB);
+    final inactiveIconColor = Get.isDarkMode ? Colors.white : Colors.black;
+    final inactiveStrokeIconColor =
+        Get.isDarkMode ? Colors.white : Colors.black;
+
     return SafeArea(
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
@@ -56,7 +61,7 @@ class _NavBarState extends State<NavBar> with TickerProviderStateMixin {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(25),
           child: Theme(
-            data: ThemeData(
+            data: Theme.of(context).copyWith(
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
             ),
@@ -67,9 +72,6 @@ class _NavBarState extends State<NavBar> with TickerProviderStateMixin {
                 elevation: 0.0,
                 showSelectedLabels: false,
                 showUnselectedLabels: false,
-                backgroundColor: Colors.white,
-                selectedItemColor: Colors.redAccent,
-                unselectedItemColor: Colors.black,
                 currentIndex: widget.index,
                 landscapeLayout: BottomNavigationBarLandscapeLayout.linear,
                 onTap: (index) {
@@ -109,16 +111,26 @@ class _NavBarState extends State<NavBar> with TickerProviderStateMixin {
                       controller: _controllers[0],
                       delegates: LottieDelegates(
                         values: [
-                          if (currentIndex == 0)
+                          if (currentIndex == 0) ...[
                             ValueDelegate.strokeColor(
                               const ['**'],
                               value: activeIconColor,
                             ),
-                          if (currentIndex == 0)
                             ValueDelegate.color(
                               const ['**'],
                               value: activeIconColor,
                             ),
+                          ],
+                          if (currentIndex != 0) ...[
+                            ValueDelegate.strokeColor(
+                              const ['**'],
+                              value: inactiveStrokeIconColor,
+                            ),
+                            ValueDelegate.color(
+                              const ['**'],
+                              value: inactiveIconColor,
+                            ),
+                          ],
                         ],
                       ),
                     ),
@@ -134,16 +146,26 @@ class _NavBarState extends State<NavBar> with TickerProviderStateMixin {
                         controller: _controllers[1],
                         delegates: LottieDelegates(
                           values: [
-                            if (currentIndex == 1)
+                            if (currentIndex == 1) ...[
                               ValueDelegate.strokeColor(
                                 const ['**'],
                                 value: activeIconColor,
                               ),
-                            if (currentIndex == 1)
                               ValueDelegate.color(
                                 const ['**'],
                                 value: activeIconColor,
                               ),
+                            ],
+                            if (currentIndex != 1) ...[
+                              ValueDelegate.strokeColor(
+                                const ['**'],
+                                value: inactiveStrokeIconColor,
+                              ),
+                              ValueDelegate.color(
+                                const ['**'],
+                                value: inactiveIconColor,
+                              ),
+                            ],
                           ],
                         ),
                       ),
@@ -158,16 +180,26 @@ class _NavBarState extends State<NavBar> with TickerProviderStateMixin {
                       controller: _controllers[2],
                       delegates: LottieDelegates(
                         values: [
-                          if (currentIndex == 2)
+                          if (currentIndex == 2) ...[
                             ValueDelegate.strokeColor(
                               const ['**'],
                               value: activeIconColor,
                             ),
-                          if (currentIndex == 2)
                             ValueDelegate.color(
                               const ['**'],
                               value: activeIconColor,
                             ),
+                          ],
+                          if (currentIndex != 2) ...[
+                            ValueDelegate.strokeColor(
+                              const ['**'],
+                              value: inactiveStrokeIconColor,
+                            ),
+                            ValueDelegate.color(
+                              const ['**'],
+                              value: inactiveIconColor,
+                            ),
+                          ],
                         ],
                       ),
                     ),
@@ -183,16 +215,26 @@ class _NavBarState extends State<NavBar> with TickerProviderStateMixin {
                       controller: _controllers[3],
                       delegates: LottieDelegates(
                         values: [
-                          if (currentIndex == 3)
+                          if (currentIndex == 3) ...[
                             ValueDelegate.strokeColor(
                               const ['**'],
                               value: activeIconColor,
                             ),
-                          if (currentIndex == 3)
                             ValueDelegate.color(
                               const ['**'],
                               value: activeIconColor,
                             ),
+                          ],
+                          if (currentIndex != 3) ...[
+                            ValueDelegate.strokeColor(
+                              const ['**'],
+                              value: inactiveStrokeIconColor,
+                            ),
+                            ValueDelegate.color(
+                              const ['**'],
+                              value: inactiveIconColor,
+                            ),
+                          ],
                         ],
                       ),
                     ),
