@@ -1,53 +1,50 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cocktails/controllers/ingredients_controller.dart';
+import 'package:cocktails/controllers/glasses_controller.dart';
 import 'package:cocktails/models/filter.dart';
-import 'package:cocktails/models/ingredient.dart';
+import 'package:cocktails/models/glass.dart';
 import 'package:cocktails/utils/themes.dart';
 import 'package:cocktails/views/widgets/cocktails_appbar.dart';
 import 'package:cocktails/views/widgets/navbar.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shimmer/shimmer.dart';
 
-class IngredientsPageBinding extends Bindings {
+class GlassesPageBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => IngredientsController());
+    Get.lazyPut(() => GlassesController());
   }
 }
 
-class IngredientsPage extends StatefulWidget {
-  const IngredientsPage({super.key});
+class GlassesPage extends StatefulWidget {
+  const GlassesPage({super.key});
 
   @override
-  State<IngredientsPage> createState() => _IngredientsPageState();
+  State<GlassesPage> createState() => _GlassesPageState();
 }
 
-class _IngredientsPageState extends State<IngredientsPage> {
-  final IngredientsController ingredientsController = Get.find();
+class _GlassesPageState extends State<GlassesPage> {
+  final GlassesController glassesController = Get.find();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CocktailsAppBar(
-        title: 'ingredients'.tr,
+        title: 'glasses'.tr,
         isBackButton: true,
         isFilterButton: true,
         isFilter: false,
         // sort
-        defaultFilter: ingredientsController.currentFilter,
+        defaultFilter: glassesController.currentFilter,
         filters: [
           Filter.defaultFilter,
           Filter.nameAscFilter,
           Filter.nameDescFilter,
         ],
         onFilterSelected: (filter) {
-          ingredientsController.currentFilter(filter);
+          glassesController.currentFilter(filter);
         },
       ),
-      body: Container(
-          constraints: BoxConstraints.expand(), child: _ingredients()),
+      body: Container(constraints: BoxConstraints.expand(), child: _glasses()),
       bottomNavigationBar: NavBar(
         animate: false,
       ),
@@ -55,27 +52,27 @@ class _IngredientsPageState extends State<IngredientsPage> {
     );
   }
 
-  Widget _ingredients() {
+  Widget _glasses() {
     return FutureBuilder(
-        future: ingredientsController.load(),
+        future: glassesController.load(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return AnimatedSwitcher(
               duration: const Duration(seconds: 1),
               child: ObxValue(
                 (filter) {
-                  var ingredients = ingredientsController.ingredients.toList();
+                  var glasses = glassesController.glasses.toList();
                   if (filter.value == Filter.nameAscFilter) {
-                    ingredients =
-                        ingredients.sorted((a, b) => a.name.compareTo(b.name));
+                    glasses =
+                        glasses.sorted((a, b) => a.name.compareTo(b.name));
                   } else if (filter.value == Filter.nameDescFilter) {
-                    ingredients =
-                        ingredients.sorted((a, b) => b.name.compareTo(a.name));
+                    glasses =
+                        glasses.sorted((a, b) => b.name.compareTo(a.name));
                   }
 
-                  return _ingredientsList(ingredients);
+                  return _glassesList(glasses);
                 },
-                ingredientsController.currentFilter,
+                glassesController.currentFilter,
               ),
               transitionBuilder: (child, animation) {
                 return FadeTransition(
@@ -90,7 +87,7 @@ class _IngredientsPageState extends State<IngredientsPage> {
         });
   }
 
-  Widget _ingredientsList(List<Ingredient> ingredients) {
+  Widget _glassesList(List<Glass> glasses) {
     return SingleChildScrollView(
       child: SafeArea(
         child: Padding(
@@ -101,8 +98,8 @@ class _IngredientsPageState extends State<IngredientsPage> {
               spacing: 15,
               runSpacing: 15,
               alignment: WrapAlignment.spaceEvenly,
-              children: List.generate(ingredients.length, (index) {
-                return _ingredientsItem(ingredients[index], index);
+              children: List.generate(glasses.length, (index) {
+                return _glassesItem(glasses[index], index);
               }),
             ),
           ),
@@ -111,7 +108,7 @@ class _IngredientsPageState extends State<IngredientsPage> {
     );
   }
 
-  SizedBox _ingredientsItem(Ingredient ingredient, int index) {
+  SizedBox _glassesItem(Glass glass, int index) {
     return SizedBox(
       height: 140,
       child: Stack(
@@ -125,47 +122,19 @@ class _IngredientsPageState extends State<IngredientsPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Container(
-                  width: 65, // Adjust the width as needed
-                  height: 65, // Adjust the height as needed
+                  width: 65,
+                  height: 65,
                   decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                  ),
-                  child: Center(
-                    child: CachedNetworkImage(
-                      imageUrl: ingredient.getLittleImageUrl(),
-                      imageBuilder: (context, imageProvider) => Container(
-                        height: 65,
-                        width: 65,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      placeholder: (context, url) => Shimmer.fromColors(
-                        baseColor: Colors.grey[300]!,
-                        highlightColor: Colors.grey[100]!,
-                        child: Container(
-                          width: 65,
-                          height: 65,
-                          // Adjust the height as needed
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                    ),
+                      color: Colors.white, shape: BoxShape.circle),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.asset(glass.getIcon() ?? 'img/cocktail.png'),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 5, right: 5),
                   child: Text(
-                    '${ingredient.name}\n',
+                    '${glass.name}\n',
                     textAlign: TextAlign.center,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -186,8 +155,7 @@ class _IngredientsPageState extends State<IngredientsPage> {
                 splashColor: Color(0x00542E71).withOpacity(0.2),
                 highlightColor: Color(0x00542E71).withOpacity(0.3),
                 onTapUp: (TapUpDetails details) {
-                  Get.toNamed(
-                      '/ingredient/${Uri.encodeComponent(ingredient.name)}');
+                  Get.toNamed('/glass/${Uri.encodeComponent(glass.name)}');
                 },
               ),
             ),

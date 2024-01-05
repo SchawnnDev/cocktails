@@ -72,8 +72,8 @@ class _FilterSelectorModalState extends State<FilterSelectorModal> {
                 widget.isFilter ? 'filter_by'.tr : 'sort_by'.tr,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  color: Colors.black,
                   fontSize: 17,
+                  color: Colors.white,
                 ),
               ),
             ),
@@ -132,7 +132,7 @@ class _FilterSelectorModalState extends State<FilterSelectorModal> {
                     BoxDecoration(color: Colors.white, shape: BoxShape.circle),
                 child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Image.asset(filter.imagePath)),
+                    child: Image.asset(filter.imagePath),),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 5, right: 5),

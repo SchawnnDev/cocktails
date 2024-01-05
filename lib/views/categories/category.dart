@@ -60,6 +60,7 @@ class _CategoryPageState extends State<CategoryPage> {
           Filter.ingredientFilter,
           Filter.nameAscFilter,
           Filter.nameDescFilter,
+          Filter.popularityFilter,
         ],
         onFilterSelected: (filter) {
           categoryController.currentFilter(filter);
@@ -109,6 +110,7 @@ class _CategoryPageState extends State<CategoryPage> {
 
   bool _drinkIsStretch(Filter filter) =>
       filter == Filter.defaultFilter ||
+      filter == Filter.popularityFilter ||
       filter == Filter.nameAscFilter ||
       filter == Filter.nameDescFilter;
 
@@ -136,6 +138,8 @@ class _CategoryPageState extends State<CategoryPage> {
               _allDrinks(Filter.nameAscFilter),
             if (categoryController.currentFilter.value == Filter.nameDescFilter)
               _allDrinks(Filter.nameDescFilter),
+            if (categoryController.currentFilter.value == Filter.popularityFilter)
+              _allDrinks(Filter.popularityFilter),
             SizedBox(height: 10),
           ],
         ),
@@ -148,12 +152,16 @@ class _CategoryPageState extends State<CategoryPage> {
       padding: const EdgeInsets.all(15),
       child: ObxValue(
         (drinks) {
-          List<Drink> sortedDrinks = drinks;
+          List<Drink> sortedDrinks = drinks.toList();
 
-          if (filter == Filter.nameAscFilter) {
+          if (filter == Filter.defaultFilter) {
+            sortedDrinks.shuffle();
+          } else if (filter == Filter.nameAscFilter) {
             sortedDrinks = sortedDrinks.sorted((a, b) => a.strDrink!.compareTo(b.strDrink!));
           } else if (filter == Filter.nameDescFilter) {
             sortedDrinks = sortedDrinks.sorted((a, b) => b.strDrink!.compareTo(a.strDrink!));
+          } else if (filter == Filter.popularityFilter) {
+            sortedDrinks = sortedDrinks.sorted((a, b) => b.favorites.compareTo(a.favorites));
           }
 
           return Wrap(
@@ -213,7 +221,7 @@ class _CategoryPageState extends State<CategoryPage> {
         Future.wait(categoryController.drinks
             .map((e) async => dataProvider.getDrink(e.idDrink))
             .toList()),
-        Future.delayed(const Duration(seconds: 1)) // smooth
+        Future.delayed(const Duration(milliseconds: 500)) // smooth
       ]),
       builder: (context, snapshot) {
         final children = <Widget>[];
@@ -286,7 +294,7 @@ class _CategoryPageState extends State<CategoryPage> {
         Future.wait(categoryController.drinks
             .map((e) async => dataProvider.getDrink(e.idDrink))
             .toList()),
-        Future.delayed(const Duration(seconds: 1))
+        Future.delayed(const Duration(milliseconds: 500))
       ]),
       builder: (context, snapshot) {
         final children = <Widget>[];

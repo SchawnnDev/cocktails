@@ -96,6 +96,7 @@ flutter:
     - assets/lottie/icon_home_solid.json
     - assets/lottie/icon_swipe_regular.json
     - assets/lottie/icon_swipe_solid.json
+    - assets/icon/icon.png
     - assets/img/cocktail.png
     - assets/img/beer.png
     - assets/img/cocoa.png
@@ -114,8 +115,9 @@ flutter:
     - assets/img/grocery.png
     - assets/img/letter.png
     - assets/img/drunk.png
-    - assets/img/sort-asc.png
-    - assets/img/sort-desc.png
+    - assets/img/sort-za.png
+    - assets/img/sort-az.png
+    - assets/img/popularity.png
     - assets/img/glass/balloon.png
     - assets/img/glass/beer.png
     - assets/img/glass/brandy.png

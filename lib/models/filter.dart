@@ -27,7 +27,9 @@ class Filter {
       Filter('ingredient', 'assets/img/grocery.png');
   static const Filter nameFilter = Filter('name', 'assets/img/letter.png');
   static const Filter nameAscFilter =
-      Filter('nameAsc', 'assets/img/sort-asc.png');
+      Filter('nameAsc', 'assets/img/sort-az.png');
   static const Filter nameDescFilter =
-      Filter('nameDesc', 'assets/img/sort-desc.png');
+      Filter('nameDesc', 'assets/img/sort-za.png');
+  static const Filter popularityFilter =
+      Filter('popularity', 'assets/img/popularity.png');
 }

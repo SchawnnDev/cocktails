@@ -1,10 +1,12 @@
 import 'package:cocktails/models/category.dart';
+import 'package:cocktails/models/filter.dart';
 import 'package:cocktails/models/ingredient.dart';
 import 'package:cocktails/providers/persistent_data_provider.dart';
 import 'package:get/get.dart';
 
 class IngredientsController extends GetxController {
   final _ingredients = <Ingredient>[].obs;
+  final currentFilter = Filter.defaultFilter.obs;
 
   List<Ingredient> get ingredients => _ingredients;
 

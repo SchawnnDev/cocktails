@@ -41,7 +41,7 @@ class CocktailsAppBar extends StatelessWidget implements PreferredSizeWidget {
             alignment: Alignment.center,
             decoration: BoxDecoration(
                 color: Color(0xffF7F8F8),
-                borderRadius: BorderRadius.circular(10)),
+                borderRadius: BorderRadius.circular(10),),
             child: Icon(
               Icons.chevron_left,
               color: Colors.black,
@@ -74,11 +74,12 @@ class CocktailsAppBar extends StatelessWidget implements PreferredSizeWidget {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                     color: Color(0xffF7F8F8),
-                    borderRadius: BorderRadius.circular(10)),
+                    borderRadius: BorderRadius.circular(10),),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5.0),
                   child: Icon(
                     isFilter ? Icons.filter_alt : Icons.sort,
+                    color: Colors.black,
                     size: 24.0,
                   ),
                 ),

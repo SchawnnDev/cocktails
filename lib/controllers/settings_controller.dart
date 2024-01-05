@@ -1,6 +1,7 @@
 import 'package:cocktails/models/setting.dart';
 import 'package:cocktails/providers/persistent_data_provider.dart';
 import 'package:cocktails/services/boxes_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,6 +16,24 @@ class SettingsController extends GetxController {
   void onInit() {
     super.onInit();
     final boxesService = Get.find<BoxesService>();
+
+    LicenseRegistry.addLicense(() => Stream<LicenseEntry>.value(
+          const LicenseEntryWithLineBreaks(
+            <String>['flaticon'],
+            '''
+            This project uses icons from the Flaticon website.
+            
+            Below is a link to the author's profile on Flaticon:
+            https://www.flaticon.com/authors/freepik
+            
+            Soft drink icons created by small.smiles
+            https://www.flaticon.com/authors/small.smiles
+            
+            Alcohol icons created by Flat Icons
+            https://www.flaticon.com/free-icons/alcohol
+            ''',
+          ),
+        ));
 
     _settings([
       Setting(
@@ -118,6 +137,23 @@ class SettingsController extends GetxController {
         final dataProvider = Get.find<PersistentDataProvider>();
         dataProvider.clearAll();
       }),
+      Setting('show_licences',
+          icon: Icons.info_outline,
+          values: {},
+          name: 'licences',
+          onTap: (BuildContext ctx) async {
+        showLicensePage(
+          context: ctx,
+          applicationName: 'Cocktails',
+          applicationVersion: '1.0.0',
+          applicationLegalese: '© ${DateTime.now().year}',
+          applicationIcon: Image.asset(
+            'assets/icon/icon.png',
+            width: 64,
+            height: 64,
+          ),
+        );
+      })
     ]);
   }
 
