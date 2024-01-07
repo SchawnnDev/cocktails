@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cocktails/models/category.dart';
 import 'package:cocktails/models/drink.dart';
 import 'package:cocktails/models/glass.dart';
@@ -250,8 +251,8 @@ class PersistentDataProvider {
     return _drinks.map((e) => e.ingredients).expand((element) => element).toList();
   }
 
-  /// Clear all boxes (resets favorites & dislikes)
-  void clearAll() {
+  /// Clear all boxes (resets favorites & dislikes & cache)
+  void clearCache() {
     clearDislikes();
     clearFavorites();
   }

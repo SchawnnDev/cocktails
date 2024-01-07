@@ -120,13 +120,13 @@ class SettingsController extends GetxController {
         final dataProvider = Get.find<PersistentDataProvider>();
         dataProvider.clearDislikes();
       }),
-      Setting('click_reset_all',
+      Setting('clear_cache',
           icon: Icons.restart_alt_outlined,
           values: {},
-          name: 'reset_all', onTap: (BuildContext ctx) async {
+          name: 'clear_cache', onTap: (BuildContext ctx) async {
         bool result = await showAlertDialog(
           ctx,
-          'reset_all'.tr,
+          'clear_cache'.tr,
           'are_you_sure_reset'.tr,
         );
 
@@ -135,7 +135,7 @@ class SettingsController extends GetxController {
         }
 
         final dataProvider = Get.find<PersistentDataProvider>();
-        dataProvider.clearAll();
+        dataProvider.clearCache();
       }),
       Setting('show_licences',
           icon: Icons.info_outline,

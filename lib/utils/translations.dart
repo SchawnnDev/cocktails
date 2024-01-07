@@ -114,6 +114,7 @@ class AppTranslations extends Translations {
           'popularity': 'Popularity',
           'licences': 'Licences',
           'show_licences': 'Show licenses',
+          'clear_cache': 'Clear cache',
           
           // Categories
           'Ordinary Drink': 'Ordinary Drink',
@@ -239,6 +240,7 @@ class AppTranslations extends Translations {
           'popularity': 'Beliebtheit',
           'licences': 'Lizenzen',
           'show_licences': 'Lizenzen anzeigen',
+          'clear_cache': 'Cache leeren',
 
           // Categories
           'Ordinary Drink': 'Gewöhnliches Getränk',
@@ -363,6 +365,7 @@ class AppTranslations extends Translations {
           'popularity': 'Popularité',
           'licences': 'Licences',
           'show_licences': 'Afficher les licences',
+          'clear_cache': 'Effacer le cache',
 
           // Categories
           'Ordinary Drink': 'Boisson ordinaire',

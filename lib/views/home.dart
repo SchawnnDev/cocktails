@@ -331,8 +331,8 @@ class _HomePageState extends State<HomePage> {
                       baseColor: Colors.grey[300]!,
                       highlightColor: Colors.grey[100]!,
                       child: Container(
-                        width: 50,
-                        height: 50,
+                        width: 45,
+                        height: 45,
                         // Adjust the height as needed
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,

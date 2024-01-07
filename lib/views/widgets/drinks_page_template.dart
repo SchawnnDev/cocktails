@@ -1,8 +1,10 @@
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cocktails/models/drink.dart';
 import 'package:cocktails/models/filter.dart';
 import 'package:cocktails/models/glass.dart';
+import 'package:cocktails/models/ingredient.dart';
 import 'package:cocktails/providers/persistent_data_provider.dart';
 import 'package:cocktails/utils/themes.dart';
 import 'package:cocktails/views/widgets/cocktails_appbar.dart';
@@ -37,6 +39,13 @@ class DrinksPageTemplate extends StatefulWidget {
 
 class _DrinksPageTemplateState extends State<DrinksPageTemplate> {
   final Rx<Filter> currentFilter = Filter.defaultFilter.obs;
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +63,11 @@ class _DrinksPageTemplateState extends State<DrinksPageTemplate> {
           if (widget.onFilterSelected != null) {
             widget.onFilterSelected!(newFilter);
           }
+          _scrollController.animateTo(
+            0.0,
+            duration: Duration(milliseconds: 750),
+            curve: Curves.easeInOut,
+          );
         },
       ),
       body: FutureBuilder(
@@ -106,6 +120,7 @@ class _DrinksPageTemplateState extends State<DrinksPageTemplate> {
 
   Widget _drinks(List<Drink> drinks) {
     return SingleChildScrollView(
+      controller: _scrollController,
       child: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -216,15 +231,14 @@ class _DrinksPageTemplateState extends State<DrinksPageTemplate> {
             return Center(child: Text('Error'));
           }
 
-          final data = snapshot.data?[0] as List<Drink?>?;
+          final data = (snapshot.data?[0] as List<Drink?>?) ?? [];
           children.add(SizedBox(height: 20));
 
           for (var filter in alcoholicFilters) {
             final drinks = data
-                    ?.where((element) => element?.strAlcoholic == filter)
-                    .map((e) => e!)
-                    .toList() ??
-                [];
+                .where((element) => element?.strAlcoholic == filter)
+                .map((e) => e!)
+                .toList();
 
             if (drinks.isEmpty) {
               continue;
@@ -288,15 +302,11 @@ class _DrinksPageTemplateState extends State<DrinksPageTemplate> {
             return Center(child: Text('Error'));
           }
 
-          final data = snapshot.data?[0] as List<Drink?>?;
+          final data = (snapshot.data?[0] as List<Drink?>?) ?? [];
           children.add(SizedBox(height: 20));
 
           // sort glasses
           glasses.sort((a, b) {
-            if (data == null) {
-              return b.name.compareTo(a.name);
-            }
-
             int aCount = 0;
             int bCount = 0;
 
@@ -317,10 +327,9 @@ class _DrinksPageTemplateState extends State<DrinksPageTemplate> {
 
           for (var glass in glasses) {
             final drinks = data
-                    ?.where((element) => element?.strGlass == glass.name)
-                    .map((e) => e!)
-                    .toList() ??
-                [];
+                .where((element) => element?.strGlass == glass.name)
+                .map((e) => e!)
+                .toList();
 
             if (drinks.isEmpty) {
               continue;
@@ -350,7 +359,146 @@ class _DrinksPageTemplateState extends State<DrinksPageTemplate> {
   }
 
   Widget _ingredientDrinks(List<Drink> drinks) {
-    return Container();
+    final dataProvider = Get.find<PersistentDataProvider>();
+    var ingredients = dataProvider.getCachedIngredients();
+
+    return FutureBuilder(
+      future: Future.wait([
+        Future.wait(
+            drinks.map((e) async => dataProvider.getDrink(e.idDrink)).toList()),
+        Future.delayed(const Duration(milliseconds: 500))
+      ]),
+      builder: (context, snapshot) {
+        final children = <Widget>[];
+
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasError || snapshot.data == null) {
+            return Center(child: Text('Error'));
+          }
+
+          final data = (snapshot.data?[0] as List<Drink?>?) ?? [];
+
+          // get all ingredients from previously loaded drinks
+          var ingredients = data
+              .map((e) => e?.ingredients ?? [])
+              .expand((element) => element)
+              .toList();
+
+          // count ingredients occurrences to sort them
+          final ingredientCount = <Ingredient, int>{};
+          for (var ingredient in ingredients) {
+            ingredientCount.update(ingredient, (value) => value + 1,
+                ifAbsent: () => 1);
+          }
+
+          // we only want ingredients that are used in more than one drink
+          // but if we have less than 8 ingredients, we want to show them all
+          final finalIngredients = ingredientCount.entries
+              .toList()
+              .where((element) => element.value > 1)
+              .toList();
+
+          finalIngredients.sort((a, b) {
+            return b.value.compareTo(a.value);
+          });
+
+          if (finalIngredients.length < 8) {
+            ingredients = ingredientCount.entries
+                .map((e) => e.key)
+                .take(15) // limit to 15
+                .toList();
+          } else {
+            ingredients = finalIngredients
+                .map((e) => e.key)
+                .take(30) // limit to 30
+                .toList();
+          }
+
+          // sort ingredients
+          ingredients.sort((a, b) {
+            int aCount = 0;
+            int bCount = 0;
+
+            for (var drink in data) {
+              if (drink == null) continue;
+              if (drink.ingredients.contains(a)) aCount++;
+              if (drink.ingredients.contains(b)) bCount++;
+            }
+
+            final int result = bCount.compareTo(aCount);
+
+            if (result == 0) {
+              return b.name.compareTo(a.name);
+            }
+
+            return result;
+          });
+
+          children.add(SizedBox(height: 20));
+
+          for (var ingredient in ingredients) {
+            final drinks = data
+                .where((element) =>
+                    element?.ingredients
+                        .any((element) => element.name == ingredient.name) ??
+                    false)
+                .map((e) => e!)
+                .toList();
+
+            if (drinks.isEmpty) {
+              continue;
+            }
+
+            children.addAll(
+              _createSection(
+                ingredient.name.tr,
+                '${widget.title.tr}: ${ingredient.name.tr}',
+                ingredient.getLittleImageUrl(),
+                drinks,
+                imageIsLocale: false,
+              ),
+            );
+          }
+        } else {
+          final shimmerIngredients = ingredients.sample(10).toList();
+          children.addAll(_createShimmers(
+            shimmerIngredients.map((e) => e.name).toList(),
+            images:
+                shimmerIngredients.map((e) => e.getLittleImageUrl()).toList(),
+            imageIsLocale: false,
+          ));
+        }
+
+        children.add(SizedBox(height: 10));
+
+        children.add(Center(
+          child: ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor:
+                  MaterialStateProperty.all<Color>(getPrimColor(context)),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+            ),
+            child: Text('more_ingredients'.tr),
+            onPressed: () {
+              // TODO:
+              Get.offNamed('/swipe');
+            },
+          ),
+        ));
+
+        children.add(SizedBox(height: 10));
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: children,
+        );
+      },
+    );
   }
 
   Widget _categoryDrinks(List<Drink> drinks) {
@@ -371,21 +519,11 @@ class _DrinksPageTemplateState extends State<DrinksPageTemplate> {
             return Center(child: Text('Error'));
           }
 
-          final data = snapshot.data?[0] as List<Drink?>?;
+          final data = (snapshot.data?[0] as List<Drink?>?) ?? [];
           children.add(SizedBox(height: 20));
 
           // sort glasses
           categories.sort((a, b) {
-            if (data == null) {
-              if (a.name == null) {
-                return 1;
-              }
-              if (b.name == null) {
-                return -1;
-              }
-              return b.name!.compareTo(a.name!);
-            }
-
             int aCount = 0;
             int bCount = 0;
 
@@ -412,10 +550,9 @@ class _DrinksPageTemplateState extends State<DrinksPageTemplate> {
 
           for (var category in categories) {
             final drinks = data
-                    ?.where((element) => element?.strCategory == category.name)
-                    .map((e) => e!)
-                    .toList() ??
-                [];
+                .where((element) => element?.strCategory == category.name)
+                .map((e) => e!)
+                .toList();
 
             if (drinks.isEmpty) {
               continue;
@@ -448,7 +585,8 @@ class _DrinksPageTemplateState extends State<DrinksPageTemplate> {
   }
 
   /// Create shimmers
-  List<Widget> _createShimmers(List<String> titles, {List<String>? images}) {
+  List<Widget> _createShimmers(List<String> titles,
+      {List<String>? images, bool imageIsLocale = true}) {
     final children = <Widget>[];
     children.add(SizedBox(height: 20));
     final bool hasImages = images != null && images.isNotEmpty;
@@ -463,14 +601,30 @@ class _DrinksPageTemplateState extends State<DrinksPageTemplate> {
             padding: EdgeInsets.only(left: 20, right: 10),
             child: Row(
               children: [
-                SizedBox(
-                  width: 45,
-                  height: 45,
-                  child: Image.asset(
-                    image,
-                    fit: BoxFit.contain,
+                if (imageIsLocale) ...[
+                  SizedBox(
+                    width: 45,
+                    height: 45,
+                    child: Image.asset(
+                      image,
+                      fit: BoxFit.contain,
+                    ),
                   ),
-                ),
+                ] else ...[
+                  Shimmer.fromColors(
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
+                    child: Container(
+                      width: 45,
+                      height: 45,
+                      // Adjust the height as needed
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
                 SizedBox(width: 10),
                 Text(
                   title.tr,
@@ -547,7 +701,8 @@ class _DrinksPageTemplateState extends State<DrinksPageTemplate> {
   }
 
   List<Widget> _createSection(
-      String title, String seeMoreTitle, String? image, List<Drink> drinks) {
+      String title, String seeMoreTitle, String? image, List<Drink> drinks,
+      {bool imageIsLocale = true}) {
     var result = <Widget>[];
     result.add(
       Padding(
@@ -559,14 +714,47 @@ class _DrinksPageTemplateState extends State<DrinksPageTemplate> {
           child: Row(
             children: [
               if (image != null) ...[
-                SizedBox(
-                  width: 45,
-                  height: 45,
-                  child: Image.asset(
-                    image,
-                    fit: BoxFit.contain,
+                if (imageIsLocale) ...[
+                  SizedBox(
+                    width: 45,
+                    height: 45,
+                    child: Image.asset(
+                      image,
+                      fit: BoxFit.contain,
+                    ),
                   ),
-                ),
+                ] else ...[
+                  Center(
+                    child: CachedNetworkImage(
+                      imageUrl: image,
+                      imageBuilder: (context, imageProvider) => Container(
+                        height: 45,
+                        width: 45,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      placeholder: (context, url) => Shimmer.fromColors(
+                        baseColor: Colors.grey[300]!,
+                        highlightColor: Colors.grey[100]!,
+                        child: Container(
+                          width: 45,
+                          height: 45,
+                          // Adjust the height as needed
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                    ),
+                  )
+                ],
                 SizedBox(width: 10),
               ],
               Text(
@@ -581,7 +769,7 @@ class _DrinksPageTemplateState extends State<DrinksPageTemplate> {
                 Text(
                   '${'see_all'.tr} >',
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
