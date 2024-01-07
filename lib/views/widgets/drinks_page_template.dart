@@ -15,14 +15,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
-class DrinksPageView extends StatefulWidget {
+class DrinksPageTemplate extends StatefulWidget {
   final String title;
   final Rx<Filter> defaultFilter;
   final List<Filter> filters;
   final Function(Filter)? onFilterSelected;
   final Future<List<Drink>> loadDrinks;
 
-  DrinksPageView({
+  DrinksPageTemplate({
     super.key,
     required this.title,
     required this.filters,
@@ -32,10 +32,10 @@ class DrinksPageView extends StatefulWidget {
   });
 
   @override
-  State<DrinksPageView> createState() => _DrinksPageViewState();
+  State<DrinksPageTemplate> createState() => _DrinksPageTemplateState();
 }
 
-class _DrinksPageViewState extends State<DrinksPageView> {
+class _DrinksPageTemplateState extends State<DrinksPageTemplate> {
   final Rx<Filter> currentFilter = Filter.defaultFilter.obs;
 
   @override
@@ -119,7 +119,9 @@ class _DrinksPageViewState extends State<DrinksPageView> {
               _alcoholicDrinks(drinks),
             if (currentFilter.value == Filter.glassFilter) _glassDrinks(drinks),
             if (currentFilter.value == Filter.ingredientFilter)
-              _ingredientDrinks(),
+              _ingredientDrinks(drinks),
+            if (currentFilter.value == Filter.categoryFilter)
+              _categoryDrinks(drinks),
             if (currentFilter.value == Filter.nameAscFilter)
               _allDrinks(drinks, Filter.nameAscFilter),
             if (currentFilter.value == Filter.nameDescFilter)
@@ -347,8 +349,102 @@ class _DrinksPageViewState extends State<DrinksPageView> {
     );
   }
 
-  Widget _ingredientDrinks() {
+  Widget _ingredientDrinks(List<Drink> drinks) {
     return Container();
+  }
+
+  Widget _categoryDrinks(List<Drink> drinks) {
+    final dataProvider = Get.find<PersistentDataProvider>();
+    var categories = dataProvider.categories.toList();
+
+    return FutureBuilder(
+      future: Future.wait([
+        Future.wait(
+            drinks.map((e) async => dataProvider.getDrink(e.idDrink)).toList()),
+        Future.delayed(const Duration(milliseconds: 500))
+      ]),
+      builder: (context, snapshot) {
+        final children = <Widget>[];
+
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasError || snapshot.data == null) {
+            return Center(child: Text('Error'));
+          }
+
+          final data = snapshot.data?[0] as List<Drink?>?;
+          children.add(SizedBox(height: 20));
+
+          // sort glasses
+          categories.sort((a, b) {
+            if (data == null) {
+              if (a.name == null) {
+                return 1;
+              }
+              if (b.name == null) {
+                return -1;
+              }
+              return b.name!.compareTo(a.name!);
+            }
+
+            int aCount = 0;
+            int bCount = 0;
+
+            for (var drink in data) {
+              if (drink == null) continue;
+              if (drink.strCategory == a.name) aCount++;
+              if (drink.strCategory == b.name) bCount++;
+            }
+
+            final int result = bCount.compareTo(aCount);
+
+            if (result == 0) {
+              if (a.name == null) {
+                return 1;
+              }
+              if (b.name == null) {
+                return -1;
+              }
+              return b.name!.compareTo(a.name!);
+            }
+
+            return result;
+          });
+
+          for (var category in categories) {
+            final drinks = data
+                    ?.where((element) => element?.strCategory == category.name)
+                    .map((e) => e!)
+                    .toList() ??
+                [];
+
+            if (drinks.isEmpty) {
+              continue;
+            }
+
+            children.addAll(_createSection(
+              category.name!.tr,
+              '${widget.title.tr}: ${category.name!.tr}',
+              category.imagePath ?? 'assets/img/cocktail.png',
+              drinks,
+            ));
+          }
+        } else {
+          final shimmerCategories = categories.sample(10).toList();
+          children.addAll(_createShimmers(
+            shimmerCategories.map((e) => e.name!).toList(),
+            images: shimmerCategories
+                .map((e) => e.imagePath ?? 'assets/img/cocktail.png')
+                .toList(),
+          ));
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: children,
+        );
+      },
+    );
   }
 
   /// Create shimmers

@@ -55,18 +55,18 @@ class _HomePageState extends State<HomePage> {
                   ),
                   _recommendationSection(),
                   SizedBox(
-                    height: 20,
+                    height: 15,
                   ),
                   _categoriesSection(),
                   if (homeController.ingredients.isNotEmpty) ...[
                     SizedBox(
-                      height: 20,
+                      height: 15,
                     ),
                     _ingredientsSection(),
                   ],
                   if (homeController.glasses.isNotEmpty) ...[
                     SizedBox(
-                      height: 20,
+                      height: 15,
                     ),
                     _glassesSection(),
                   ],
@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         SizedBox(
-          height: 15,
+          height: 10,
         ),
         SizedBox(
           height: 205,
@@ -153,7 +153,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         SizedBox(
-          height: 15,
+          height: 10,
         ),
         SizedBox(
           height: 120,
@@ -245,9 +245,7 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Text(
                   'ingredients'.tr,
-                  style: TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.w600),
+                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.w600),
                 ),
                 SizedBox(
                   width: 5,
@@ -262,7 +260,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         SizedBox(
-          height: 15,
+          height: 10,
         ),
         SizedBox(
           height: 120,
@@ -394,9 +392,7 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Text(
                   'glasses'.tr,
-                  style: TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.w600),
+                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.w600),
                 ),
                 SizedBox(
                   width: 5,
@@ -411,12 +407,12 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         SizedBox(
-          height: 15,
+          height: 10,
         ),
         SizedBox(
           height: 120,
           child: Obx(
-                () => ListView.separated(
+            () => ListView.separated(
               itemCount: homeController.ingredients.length + 1,
               scrollDirection: Axis.horizontal,
               padding: EdgeInsets.only(left: 20, right: 20),
@@ -427,7 +423,7 @@ class _HomePageState extends State<HomePage> {
                 if (index == homeController.ingredients.length) {
                   return MoreCard(
                     'see_all_glasses',
-                        () {
+                    () {
                       Get.toNamed('/glasses');
                     },
                     primColor(context, index),
@@ -452,8 +448,8 @@ class _HomePageState extends State<HomePage> {
         Container(
           width: 100,
           decoration: BoxDecoration(
-              color: primColor(context, index),
-              borderRadius: BorderRadius.circular(16),
+            color: primColor(context, index),
+            borderRadius: BorderRadius.circular(16),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -462,12 +458,12 @@ class _HomePageState extends State<HomePage> {
                 width: 50,
                 height: 50,
                 decoration:
-                BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+                    BoxDecoration(color: Colors.white, shape: BoxShape.circle),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Center(
-                      child:
-                      Image.asset(glass.getIcon() ?? 'img/cocktail.png'),),
+                    child: Image.asset(glass.getIcon() ?? 'img/cocktail.png'),
+                  ),
                 ),
               ),
               Padding(
@@ -515,41 +511,19 @@ class _HomePageState extends State<HomePage> {
       ]),
       child: TextField(
         decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white,
-            contentPadding: EdgeInsets.all(15),
-            hintText: 'search_cocktail_hint'.tr,
-            hintStyle: TextStyle(color: Color(0xffDDDADA)),
-            prefixIcon: Icon(
-              Icons.search,
-              color: Colors.black,
-            ),
-            /*         suffixIcon: Container(
-                  width: 80,
-                  child: IntrinsicHeight(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        VerticalDivider(
-                          color: Colors.black,
-                          indent: 10,
-                          endIndent: 10,
-                          thickness: 0.1,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(
-                            Icons.filter_alt_outlined,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),*/
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide.none)),
+          filled: true,
+          fillColor: Colors.white,
+          contentPadding: EdgeInsets.all(15),
+          hintText: 'search_cocktail_hint'.tr,
+          hintStyle: TextStyle(color: Color(0xffDDDADA)),
+          prefixIcon: Icon(
+            Icons.search,
+            color: Colors.black,
+          ),
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: BorderSide.none),
+        ),
       ),
     );
   }

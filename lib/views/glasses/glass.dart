@@ -1,7 +1,7 @@
 import 'package:cocktails/controllers/glass_controller.dart';
 import 'package:cocktails/models/filter.dart';
 import 'package:cocktails/providers/persistent_data_provider.dart';
-import 'package:cocktails/views/widgets/drinks_page_view.dart';
+import 'package:cocktails/views/widgets/drinks_page_template.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -33,7 +33,7 @@ class _GlassPageState extends State<GlassPage> {
       return Scaffold();
     }
 
-    return DrinksPageView(
+    return DrinksPageTemplate(
       title: glass.name.tr,
       filters: [
         Filter.defaultFilter,
