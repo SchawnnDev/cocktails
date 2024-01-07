@@ -114,6 +114,18 @@ class AppTranslations extends Translations {
           'popularity': 'Popularity',
           'licences': 'Licences',
           'show_licences': 'Show licenses',
+          
+          // Categories
+          'Ordinary Drink': 'Ordinary Drink',
+          'Cocktail': 'Cocktail',
+          'Shake': 'Shake',
+          'Other / Unknown': 'Other / Unknown',
+          'Cocoa': 'Cocoa',
+          'Shot': 'Shot',
+          'Coffee / Tea': 'Coffee / Tea',
+          'Homemade Liqueur': 'Homemade Liqueur',
+          'Punch / Party Drink': 'Punch / Party Drink',
+          'Soft Drink': 'Soft Drink'
         },
         'de_DE': {
           'hello': 'Hallo Welt',
@@ -227,6 +239,18 @@ class AppTranslations extends Translations {
           'popularity': 'Beliebtheit',
           'licences': 'Lizenzen',
           'show_licences': 'Lizenzen anzeigen',
+
+          // Categories
+          'Ordinary Drink': 'Gewöhnliches Getränk',
+          'Cocktail': 'Cocktail',
+          'Shake': 'Shake',
+          'Other / Unknown': 'Andere / Unbekannt',
+          'Cocoa': 'Kakao',
+          'Shot': 'Shot',
+          'Coffee / Tea': 'Kaffee / Tee',
+          'Homemade Liqueur': 'Hausgemachte Likör',
+          'Punch / Party Drink': 'Punsch / Partygetränk',
+          'Soft Drink': 'Erfrischungsgetränk'
         },
         'fr_FR': {
           'hello': 'Bonjour monde',
@@ -339,6 +363,18 @@ class AppTranslations extends Translations {
           'popularity': 'Popularité',
           'licences': 'Licences',
           'show_licences': 'Afficher les licences',
+
+          // Categories
+          'Ordinary Drink': 'Boisson ordinaire',
+          'Cocktail': 'Cocktail',
+          'Shake': 'Shake',
+          'Other / Unknown': 'Autre / Inconnu',
+          'Cocoa': 'Cacao',
+          'Shot': 'Shot',
+          'Coffee / Tea': 'Café / Thé',
+          'Homemade Liqueur': 'Liqueur maison',
+          'Punch / Party Drink': 'Punch / Boisson de fête',
+          'Soft Drink': 'Boisson non alcoolisée'
         },
       };
 }

@@ -43,7 +43,7 @@ class _QuantitySelectorModalState extends State<QuantitySelectorModal> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    icon: Icon(Icons.cancel_outlined, color: Get.isDarkMode ? Colors.black: Colors.white),
+                    icon: Icon(Icons.cancel_outlined, color: Colors.white),
                     iconSize: 28,
                   ),
                   Text(
@@ -62,7 +62,7 @@ class _QuantitySelectorModalState extends State<QuantitySelectorModal> {
                     splashColor: Colors.blueGrey,
                     icon: Icon(
                       Icons.check_circle_outline,
-                      color: Get.isDarkMode ? Colors.black: Colors.white,
+                      color: Colors.white,
                     ),
                     iconSize: 28,
                   ),

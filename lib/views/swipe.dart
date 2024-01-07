@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cocktails/controllers/swipe_controller.dart';
 import 'package:cocktails/models/drink.dart';
 import 'package:cocktails/views/widgets/cocktails_appbar.dart';
+import 'package:cocktails/views/widgets/drink_recipe_modal.dart';
 import 'package:cocktails/views/widgets/navbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -125,14 +126,15 @@ class _SwipePageState extends State<SwipePage> {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
+        color: Get.isDarkMode ? Color(0xFF191919) : Colors.white,
         boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            spreadRadius: 3,
-            blurRadius: 7,
-            offset: const Offset(0, 3),
-          )
+          if (!Get.isDarkMode)
+            BoxShadow(
+              color: (Colors.grey).withOpacity(0.2),
+              spreadRadius: 3,
+              blurRadius: 7,
+              offset: const Offset(0, 3),
+            )
         ],
       ),
       alignment: Alignment.center,
@@ -163,7 +165,6 @@ class _SwipePageState extends State<SwipePage> {
                     topLeft: Radius.circular(10),
                     topRight: Radius.circular(10),
                   ),
-                  color: Colors.white,
                 ),
               ),
             ),
@@ -172,7 +173,6 @@ class _SwipePageState extends State<SwipePage> {
           Container(
             padding: const EdgeInsets.all(15),
             decoration: const BoxDecoration(
-              color: Colors.white,
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(10),
                 bottomRight: Radius.circular(10),
@@ -191,7 +191,6 @@ class _SwipePageState extends State<SwipePage> {
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
@@ -208,6 +207,16 @@ class _SwipePageState extends State<SwipePage> {
                     ),
                   ],
                 ),
+                Spacer(),
+                IconButton(
+                  onPressed: () {
+                    DrinkRecipeModal.show(context, drink);
+                  },
+                  icon: Icon(
+                    Icons.info_outline_rounded,
+                    size: 28,
+                  ),
+                )
               ],
             ),
           ),

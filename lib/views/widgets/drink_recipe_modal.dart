@@ -21,6 +21,24 @@ class DrinkRecipeModal extends StatefulWidget {
 
   @override
   State<DrinkRecipeModal> createState() => _DrinkRecipeModalState();
+
+  static void show(BuildContext ctx, Drink drink) {
+    showModalBottomSheet(
+      context: ctx,
+      isScrollControlled: true,
+      enableDrag: true,
+      showDragHandle: false,
+      useSafeArea: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(10),
+        ),
+      ),
+      builder: (context) => DrinkRecipeModal(
+        drink: drink,
+      ),
+    );
+  }
 }
 
 class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
@@ -71,7 +89,8 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
           floating: false,
           flexibleSpace: FlexibleSpaceBar(
             title: Container(
-              color: (Get.isDarkMode ? Colors.black : Colors.white).withOpacity(headerVisible ? 1 : 0),
+              color: (Get.isDarkMode ? Colors.black : Colors.white)
+                  .withOpacity(headerVisible ? 1 : 0),
               child: Padding(
                 padding: const EdgeInsets.only(left: 65, right: 65),
                 child: Column(
@@ -134,12 +153,14 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                 color: Get.isDarkMode ? Colors.black : Colors.white,
               ),
               child: IconButton(
-                icon: Obx(() => drink.favorite.value
-                    ? Icon(
-                        Icons.favorite,
-                        color: Colors.redAccent,
-                      )
-                    : Icon(Icons.favorite_border_outlined),),
+                icon: Obx(
+                  () => drink.favorite.value
+                      ? Icon(
+                          Icons.favorite,
+                          color: Colors.redAccent,
+                        )
+                      : Icon(Icons.favorite_border_outlined),
+                ),
                 onPressed: () {
                   drink.favorite.toggle();
                 },
@@ -205,22 +226,23 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                               ? 'final_step'.tr
                               : '${'step'.tr} ${index + 1}',
                           style: const TextStyle(
-                              color: Colors.grey,
-                              fontSize:
-                                  DrinkRecipeModal.instructionStepFontSize),
+                            color: Colors.grey,
+                            fontSize: DrinkRecipeModal.instructionStepFontSize,
+                          ),
                           textAlign: TextAlign.left,
                         ),
                         SizedBox(
                           height: 3,
                         ),
                         Text(
-                            index >= drink.instructions['EN']!.length
-                                ? ''
-                                : drink.instructions['EN']![index],
-                            textAlign: TextAlign.left,
-                            style: const TextStyle(
-                                fontSize:
-                                    DrinkRecipeModal.instructionFontSize)),
+                          index >= drink.instructions['EN']!.length
+                              ? ''
+                              : drink.instructions['EN']![index],
+                          textAlign: TextAlign.left,
+                          style: const TextStyle(
+                            fontSize: DrinkRecipeModal.instructionFontSize,
+                          ),
+                        ),
                       ],
                     ),
                   );
@@ -248,15 +270,18 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
           GestureDetector(
             onTapUp: (details) {
               showModalBottomSheet(
-                  context: context,
-                  builder: (context) => QuantitySelectorModal(
-                        defaultQuantity: quantity.value,
-                        onSelected: (int a) {
-                          setState(() {
-                            quantity(a);
-                          });
-                        },
-                      ));
+                context: context,
+                builder: (context) => QuantitySelectorModal(
+                  defaultQuantity: quantity.value,
+                  onSelected: (int a) {
+                    setState(
+                      () {
+                        quantity(a);
+                      },
+                    );
+                  },
+                ),
+              );
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -276,11 +301,10 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                   frontIcon: Icon(
                     Icons.unfold_more,
                     size: 14,
-                    color: Get.isDarkMode ? Colors.black : Colors.white,
                   ),
                   text: '$quantity x',
                   textStyle: TextStyle(
-                      color: Get.isDarkMode ? Colors.black : Colors.white, fontWeight: FontWeight.w600),
+                      fontWeight: FontWeight.w600),
                   color: Color(0xff4472c4),
                   verticalPadding: 1,
                 )
@@ -385,8 +409,9 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                 drink.strDrink!,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600),
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600,
+                ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -408,7 +433,8 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                   text: drink.strGlass!,
                   color: Get.isDarkMode ? Colors.white : Colors.black,
                   textStyle: TextStyle(
-                      color: Get.isDarkMode ? Colors.black : Colors.white, fontWeight: FontWeight.w200),
+                      color: Get.isDarkMode ? Colors.black : Colors.white,
+                      fontWeight: FontWeight.w200),
                   backIcon: Icon(
                     Icons.wine_bar_outlined,
                     color: Get.isDarkMode ? Colors.black : Colors.white,
@@ -479,11 +505,17 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
         padding: EdgeInsets.only(bottom: 10),
         child: GestureDetector(
           onTapUp: (details) {
-            if(!canShare) { return; }
+            if (!canShare) {
+              return;
+            }
             setState(() {
               canShare = false;
             });
-            Share.share("🍹 ${'share_1'.tr} ${drink.strDrink!} 🎉🥳\n ${'share_2'.tr} 🍸🌟 ${'share_3'.tr}\n\n📲 ${getAppUrl()}");
+            Share.share("🍹 ${'share_1'.tr} "
+                "${drink.strDrink!} 🎉🥳\n"
+                " ${'share_2'.tr} 🍸🌟"
+                " ${'share_3'.tr}\n\n"
+                "📲 ${getAppUrl()}");
             Future.delayed(Duration(seconds: 2), () {
               setState(() {
                 canShare = true;
@@ -529,15 +561,17 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                       onTapUp: (details) {
                         drink.favorite.toggle();
                       },
-                      child: Obx(() => Icon(
-                            drink.favorite.value
-                                ? Icons.favorite
-                                : Icons.favorite_outline,
-                            color: drink.favorite.value
-                                ? Colors.redAccent
-                                : (Get.isDarkMode ? Colors.white : Colors.black),
-                            size: 24,
-                          )),
+                      child: Obx(
+                        () => Icon(
+                          drink.favorite.value
+                              ? Icons.favorite
+                              : Icons.favorite_outline,
+                          color: drink.favorite.value
+                              ? Colors.redAccent
+                              : (Get.isDarkMode ? Colors.white : Colors.black),
+                          size: 24,
+                        ),
+                      ),
                     )
                   ],
                 ),

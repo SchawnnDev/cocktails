@@ -47,7 +47,7 @@ class _CategoryPageState extends State<CategoryPage> {
 
     return Scaffold(
       appBar: CocktailsAppBar(
-        title: category.name ?? 'No name',
+        title: (category.name ?? 'No name').tr,
         isBackButton: true,
         isFilterButton: true,
         isFilter: false,

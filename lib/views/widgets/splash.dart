@@ -75,29 +75,26 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
           ),
           Positioned(
             bottom: 10,
-            child: Row(
-              children: [
-                Icon(
-                  Icons.warning_amber_rounded,
-                  color: Colors.white,
-                ),
-                SizedBox(width: 5),
-                Text(
-                  alcohol,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w600,
+            child: SafeArea(
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.warning_amber_rounded,
                     color: Colors.white,
-                    fontFamily: 'Karla',
                   ),
-                ),
-                SizedBox(width: 5),
-                Icon(
-                  Icons.warning_amber_rounded,
-                  color: Colors.white,
-                ),
-              ],
+                  SizedBox(width: 5),
+                  Text(
+                    alcohol,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                      fontFamily: 'Karla',
+                    ),
+                  ),
+                ],
+              ),
             ),
           )
         ],

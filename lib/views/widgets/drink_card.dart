@@ -101,19 +101,7 @@ class _DrinkCardState extends State<DrinkCard> {
             splashColor: Color(0x00542E71).withOpacity(0.2),
             highlightColor: Color(0x00542E71).withOpacity(0.3),
             onTapUp: (TapUpDetails details) {
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                enableDrag: true,
-                showDragHandle: false,
-                useSafeArea: true,
-                shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(10))),
-                builder: (context) => DrinkRecipeModal(
-                  drink: widget.drink,
-                ),
-              );
+              DrinkRecipeModal.show(context, widget.drink);
             },
           ),
         ),

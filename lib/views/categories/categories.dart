@@ -81,14 +81,15 @@ class _CategoriesPageState extends State<CategoriesPage> {
                   decoration: BoxDecoration(
                       color: Colors.white, shape: BoxShape.circle),
                   child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image.asset(
-                          category.imagePath ?? 'img/cocktail.png')),
+                    padding: const EdgeInsets.all(8.0),
+                    child:
+                        Image.asset(category.imagePath ?? 'img/cocktail.png'),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 5, right: 5),
                   child: Text(
-                    category.name ?? 'No name',
+                    (category.name ?? 'No name').tr,
                     textAlign: TextAlign.center,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
