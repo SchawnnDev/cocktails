@@ -19,9 +19,31 @@ class TheCocktailsDBService extends GetxService {
     return Uri.parse(apiUrl + script);
   }
 
-  /// Get drinks from API
-  Future<Drinks<Drink>> getDrinks(String category) async {
+  /// Get drinks by category from API
+  Future<Drinks<Drink>> getDrinksByCategory(String category) async {
     final response = await http.get(_buildUri('filter.php?c=$category'));
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      return Drinks.fromJson(data, (json) => Drink.fromJson(json));
+    } else {
+      return Future.error('Failed to load drinks');
+    }
+  }
+
+  /// Get drinks by ingredient from API
+  Future<Drinks<Drink>> getDrinksByIngredient(String ingredient) async {
+    final response = await http.get(_buildUri('filter.php?i=$ingredient'));
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      return Drinks.fromJson(data, (json) => Drink.fromJson(json));
+    } else {
+      return Future.error('Failed to load drinks');
+    }
+  }
+
+  /// Get drinks by glass from API
+  Future<Drinks<Drink>> getDrinksByGlass(String glass) async {
+    final response = await http.get(_buildUri('filter.php?g=$glass'));
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
       return Drinks.fromJson(data, (json) => Drink.fromJson(json));

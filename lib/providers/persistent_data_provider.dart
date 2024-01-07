@@ -26,7 +26,6 @@ class PersistentDataProvider {
   List<Drink> get drinks => _drinks;
   List<Category> get categories => _categories;
   List<Glass> get glasses => _glasses;
-  List<Ingredient> get ingredients => _ingredients;
   List<String> get alcoholicFilters => _alcoholicFilters;
 
   final RxBool error = false.obs;
@@ -246,6 +245,11 @@ class PersistentDataProvider {
     return _ingredients;
   }
 
+  /// Get all ingredients from cache
+  List<Ingredient> getCachedIngredients() {
+    return _drinks.map((e) => e.ingredients).expand((element) => element).toList();
+  }
+
   /// Clear all boxes (resets favorites & dislikes)
   void clearAll() {
     clearDislikes();
@@ -267,4 +271,5 @@ class PersistentDataProvider {
     }
     boxesService.dislikesBox.clear();
   }
+
 }

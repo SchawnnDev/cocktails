@@ -1,28 +1,29 @@
 import 'package:cocktails/models/category.dart';
 import 'package:cocktails/models/drink.dart';
 import 'package:cocktails/models/filter.dart';
+import 'package:cocktails/models/glass.dart';
 import 'package:cocktails/providers/persistent_data_provider.dart';
 import 'package:cocktails/services/thecocktailsdb_service.dart';
 import 'package:get/get.dart';
 
-class CategoryController extends GetxController {
-  final _categories = <Category>[].obs;
+class GlassController extends GetxController {
+  final _glasses = <Glass>[].obs;
   final currentFilter = Filter.defaultFilter.obs;
 
-  List<Category> get categories => _categories;
+  List<Glass> get glasses => _glasses;
 
-  CategoryController({List<Category>? categories}) {
-    if (categories != null) {
-      _categories(categories);
+  GlassController({List<Glass>? glasses}) {
+    if (glasses != null) {
+      _glasses(glasses);
     }
   }
 
-  /// Load drinks from API
-  Future<List<Drink>> loadDrinks(String categoryName, {bool fullLoad = false}) async {
+  // Load glasses from API
+  Future<List<Drink>> loadDrinks(String glassName, {bool fullLoad = false}) async {
     final dataProvider = Get.find<PersistentDataProvider>();
     final drinks =
-        await Get.find<TheCocktailsDBService>().getDrinksByCategory(categoryName);
-    // category drinks are incomplete, dont load them all but check in cache
+    await Get.find<TheCocktailsDBService>().getDrinksByGlass(glassName);
+    // glass drinks are incomplete, dont load them all but check in cache
     // whether we already have them
     final result = drinks.drinks;
     if (result == null) {
@@ -30,7 +31,7 @@ class CategoryController extends GetxController {
     }
 
     // enrich with cached data
-    dataProvider.getDrinksByCategory(categoryName).forEach((element) {
+    dataProvider.getDrinksByGlass(glassName).forEach((element) {
       if (!result.any((element) => element.idDrink == element.idDrink)) {
         result.add(element);
       }
@@ -51,17 +52,17 @@ class CategoryController extends GetxController {
     }).toList();
   }
 
-  /// Find category by name in URL
-  Category? findCategory() {
-    var categoryName = Get.parameters['category_name'];
+  /// Find glass by name in URL
+  Glass? findGlass() {
+    var glassName = Get.parameters['glass_name'];
 
-    if (categoryName == null) {
+    if (glassName == null) {
       return null;
     }
 
-    categoryName = Uri.decodeComponent(categoryName);
-    return _categories
-        .firstWhereOrNull((element) => element.name == categoryName);
+    glassName = Uri.decodeComponent(glassName);
+    return _glasses
+        .firstWhereOrNull((element) => element.name == glassName);
   }
 
 }

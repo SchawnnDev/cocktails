@@ -1,6 +1,7 @@
 import 'package:cocktails/views/categories/categories.dart';
 import 'package:cocktails/views/categories/category.dart';
 import 'package:cocktails/views/favorites.dart';
+import 'package:cocktails/views/glasses/glass.dart';
 import 'package:cocktails/views/glasses/glasses.dart';
 import 'package:cocktails/views/home.dart';
 import 'package:cocktails/views/ingredients/ingredient.dart';
@@ -53,6 +54,13 @@ class Routes {
       transition: Transition.rightToLeft,
       transitionDuration: const Duration(milliseconds: 200),
       binding: GlassesPageBinding(),
+    ),
+    GetPage(
+      name: '/glass/:glass_name',
+      page: () => const GlassPage(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 200),
+      binding: GlassPageBinding(),
     ),
     GetPage(
       name: '/favorites',
