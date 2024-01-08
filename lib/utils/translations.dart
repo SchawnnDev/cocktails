@@ -115,6 +115,9 @@ class AppTranslations extends Translations {
           'licences': 'Licences',
           'show_licences': 'Show licenses',
           'clear_cache': 'Clear cache',
+          'search_cocktail': 'Search cocktail',
+          'last_searches': 'Last searches',
+          'suggestions': 'Suggestions',
           
           // Categories
           'Ordinary Drink': 'Ordinary Drink',
@@ -241,6 +244,9 @@ class AppTranslations extends Translations {
           'licences': 'Lizenzen',
           'show_licences': 'Lizenzen anzeigen',
           'clear_cache': 'Cache leeren',
+          'search_cocktail': 'Cocktail-Suche',
+          'last_searches': 'Letzte Suchen',
+          'suggestions': 'Vorschläge',
 
           // Categories
           'Ordinary Drink': 'Gewöhnliches Getränk',
@@ -366,6 +372,9 @@ class AppTranslations extends Translations {
           'licences': 'Licences',
           'show_licences': 'Afficher les licences',
           'clear_cache': 'Effacer le cache',
+          'search_cocktail': 'Recherche de cocktails',
+          'last_searches': 'Dernières recherches',
+          'suggestions': 'Suggestions',
 
           // Categories
           'Ordinary Drink': 'Boisson ordinaire',

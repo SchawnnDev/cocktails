@@ -10,6 +10,7 @@ import 'package:cocktails/views/widgets/cocktails_appbar.dart';
 import 'package:cocktails/views/widgets/drink_card.dart';
 import 'package:cocktails/views/widgets/more_card.dart';
 import 'package:cocktails/views/widgets/navbar.dart';
+import 'package:cocktails/views/widgets/search_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
@@ -331,8 +332,8 @@ class _HomePageState extends State<HomePage> {
                       baseColor: Colors.grey[300]!,
                       highlightColor: Colors.grey[100]!,
                       child: Container(
-                        width: 45,
-                        height: 45,
+                        width: 50,
+                        height: 50,
                         // Adjust the height as needed
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
@@ -509,20 +510,27 @@ class _HomePageState extends State<HomePage> {
           spreadRadius: 0.0,
         )
       ]),
-      child: TextField(
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.white,
-          contentPadding: EdgeInsets.all(15),
-          hintText: 'search_cocktail_hint'.tr,
-          hintStyle: TextStyle(color: Color(0xffDDDADA)),
-          prefixIcon: Icon(
-            Icons.search,
-            color: Colors.black,
+      child: GestureDetector(
+        onTapUp: (details) {
+          SearchModal.show(context);
+        },
+        child: TextField(
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
+            contentPadding: EdgeInsets.all(15),
+            hintText: 'search_cocktail_hint'.tr,
+            hintStyle: TextStyle(color: Color(0xffDDDADA)),
+            enabled: false,
+            prefixIcon: Icon(
+              Icons.search,
+              color: Colors.black,
+            ),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide.none,
+            ),
           ),
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide.none),
         ),
       ),
     );
