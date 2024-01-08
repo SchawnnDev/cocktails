@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SearchModal extends StatefulWidget {
-
   static const List<String> suggestions = [
     'Mojito',
     'Margarita',
@@ -145,20 +144,25 @@ class _SearchModalState extends State<SearchModal> {
         alignment: WrapAlignment.start,
         children: List.generate(
           SearchModal.suggestions.length,
-              (index) {
-            return Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: Padding(
-                padding:
-                const EdgeInsets.symmetric(vertical: 3.0, horizontal: 8.0),
-                child: Text(
-                  SearchModal.suggestions[index],
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
+          (index) {
+            return GestureDetector(
+              onTapUp: (details) {
+                _openSearchResults();
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 3.0, horizontal: 8.0),
+                  child: Text(
+                    SearchModal.suggestions[index],
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ),
@@ -209,6 +213,24 @@ class _SearchModalState extends State<SearchModal> {
           ),
         )
       ],
+    );
+  }
+
+  void _openSearchResults() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => Container(
+        color: getPrimColor(context).withOpacity(0.6),
+        child: Center(
+          child: Text(
+            'search_results'.tr,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
