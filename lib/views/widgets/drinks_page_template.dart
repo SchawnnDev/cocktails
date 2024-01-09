@@ -709,7 +709,7 @@ class _DrinksPageTemplateState extends State<DrinksPageTemplate> {
         padding: EdgeInsets.only(left: 20, right: 10),
         child: GestureDetector(
           onTapUp: (details) {
-            _openSeeMore(drinks, seeMoreTitle);
+            SeeMoreModal.show(context, seeMoreTitle, drinks: drinks);
           },
           child: Row(
             children: [
@@ -793,7 +793,7 @@ class _DrinksPageTemplateState extends State<DrinksPageTemplate> {
 
             if (index == 15) {
               return MoreCard('see_all', () {
-                _openSeeMore(drinks, seeMoreTitle);
+                SeeMoreModal.show(context, seeMoreTitle, drinks: drinks);
               }, primColor(context, index), 140, 205);
             }
 
@@ -805,24 +805,5 @@ class _DrinksPageTemplateState extends State<DrinksPageTemplate> {
     );
     result.add(SizedBox(height: 20));
     return result;
-  }
-
-  _openSeeMore(List<Drink> drinks, String title) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      enableDrag: true,
-      showDragHandle: false,
-      useSafeArea: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(10),
-        ),
-      ),
-      builder: (context) => SeeMoreModal(
-        drinks: drinks,
-        title: title,
-      ),
-    );
   }
 }

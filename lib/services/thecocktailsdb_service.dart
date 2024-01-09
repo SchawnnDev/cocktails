@@ -161,4 +161,37 @@ class TheCocktailsDBService extends GetxService {
     }
   }
 
+  /// Search drinks from API
+  Future<Drinks<Drink>> searchDrinks(String what) async {
+    final response = await http.get(_buildUri('search.php?s=$what'));
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      return Drinks.fromJson(data, (json) => Drink.fromJson(json));
+    } else {
+      return Future.error('Failed to load drinks');
+    }
+  }
+
+  /// Search drinks by first letter from API
+  Future<Drinks<Drink>> searchDrinksByFirstLetter(String letter) async {
+    final response = await http.get(_buildUri('search.php?f=$letter'));
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      return Drinks.fromJson(data, (json) => Drink.fromJson(json));
+    } else {
+      return Future.error('Failed to load drinks');
+    }
+  }
+
+  /// Search ingredients from API
+  Future<Drinks<Ingredient>> searchIngredients(String what) async {
+    final response = await http.get(_buildUri('search.php?i=$what'));
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      return Drinks.fromJson(data, (json) => Ingredient.fromJson(json));
+    } else {
+      return Future.error('Failed to load ingredients');
+    }
+  }
+
 }

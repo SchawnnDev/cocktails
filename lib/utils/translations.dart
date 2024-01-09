@@ -118,6 +118,8 @@ class AppTranslations extends Translations {
           'search_cocktail': 'Search cocktail',
           'last_searches': 'Last searches',
           'suggestions': 'Suggestions',
+          'buzzing_recipes': 'Buzzing recipes',
+          'no_results': 'No results found',
           
           // Categories
           'Ordinary Drink': 'Ordinary Drink',
@@ -247,6 +249,8 @@ class AppTranslations extends Translations {
           'search_cocktail': 'Cocktail-Suche',
           'last_searches': 'Letzte Suchen',
           'suggestions': 'Vorschläge',
+          'buzzing_recipes': 'Beliebte Rezepte',
+          'no_results': 'Keine Ergebnisse gefunden',
 
           // Categories
           'Ordinary Drink': 'Gewöhnliches Getränk',
@@ -375,6 +379,8 @@ class AppTranslations extends Translations {
           'search_cocktail': 'Recherche de cocktails',
           'last_searches': 'Dernières recherches',
           'suggestions': 'Suggestions',
+          'buzzing_recipes': 'Les recettes qui font le buzz',
+          'no_results': 'Aucun résultat trouvé',
 
           // Categories
           'Ordinary Drink': 'Boisson ordinaire',

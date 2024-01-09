@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 const apiBaseUrl = "https://www.thecocktaildb.com";
 const apiImageUrl = "$apiBaseUrl/images/ingredients";
 const apiIngredientImageUrl = "$apiImageUrl/";
+const maxLastSearches = 6;
+
 
 String getAppUrl() {
   if (GetPlatform.isIOS) {

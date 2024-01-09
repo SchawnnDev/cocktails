@@ -10,19 +10,30 @@ class DrinkCard extends StatefulWidget {
   final Drink drink;
   final int index;
   final Color? singleColor;
+  final bool twoRowsSize;
 
-  const DrinkCard(this.drink, this.index, {super.key, this.singleColor});
+  const DrinkCard(this.drink, this.index, {super.key, this.singleColor, this.twoRowsSize = false});
 
   @override
   State<DrinkCard> createState() => _DrinkCardState();
 }
 
 class _DrinkCardState extends State<DrinkCard> {
+
+  double calculateWidth() {
+    final screenWidth = MediaQuery.of(context).size.width;
+    if (screenWidth >= 600) {
+      return 140;
+    }
+    return (screenWidth - 3 * 15) / 2;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final width = widget.twoRowsSize ? calculateWidth() : 140.0;
     return Stack(children: [
       Container(
-          width: 140,
+          width: width,
           height: 205,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
@@ -41,7 +52,7 @@ class _DrinkCardState extends State<DrinkCard> {
             children: [
               SizedBox(
                 height: 110,
-                width: 140,
+                width: width,
                 child: CachedNetworkImage(
                   imageUrl: widget.drink.thumbnail ?? '',
                   imageBuilder: (context, imageProvider) => Container(
@@ -62,7 +73,7 @@ class _DrinkCardState extends State<DrinkCard> {
                     highlightColor: Colors.grey[100]!,
                     child: Container(
                       height: 110,
-                      width: 140,
+                      width: width,
                       // Adjust the height as needed
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.only(
@@ -162,7 +173,7 @@ class _DrinkCardState extends State<DrinkCard> {
                 color: widget.drink.favorite.value
                     ? Colors.redAccent
                     : Colors.black,
-                size: 22,
+                size: widget.twoRowsSize ? 26 : 22,
               )),
         ),
       ),

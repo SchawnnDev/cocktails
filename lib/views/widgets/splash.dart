@@ -31,7 +31,12 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
     // quick system translations (app not loaded & get translations not available)
     var alcohol = 'Alcohol is injurious to health';
     var loading = 'Loading...';
-    final defaultLocale = Platform.localeName;
+    var defaultLocale = 'en';
+
+    try {
+      defaultLocale = Platform.localeName;
+    } catch (e) {}
+
     if (defaultLocale == 'fr' || defaultLocale == 'fr_FR') {
       alcohol = 'L\'alcool est dangereux pour la santé';
       loading = 'Chargement...';
@@ -65,7 +70,6 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 22,
-                    fontWeight: FontWeight.w600,
                     color: Colors.white,
                     fontFamily: 'Karla',
                   ),

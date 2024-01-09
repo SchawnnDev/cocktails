@@ -134,6 +134,25 @@ class PersistentDataProvider {
     }
   }
 
+  /// Search drinks from cache or from API
+  Future<List<Drink>> searchDrinks(String what) async {
+    var result = <Drink>[];
+    var cocktailsDBService = Get.find<TheCocktailsDBService>();
+
+    try {
+      var foundDrinks = what.length == 1
+          ? await cocktailsDBService.searchDrinksByFirstLetter(what[0])
+          : await cocktailsDBService.searchDrinks(what);
+      for (var drink in foundDrinks.drinks ?? []) {
+        addDrink(drink);
+        result.add(drink);
+      }
+      return result;
+    } catch (e) {
+      return result;
+    }
+  }
+
   /// Get drinks from cache or from API
   Future<List<Drink>> getDrinks(List<String> ids) async {
     var result = <Drink>[];
@@ -246,6 +265,18 @@ class PersistentDataProvider {
     return _ingredients;
   }
 
+  /// Search ingredients from cache or from API
+  Future<List<Ingredient>> searchIngredients(String what) async {
+    var cocktailsDBService = Get.find<TheCocktailsDBService>();
+
+    try {
+      var foundIngredients = await cocktailsDBService.searchIngredients(what);
+      return foundIngredients.drinks ?? [];
+    } catch (e) {
+      return [];
+    }
+  }
+
   /// Get all ingredients from cache
   List<Ingredient> getCachedIngredients() {
     return _drinks.map((e) => e.ingredients).expand((element) => element).toList();
@@ -255,6 +286,7 @@ class PersistentDataProvider {
   void clearCache() {
     clearDislikes();
     clearFavorites();
+    boxesService.clear();
   }
 
   /// Clear favorites
