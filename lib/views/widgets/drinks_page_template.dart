@@ -79,9 +79,8 @@ class _DrinksPageTemplateState extends State<DrinksPageTemplate> {
             case ConnectionState.none:
               return Center(child: Text('No connection'));
             case ConnectionState.waiting:
-              return Center(child: CircularProgressIndicator());
             case ConnectionState.active:
-              return Center(child: CircularProgressIndicator());
+              return _createDrinksShimmers();
             case ConnectionState.done:
               if (snapshot.hasError) {
                 Get.snackbar(
@@ -820,5 +819,39 @@ class _DrinksPageTemplateState extends State<DrinksPageTemplate> {
     );
     result.add(SizedBox(height: 20));
     return result;
+  }
+
+  Widget _createDrinksShimmers() {
+    return SingleChildScrollView(
+      controller: _scrollController,
+      child: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment:  CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: Wrap(
+                spacing: 15,
+                runSpacing: 15,
+                alignment: WrapAlignment.spaceEvenly,
+                children: List.generate(
+                  10,
+                  (index) {
+                    return DrinkCard(
+                      null,
+                      index,
+                      singleColor: getPrimColor(context).withOpacity(0.6),
+                      twoRowsSize: settingsController.responsiveDisplay.value,
+                    );
+                  },
+                ),
+              ),
+            ),
+            SizedBox(height: 10),
+          ],
+        ),
+      ),
+    );
   }
 }

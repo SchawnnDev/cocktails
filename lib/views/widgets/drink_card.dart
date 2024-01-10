@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
 class DrinkCard extends StatefulWidget {
-  final Drink drink;
+  final Drink? drink;
   final int index;
   final Color? singleColor;
   final bool twoRowsSize;
@@ -31,6 +31,26 @@ class _DrinkCardState extends State<DrinkCard> {
   @override
   Widget build(BuildContext context) {
     final width = widget.twoRowsSize ? calculateWidth() : 140.0;
+
+    if (widget.drink == null) {
+      return SizedBox(
+        width: width,
+        height: 205,
+        child: Shimmer.fromColors(
+          baseColor: Colors.grey[300]!,
+          highlightColor: Colors.grey[100]!,
+          child: Container(
+            width: width,
+            height: 205,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+          ),
+        ),
+      );
+    }
+
     return Stack(children: [
       Container(
           width: width,
@@ -54,7 +74,7 @@ class _DrinkCardState extends State<DrinkCard> {
                 height: 110,
                 width: width,
                 child: CachedNetworkImage(
-                  imageUrl: widget.drink.thumbnail ?? '',
+                  imageUrl: widget.drink!.thumbnail ?? '',
                   imageBuilder: (context, imageProvider) => Container(
                     // Adjust the height as needed
                     decoration: BoxDecoration(
@@ -93,7 +113,7 @@ class _DrinkCardState extends State<DrinkCard> {
               Padding(
                 padding: const EdgeInsets.only(left: 5, right: 5),
                 child: Text(
-                  '${widget.drink.strDrink ?? 'No name'}\n',
+                  '${widget.drink!.strDrink ?? 'No name'}\n',
                   style: TextStyle(
                     fontSize: 16,
                   ),
@@ -112,7 +132,7 @@ class _DrinkCardState extends State<DrinkCard> {
             splashColor: Color(0x00542E71).withOpacity(0.2),
             highlightColor: Color(0x00542E71).withOpacity(0.3),
             onTapUp: (TapUpDetails details) {
-              DrinkRecipeModal.show(context, widget.drink);
+              DrinkRecipeModal.show(context, widget.drink!);
             },
           ),
         ),
@@ -124,9 +144,9 @@ class _DrinkCardState extends State<DrinkCard> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if (widget.drink.strAlcoholic != null) ...[
+            if (widget.drink!.strAlcoholic != null) ...[
               Icon(
-                widget.drink.strAlcoholic == "Alcoholic"
+                widget.drink!.strAlcoholic == "Alcoholic"
                     ? Icons.local_bar
                     : Icons.no_drinks,
                 size: 20,
@@ -136,12 +156,12 @@ class _DrinkCardState extends State<DrinkCard> {
                 width: 5,
               ),
             ],
-            if (widget.drink.ingredients.isNotEmpty) ...[
+            if (widget.drink!.ingredients.isNotEmpty) ...[
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    '${widget.drink.ingredients.length}',
+                    '${widget.drink!.ingredients.length}',
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.w700,
@@ -164,13 +184,13 @@ class _DrinkCardState extends State<DrinkCard> {
         bottom: 10,
         child: GestureDetector(
           onTapUp: (details) {
-            widget.drink.favorite.toggle();
+            widget.drink!.favorite.toggle();
           },
           child: Obx(() => Icon(
-                widget.drink.favorite.value
+                widget.drink!.favorite.value
                     ? Icons.favorite
                     : Icons.favorite_outline,
-                color: widget.drink.favorite.value
+                color: widget.drink!.favorite.value
                     ? Colors.redAccent
                     : Colors.black,
                 size: widget.twoRowsSize ? 26 : 22,

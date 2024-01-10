@@ -65,10 +65,7 @@ class IngredientController extends GetxController {
     // TODO: we should not only search in the cache but also search in API
 
     return _ingredients
-        .firstWhereOrNull((element) {
-      print(element.name);
-      return element.name == ingredientName;
-    });
+        .firstWhereOrNull((element) => element.name == ingredientName);
   }
 
 }
