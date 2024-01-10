@@ -48,7 +48,9 @@ class _CategoryPageState extends State<CategoryPage> {
         categoryController.currentFilter(filter);
       },
       defaultFilter: categoryController.currentFilter,
-      loadDrinks: categoryController.loadDrinks(category.name!, fullLoad: true),
+      loadDrinks: categoryController.loadDrinks(
+          category.name!, fullLoad: true
+      ),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:cocktails/models/drink.dart';
 import 'package:cocktails/models/filter.dart';
 import 'package:cocktails/providers/persistent_data_provider.dart';
 import 'package:cocktails/services/thecocktailsdb_service.dart';
+import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 
 class CategoryController extends GetxController {
@@ -19,15 +20,15 @@ class CategoryController extends GetxController {
 
   /// Load drinks from API
   Future<List<Drink>> loadDrinks(String categoryName,
-      {bool fullLoad = false}) async {
+      {bool fullLoad = false, int? count}) async {
     final dataProvider = Get.find<PersistentDataProvider>();
     final drinks = await Get.find<TheCocktailsDBService>()
         .getDrinksByCategory(categoryName);
     // category drinks are incomplete, dont load them all but check in cache
     // whether we already have them
-    final result = drinks.drinks;
-    if (result == null) {
-      return [];
+    var result = drinks.drinks ?? [];
+    if (result.isEmpty) {
+      return result;
     }
 
     // enrich with cached data
@@ -40,6 +41,11 @@ class CategoryController extends GetxController {
     if (fullLoad) {
       final fullDrinks = <Drink>[];
       // load all drinks
+
+      if (count != null) {
+        result = result.sample(count).toList();
+      }
+
       for (var element in result) {
         final drink = await dataProvider.getDrink(element.idDrink);
         fullDrinks.add(drink ?? element);

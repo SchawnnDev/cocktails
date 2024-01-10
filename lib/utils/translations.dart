@@ -291,7 +291,7 @@ class AppTranslations extends Translations {
         'fr_FR': {
           'hello': 'Bonjour monde',
           'welcome': 'Bienvenue',
-          'recommendation': 'Recommendations',
+          'recommendation': 'Recommandations',
           'categories': 'Catégories',
           'search_cocktail_hint': 'Rechercher un cocktail',
           'ingredients': 'Ingrédients',
