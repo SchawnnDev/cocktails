@@ -1,5 +1,3 @@
-
-
 class Drinks<T> {
   List<T>? drinks;
 

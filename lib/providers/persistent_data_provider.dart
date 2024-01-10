@@ -31,6 +31,7 @@ class PersistentDataProvider {
 
   final RxBool error = false.obs;
   bool loaded = false;
+  bool ingredientsLoaded = false;
   final boxesService = Get.find<BoxesService>();
 
   /// Load needed data from API
@@ -271,7 +272,14 @@ class PersistentDataProvider {
 
     try {
       var foundIngredients = await cocktailsDBService.searchIngredients(what);
-      return foundIngredients.drinks ?? [];
+      var result = foundIngredients.ingredients ?? [];
+      for (var ingredient in result) {
+        if (_ingredients.contains(ingredient)){
+          continue;
+        }
+        _ingredients.add(ingredient);
+      }
+      return result;
     } catch (e) {
       return [];
     }
@@ -279,7 +287,9 @@ class PersistentDataProvider {
 
   /// Get all ingredients from cache
   List<Ingredient> getCachedIngredients() {
-    return _drinks.map((e) => e.ingredients).expand((element) => element).toList();
+    var result = _drinks.map((e) => e.ingredients).expand((element) => element).toList();
+    result.addAll(_ingredients);
+    return result;
   }
 
   /// Clear all boxes (resets favorites & dislikes & cache)

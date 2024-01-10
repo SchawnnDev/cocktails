@@ -1,7 +1,5 @@
 import 'package:cocktails/utils/consts.dart';
 
-const url = "";
-
 class Ingredient {
   final String name;
   final String? measure;
@@ -13,7 +11,12 @@ class Ingredient {
   }
 
   factory Ingredient.fromJson(Map<String, dynamic> json) {
-    return Ingredient(name: json['strIngredient1']);
+    return Ingredient(name: json['strIngredient1'] ?? json['strIngredient']);
+  }
+
+  @override
+  String toString() {
+    return 'Ingredient{name: $name, measure: $measure}';
   }
 
   @override

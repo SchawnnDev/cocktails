@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:cocktails/models/category.dart';
 import 'package:cocktails/models/drink.dart';
 import 'package:cocktails/models/drinks.dart';
 import 'package:cocktails/models/glass.dart';
 import 'package:cocktails/models/ingredient.dart';
+import 'package:cocktails/models/ingredients.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -184,11 +186,11 @@ class TheCocktailsDBService extends GetxService {
   }
 
   /// Search ingredients from API
-  Future<Drinks<Ingredient>> searchIngredients(String what) async {
+  Future<Ingredients> searchIngredients(String what) async {
     final response = await http.get(_buildUri('search.php?i=$what'));
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
-      return Drinks.fromJson(data, (json) => Ingredient.fromJson(json));
+      return Ingredients.fromJson(data);
     } else {
       return Future.error('Failed to load ingredients');
     }

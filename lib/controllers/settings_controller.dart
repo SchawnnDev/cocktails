@@ -11,6 +11,7 @@ class SettingsController extends GetxController {
   List<Setting> get settings => _settings;
 
   RxBool measureInOz = true.obs;
+  RxBool responsiveDisplay = false.obs;
 
   @override
   void onInit() {
@@ -86,6 +87,17 @@ class SettingsController extends GetxController {
           return newValue;
         },
       ),
+      Setting(
+        boxesService.settingsBox.get('drinkDisplay', defaultValue: 'simple'),
+        icon: Icons.display_settings_outlined,
+        values: {'simple': 'Simple', 'responsive': 'Responsive'},
+        name: 'drinkDisplay',
+        onChange: (newValue) {
+          boxesService.settingsBox.put('drinkDisplay', newValue);
+          responsiveDisplay(newValue == 'responsive');
+          return newValue;
+        },
+      ),
       Setting('click_reset_favorites',
           icon: Icons.favorite_outline,
           values: {},
@@ -102,6 +114,12 @@ class SettingsController extends GetxController {
 
         final dataProvider = Get.find<PersistentDataProvider>();
         dataProvider.clearFavorites();
+
+        _showSnackBar(
+          'reset_favorites'.tr,
+          'reset_favorites_success'.tr,
+          Icons.favorite,
+        );
       }),
       Setting('click_reset_dislikes',
           icon: Icons.thumb_down_outlined,
@@ -119,6 +137,12 @@ class SettingsController extends GetxController {
 
         final dataProvider = Get.find<PersistentDataProvider>();
         dataProvider.clearDislikes();
+
+        _showSnackBar(
+          'reset_dislikes'.tr,
+          'reset_dislikes_success'.tr,
+          Icons.thumb_down,
+        );
       }),
       Setting('clear_cache',
           icon: Icons.restart_alt_outlined,
@@ -136,12 +160,17 @@ class SettingsController extends GetxController {
 
         final dataProvider = Get.find<PersistentDataProvider>();
         dataProvider.clearCache();
+
+        _showSnackBar(
+          'clear_cache'.tr,
+          'clear_cache_success'.tr,
+          Icons.restart_alt,
+        );
       }),
       Setting('show_licences',
           icon: Icons.info_outline,
           values: {},
-          name: 'licences',
-          onTap: (BuildContext ctx) async {
+          name: 'licences', onTap: (BuildContext ctx) async {
         showLicensePage(
           context: ctx,
           applicationName: 'Cocktails',
@@ -155,6 +184,21 @@ class SettingsController extends GetxController {
         );
       })
     ]);
+  }
+
+  void _showSnackBar(String title, String message, IconData icon) {
+    Get.snackbar(
+      title,
+      message,
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Color(0xFF198754).withOpacity(0.6),
+      colorText: Colors.white,
+      icon: Icon(
+        icon,
+        color: Colors.white,
+      ),
+      shouldIconPulse: true,
+    );
   }
 
   Setting? getSetting(String name) {

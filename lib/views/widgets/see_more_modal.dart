@@ -125,6 +125,18 @@ class SeeMoreModal extends StatelessWidget {
         if (snapshot.hasData) {
           return _buildBody(snapshot.data ?? []);
         } else if (snapshot.hasError) {
+          Get.snackbar(
+            'error_happened'.tr,
+            'get_drinks_error'.tr,
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Color(0xFFCC0000).withOpacity(0.6),
+            colorText: Colors.white,
+            icon: Icon(
+              Icons.error_outline,
+              color: Colors.white,
+            ),
+            shouldIconPulse: true,
+          );
           Navigator.pop(context);
           return Center(
             child: Text(

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cocktails/controllers/settings_controller.dart';
 import 'package:cocktails/models/drink.dart';
 import 'package:cocktails/models/filter.dart';
 import 'package:cocktails/models/glass.dart';
@@ -40,6 +41,7 @@ class DrinksPageTemplate extends StatefulWidget {
 class _DrinksPageTemplateState extends State<DrinksPageTemplate> {
   final Rx<Filter> currentFilter = Filter.defaultFilter.obs;
   final ScrollController _scrollController = ScrollController();
+  final settingsController = Get.find<SettingsController>();
 
   @override
   void dispose() {
@@ -82,6 +84,18 @@ class _DrinksPageTemplateState extends State<DrinksPageTemplate> {
               return Center(child: CircularProgressIndicator());
             case ConnectionState.done:
               if (snapshot.hasError) {
+                Get.snackbar(
+                  'error_happened'.tr,
+                  'get_drinks_error'.tr,
+                  snackPosition: SnackPosition.BOTTOM,
+                  backgroundColor: Color(0xFFCC0000).withOpacity(0.6),
+                  colorText: Colors.white,
+                  icon: Icon(
+                    Icons.error_outline,
+                    color: Colors.white,
+                  ),
+                  shouldIconPulse: true,
+                );
                 Get.back();
                 return Center(child: Text('Error'));
               }
@@ -151,7 +165,7 @@ class _DrinksPageTemplateState extends State<DrinksPageTemplate> {
   }
 
   Widget _allDrinks(List<Drink> drinks, Filter filter) {
-    List<Drink> sortedDrinks = drinks.toList();
+    var sortedDrinks = drinks.toList();
 
     if (filter == Filter.defaultFilter) {
       sortedDrinks.shuffle();
@@ -181,6 +195,7 @@ class _DrinksPageTemplateState extends State<DrinksPageTemplate> {
               drink,
               index,
               singleColor: getPrimColor(context).withOpacity(0.6),
+              twoRowsSize: settingsController.responsiveDisplay.value,
             );
           },
         ),

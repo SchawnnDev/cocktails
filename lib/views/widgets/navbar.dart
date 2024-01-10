@@ -86,16 +86,16 @@ class _NavBarState extends State<NavBar> with TickerProviderStateMixin {
 
                     switch (index) {
                       case 0:
-                        Get.offNamed('/');
+                        Get.offAllNamed('/');
                         break;
                       case 1:
-                        Get.offNamed('/favorites');
+                        Get.offAllNamed('/favorites');
                         break;
                       case 2:
-                        Get.offNamed('/swipe');
+                        Get.offAllNamed('/swipe');
                         break;
                       case 3:
-                        Get.offNamed('/settings');
+                        Get.offAllNamed('/settings');
                         break;
                     }
                   });

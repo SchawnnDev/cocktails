@@ -69,6 +69,18 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
             return Center(child: CircularProgressIndicator());
           case ConnectionState.done:
             if (snapshot.hasError || snapshot.data == null) {
+              Get.snackbar(
+                'error_happened'.tr,
+                'get_drink_error'.tr,
+                snackPosition: SnackPosition.BOTTOM,
+                backgroundColor: Color(0xFFCC0000).withOpacity(0.6),
+                colorText: Colors.white,
+                icon: Icon(
+                  Icons.error_outline,
+                  color: Colors.white,
+                ),
+                shouldIconPulse: true,
+              );
               Navigator.pop(context);
               return Center(child: Text('Error'));
             }

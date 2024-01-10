@@ -48,7 +48,7 @@ class _GlassPageState extends State<GlassPage> {
         glassController.currentFilter(filter);
       },
       defaultFilter: glassController.currentFilter,
-      loadDrinks: glassController.loadDrinks(glass.name),
+      loadDrinks: glassController.loadDrinks(glass.name, fullLoad: true),
     );
   }
 }

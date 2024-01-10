@@ -77,6 +77,8 @@ class _SearchModalState extends State<SearchModal> {
         Expanded(
           child: LayoutBuilder(builder: (context, constraint) {
             return SingleChildScrollView(
+              physics: ClampingScrollPhysics(),
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               child: ConstrainedBox(
                 constraints: BoxConstraints(
                   minHeight: constraint.maxHeight,
