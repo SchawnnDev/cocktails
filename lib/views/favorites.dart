@@ -67,7 +67,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
                       return DrinkCard(
                         drink,
                         index,
-                        singleColor: Theme.of(context).primaryColor.withOpacity(0.6),
+                        singleColor:
+                            Theme.of(context).primaryColor.withOpacity(0.6),
                       );
                     }),
                   )),

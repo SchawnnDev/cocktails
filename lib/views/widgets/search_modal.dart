@@ -2,7 +2,6 @@ import 'package:cocktails/controllers/search_controller.dart';
 import 'package:cocktails/utils/themes.dart';
 import 'package:cocktails/views/widgets/drink_card.dart';
 import 'package:cocktails/views/widgets/search_result_modal.dart';
-import 'package:cocktails/views/widgets/see_more_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

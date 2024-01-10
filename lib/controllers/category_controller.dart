@@ -18,10 +18,11 @@ class CategoryController extends GetxController {
   }
 
   /// Load drinks from API
-  Future<List<Drink>> loadDrinks(String categoryName, {bool fullLoad = false}) async {
+  Future<List<Drink>> loadDrinks(String categoryName,
+      {bool fullLoad = false}) async {
     final dataProvider = Get.find<PersistentDataProvider>();
-    final drinks =
-        await Get.find<TheCocktailsDBService>().getDrinksByCategory(categoryName);
+    final drinks = await Get.find<TheCocktailsDBService>()
+        .getDrinksByCategory(categoryName);
     // category drinks are incomplete, dont load them all but check in cache
     // whether we already have them
     final result = drinks.drinks;
@@ -63,5 +64,4 @@ class CategoryController extends GetxController {
     return _categories
         .firstWhereOrNull((element) => element.name == categoryName);
   }
-
 }

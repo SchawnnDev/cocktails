@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cocktails/models/category.dart';
 import 'package:cocktails/models/drink.dart';
 import 'package:cocktails/models/glass.dart';
@@ -25,8 +24,11 @@ class PersistentDataProvider {
 
   // Getters
   List<Drink> get drinks => _drinks;
+
   List<Category> get categories => _categories;
+
   List<Glass> get glasses => _glasses;
+
   List<String> get alcoholicFilters => _alcoholicFilters;
 
   final RxBool error = false.obs;
@@ -274,7 +276,7 @@ class PersistentDataProvider {
       var foundIngredients = await cocktailsDBService.searchIngredients(what);
       var result = foundIngredients.ingredients ?? [];
       for (var ingredient in result) {
-        if (_ingredients.contains(ingredient)){
+        if (_ingredients.contains(ingredient)) {
           continue;
         }
         _ingredients.add(ingredient);
@@ -287,7 +289,8 @@ class PersistentDataProvider {
 
   /// Get all ingredients from cache
   List<Ingredient> getCachedIngredients() {
-    var result = _drinks.map((e) => e.ingredients).expand((element) => element).toList();
+    var result =
+        _drinks.map((e) => e.ingredients).expand((element) => element).toList();
     result.addAll(_ingredients);
     return result;
   }
@@ -314,5 +317,4 @@ class PersistentDataProvider {
     }
     boxesService.dislikesBox.clear();
   }
-
 }

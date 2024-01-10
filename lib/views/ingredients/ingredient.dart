@@ -49,7 +49,8 @@ class _IngredientPageState extends State<IngredientPage> {
         ingredientController.currentFilter(filter);
       },
       defaultFilter: ingredientController.currentFilter,
-      loadDrinks: ingredientController.loadDrinks(ingredient.name, fullLoad: true),
+      loadDrinks:
+          ingredientController.loadDrinks(ingredient.name, fullLoad: true),
     );
   }
 }

@@ -1,7 +1,5 @@
-import 'package:cocktails/models/category.dart';
 import 'package:cocktails/models/filter.dart';
 import 'package:cocktails/models/glass.dart';
-import 'package:cocktails/models/ingredient.dart';
 import 'package:cocktails/providers/persistent_data_provider.dart';
 import 'package:get/get.dart';
 
@@ -22,5 +20,4 @@ class GlassesController extends GetxController {
     final glasses = await dataProvider.getGlasses();
     _glasses(glasses);
   }
-
 }

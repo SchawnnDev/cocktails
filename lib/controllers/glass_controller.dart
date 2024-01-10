@@ -1,4 +1,3 @@
-import 'package:cocktails/models/category.dart';
 import 'package:cocktails/models/drink.dart';
 import 'package:cocktails/models/filter.dart';
 import 'package:cocktails/models/glass.dart';
@@ -19,10 +18,11 @@ class GlassController extends GetxController {
   }
 
   // Load glasses from API
-  Future<List<Drink>> loadDrinks(String glassName, {bool fullLoad = false}) async {
+  Future<List<Drink>> loadDrinks(String glassName,
+      {bool fullLoad = false}) async {
     final dataProvider = Get.find<PersistentDataProvider>();
     final drinks =
-    await Get.find<TheCocktailsDBService>().getDrinksByGlass(glassName);
+        await Get.find<TheCocktailsDBService>().getDrinksByGlass(glassName);
     // glass drinks are incomplete, dont load them all but check in cache
     // whether we already have them
     final result = drinks.drinks;
@@ -61,8 +61,6 @@ class GlassController extends GetxController {
     }
 
     glassName = Uri.decodeComponent(glassName);
-    return _glasses
-        .firstWhereOrNull((element) => element.name == glassName);
+    return _glasses.firstWhereOrNull((element) => element.name == glassName);
   }
-
 }

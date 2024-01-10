@@ -113,7 +113,8 @@ class AppTranslations extends Translations {
           'glasses': 'Glasses',
           'see_all_glasses': 'See all glasses',
           'share_1': 'Check out this delicious cocktail recipe:',
-          'share_2': 'Let\'s mix things up and enjoy the perfect blend of flavors.',
+          'share_2':
+              'Let\'s mix things up and enjoy the perfect blend of flavors.',
           'share_3': '#CocktailMagic #MixologyMasterpiece #Cheers',
           'nameAsc': 'Names A to Z',
           'nameDesc': 'Names Z to A',
@@ -131,7 +132,7 @@ class AppTranslations extends Translations {
           'get_drink_error': 'Error getting drink',
           'get_drinks_error': 'Error getting drinks',
           'search_drink_error': 'Error searching drink',
-          
+
           // Categories
           'Ordinary Drink': 'Ordinary Drink',
           'Cocktail': 'Cocktail',
@@ -255,7 +256,8 @@ class AppTranslations extends Translations {
           'glasses': 'Gläser',
           'see_all_glasses': 'Alle Gläser anzeigen',
           'share_1': 'Probieren Sie dieses köstliche Cocktailrezept aus:',
-          'share_2': 'Lassen Sie uns die Aromen mischen und die perfekte Mischung genießen.',
+          'share_2':
+              'Lassen Sie uns die Aromen mischen und die perfekte Mischung genießen.',
           'share_3': '#Cocktail #Magie #Prost',
           'nameAsc': 'Namen A zu Z',
           'nameDesc': 'Namen Z zu A',
@@ -376,7 +378,8 @@ class AppTranslations extends Translations {
           'reset_dislikes_success': 'Dislikes réinitialisés avec succès',
           'click_reset_dislikes': 'Réinitialiser',
           'reset_all': 'Réinitialiser tout',
-          'reset_all_success': 'Tous les paramètres ont été réinitialisés avec succès',
+          'reset_all_success':
+              'Tous les paramètres ont été réinitialisés avec succès',
           'click_reset_all': 'Réinitialiser',
           'are_you_sure_reset': 'Êtes-vous sûr de vouloir réinitialiser?',
           'cancel': 'Annuler',
@@ -396,7 +399,8 @@ class AppTranslations extends Translations {
           'glasses': 'Verres',
           'see_all_glasses': 'Voir tous les verres',
           'share_1': 'Découvrez cette recette de cocktail délicieuse :',
-          'share_2': 'Mélangeons les saveurs pour savourer une combinaison parfaite.',
+          'share_2':
+              'Mélangeons les saveurs pour savourer une combinaison parfaite.',
           'share_3': '#Cocktail #Mixologue #BonneCuite #Santé',
           'nameAsc': 'Noms A à Z',
           'nameDesc': 'Noms Z à A',

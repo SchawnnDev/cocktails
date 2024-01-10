@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 
 ///  Light Theme
-ThemeData lightTheme = ThemeData(
-  primaryColor: Color(0xFFBAA9DB),
-    fontFamily: 'Karla'
-);
+ThemeData lightTheme =
+    ThemeData(primaryColor: Color(0xFFBAA9DB), fontFamily: 'Karla');
 
 /// Dark Theme
 ThemeData darkTheme = ThemeData.dark().copyWith(
-    primaryColor: Color(0xFFBAA9DB),
+  primaryColor: Color(0xFFBAA9DB),
   navigationBarTheme: NavigationBarThemeData(
     backgroundColor: Color(0xFF0f0d13),
-
   ),
 );
 

@@ -120,7 +120,9 @@ class _FilterSelectorModalState extends State<FilterSelectorModal> {
                     color: Color(0xFF8253DB),
                     width: 3,
                   )
-                : Border.all(color: Get.isDarkMode ? Colors.white : Colors.black, width: 1),
+                : Border.all(
+                    color: Get.isDarkMode ? Colors.white : Colors.black,
+                    width: 1),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -131,8 +133,9 @@ class _FilterSelectorModalState extends State<FilterSelectorModal> {
                 decoration:
                     BoxDecoration(color: Colors.white, shape: BoxShape.circle),
                 child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Image.asset(filter.imagePath),),
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.asset(filter.imagePath),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 5, right: 5),

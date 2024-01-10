@@ -12,8 +12,11 @@ class HomeController extends GetxController {
   final _glasses = <Glass>[].obs;
 
   List<Category> get categories => _categories;
+
   List<Drink> get recommendations => _recommendations;
+
   List<Ingredient> get ingredients => _ingredients;
+
   List<Glass> get glasses => _glasses;
 
   HomeController(

@@ -315,8 +315,7 @@ class _DrinkRecipeModalState extends State<DrinkRecipeModal> {
                     size: 14,
                   ),
                   text: '$quantity x',
-                  textStyle: TextStyle(
-                      fontWeight: FontWeight.w600),
+                  textStyle: TextStyle(fontWeight: FontWeight.w600),
                   color: Color(0xff4472c4),
                   verticalPadding: 1,
                 )

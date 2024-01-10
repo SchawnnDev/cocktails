@@ -87,8 +87,12 @@ class _QuantitySelectorModalState extends State<QuantitySelectorModal> {
                     padding: EdgeInsets.symmetric(vertical: 8.0),
                     decoration: BoxDecoration(
                       color: index + 1 != selectedQuantity
-                          ? (Get.isDarkMode ? Colors.black.withOpacity(0.6) : Colors.white)
-                          : (Get.isDarkMode ? Colors.white.withOpacity(0.6) : Colors.grey[200]),
+                          ? (Get.isDarkMode
+                              ? Colors.black.withOpacity(0.6)
+                              : Colors.white)
+                          : (Get.isDarkMode
+                              ? Colors.white.withOpacity(0.6)
+                              : Colors.grey[200]),
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: Center(

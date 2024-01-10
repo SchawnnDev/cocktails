@@ -5,7 +5,6 @@ const apiImageUrl = "$apiBaseUrl/images/ingredients";
 const apiIngredientImageUrl = "$apiImageUrl/";
 const maxLastSearches = 6;
 
-
 String getAppUrl() {
   if (GetPlatform.isIOS) {
     return "https://apps.apple.com/us/app/cocktails/id1577375369";

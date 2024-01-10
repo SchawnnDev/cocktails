@@ -527,8 +527,8 @@ class _HomePageState extends State<HomePage> {
               color: Colors.black,
             ),
             border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide.none,
+              borderRadius: BorderRadius.circular(15),
+              borderSide: BorderSide.none,
             ),
           ),
         ),

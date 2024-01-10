@@ -1,4 +1,3 @@
-import 'package:cocktails/models/category.dart';
 import 'package:cocktails/models/filter.dart';
 import 'package:cocktails/models/ingredient.dart';
 import 'package:cocktails/providers/persistent_data_provider.dart';
@@ -21,7 +20,8 @@ class IngredientsController extends GetxController {
     final ingredients = await dataProvider.getIngredients();
 
     // Enrich ingredients with existing drinks
-    dataProvider.drinks.where((element) => element.ingredients.isNotEmpty)
+    dataProvider.drinks
+        .where((element) => element.ingredients.isNotEmpty)
         .forEach((drink) {
       for (var ingredient in drink.ingredients) {
         if (ingredients.any((element) => element.name == ingredient.name)) {
@@ -33,5 +33,4 @@ class IngredientsController extends GetxController {
 
     _ingredients(ingredients);
   }
-
 }

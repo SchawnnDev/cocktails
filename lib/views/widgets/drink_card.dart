@@ -12,14 +12,14 @@ class DrinkCard extends StatefulWidget {
   final Color? singleColor;
   final bool twoRowsSize;
 
-  const DrinkCard(this.drink, this.index, {super.key, this.singleColor, this.twoRowsSize = false});
+  const DrinkCard(this.drink, this.index,
+      {super.key, this.singleColor, this.twoRowsSize = false});
 
   @override
   State<DrinkCard> createState() => _DrinkCardState();
 }
 
 class _DrinkCardState extends State<DrinkCard> {
-
   double calculateWidth() {
     final screenWidth = MediaQuery.of(context).size.width;
     if (screenWidth >= 600) {
@@ -57,8 +57,7 @@ class _DrinkCardState extends State<DrinkCard> {
           height: 205,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
-            color: widget.singleColor ??
-                primColor(context, widget.index),
+            color: widget.singleColor ?? primColor(context, widget.index),
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.2),

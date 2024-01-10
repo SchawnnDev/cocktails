@@ -18,6 +18,7 @@ class SearchModalController extends GetxController {
   ];
 
   List<String> get lastSearches => _lastSearches;
+
   List<Drink> get buzzingDrinks => _buzzingDrinks;
 
   SearchModalController() {
@@ -36,5 +37,4 @@ class SearchModalController extends GetxController {
         .sample(6)
         .toList());
   }
-
 }

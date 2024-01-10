@@ -1,4 +1,3 @@
-import 'package:cocktails/models/category.dart';
 import 'package:cocktails/models/drink.dart';
 import 'package:cocktails/models/filter.dart';
 import 'package:cocktails/models/ingredient.dart';
@@ -19,10 +18,11 @@ class IngredientController extends GetxController {
   }
 
   /// Load drinks from API
-  Future<List<Drink>> loadDrinks(String ingredientName, {bool fullLoad = false}) async {
+  Future<List<Drink>> loadDrinks(String ingredientName,
+      {bool fullLoad = false}) async {
     final dataProvider = Get.find<PersistentDataProvider>();
-    final drinks =
-    await Get.find<TheCocktailsDBService>().getDrinksByIngredient(ingredientName);
+    final drinks = await Get.find<TheCocktailsDBService>()
+        .getDrinksByIngredient(ingredientName);
     // ingredient drinks are incomplete, dont load them all but check in cache
     // whether we already have them
     final result = drinks.drinks;
@@ -67,5 +67,4 @@ class IngredientController extends GetxController {
     return _ingredients
         .firstWhereOrNull((element) => element.name == ingredientName);
   }
-
 }
