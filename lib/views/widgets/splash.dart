@@ -42,6 +42,12 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
     } else if (defaultLocale == 'de' || defaultLocale == 'de_DE') {
       alcohol = 'Alkohol ist gesundheitsschädlich';
       loading = 'Wird geladen...';
+    } else if (defaultLocale == 'es' || defaultLocale == 'es_ES') {
+      alcohol = 'El alcohol es perjudicial para la salud';
+      loading = 'Cargando...';
+    } else if (defaultLocale == 'it' || defaultLocale == 'it_IT') {
+      alcohol = 'L\'alcol è dannoso per la salute';
+      loading = 'Caricamento...';
     }
 
     return Directionality(

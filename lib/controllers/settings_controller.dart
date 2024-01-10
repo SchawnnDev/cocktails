@@ -41,7 +41,13 @@ class SettingsController extends GetxController {
         boxesService.settingsBox.get('language',
             defaultValue: Get.deviceLocale?.toString() ?? 'en_US'),
         icon: Icons.language,
-        values: {'en_US': 'en_US', 'fr_FR': 'fr_FR', 'de_DE': 'de_DE'},
+        values: {
+          'en_US': 'en_US',
+          'fr_FR': 'fr_FR',
+          'de_DE': 'de_DE',
+          'es_ES': 'es_ES',
+          'it_IT': 'it_IT'
+        },
         name: 'language',
         onChange: (newValue) {
           var split = newValue.split('_');
