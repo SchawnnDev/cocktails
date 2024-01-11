@@ -51,6 +51,20 @@ class _IngredientPageState extends State<IngredientPage> {
       defaultFilter: ingredientController.currentFilter,
       loadDrinks:
           ingredientController.loadDrinks(ingredient.name, fullLoad: true),
+      onError: () {
+        Get.snackbar(
+          'error_happened'.tr,
+          'get_ingredient_error'.tr,
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Color(0xFFCC0000).withOpacity(0.6),
+          colorText: Colors.white,
+          icon: Icon(
+            Icons.error_outline,
+            color: Colors.white,
+          ),
+          shouldIconPulse: true,
+        );
+      },
     );
   }
 }

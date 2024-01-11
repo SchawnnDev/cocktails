@@ -15,6 +15,7 @@ import 'package:cocktails/views/widgets/navbar.dart';
 import 'package:cocktails/views/widgets/see_more_modal.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -24,6 +25,7 @@ class DrinksPageTemplate extends StatefulWidget {
   final List<Filter> filters;
   final Function(Filter)? onFilterSelected;
   final Future<List<Drink>> loadDrinks;
+  final Function onError;
 
   DrinksPageTemplate({
     super.key,
@@ -32,6 +34,7 @@ class DrinksPageTemplate extends StatefulWidget {
     required this.defaultFilter,
     this.onFilterSelected,
     required this.loadDrinks,
+    required this.onError,
   });
 
   @override
@@ -77,25 +80,34 @@ class _DrinksPageTemplateState extends State<DrinksPageTemplate> {
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
-              return Center(child: Text('No connection'));
+              return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 128,
+                      width: 128,
+                      child: Image.asset('assets/img/no-wifi.png'),
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      'No internet connection',
+                      textDirection: TextDirection.ltr,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  ]);
             case ConnectionState.waiting:
             case ConnectionState.active:
               return _createDrinksShimmers();
             case ConnectionState.done:
               if (snapshot.hasError) {
-                Get.snackbar(
-                  'error_happened'.tr,
-                  'get_drinks_error'.tr,
-                  snackPosition: SnackPosition.BOTTOM,
-                  backgroundColor: Color(0xFFCC0000).withOpacity(0.6),
-                  colorText: Colors.white,
-                  icon: Icon(
-                    Icons.error_outline,
-                    color: Colors.white,
-                  ),
-                  shouldIconPulse: true,
-                );
-                Get.back();
+                SchedulerBinding.instance.addPostFrameCallback((_){
+                  widget.onError();
+                  Navigator.pop(context);
+                });
                 return Center(child: Text('Error'));
               }
 

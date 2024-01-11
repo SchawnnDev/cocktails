@@ -132,6 +132,9 @@ class AppTranslations extends Translations {
           'no_results': 'No results found',
           'error_happened': 'An error happened',
           'get_drink_error': 'Error getting drink',
+          'get_ingredient_error': 'Error getting ingredient',
+          'get_glass_error': 'Error getting glass',
+          'get_category_error': 'Error getting category',
           'get_drinks_error': 'Error getting drinks',
           'search_drink_error': 'Error searching drink',
 
@@ -277,6 +280,9 @@ class AppTranslations extends Translations {
           'no_results': 'Keine Ergebnisse gefunden',
           'error_happened': 'Ein Fehler ist aufgetreten',
           'get_drink_error': 'Fehler beim Abrufen des Getränks',
+          'get_ingredient_error': 'Fehler beim Abrufen der Zutat',
+          'get_glass_error': 'Fehler beim Abrufen des Glases',
+          'get_category_error': 'Fehler beim Abrufen der Kategorie',
           'get_drinks_error': 'Fehler beim Abrufen der Getränke',
           'search_drink_error': 'Fehler beim Suchen des Getränks',
 
@@ -422,6 +428,9 @@ class AppTranslations extends Translations {
           'no_results': 'Aucun résultat trouvé',
           'error_happened': 'Une erreur est survenue',
           'get_drink_error': 'Erreur lors de la récupération du cocktail',
+          'get_ingredient_error': 'Erreur lors de la récupération de l\'ingrédient',
+          'get_glass_error': 'Erreur lors de la récupération du verre',
+          'get_category_error': 'Erreur lors de la récupération de la catégorie',
           'get_drinks_error': 'Erreur lors de la récupération des cocktails',
           'search_drink_error': 'Erreur lors de la recherche du cocktail',
 
@@ -567,6 +576,9 @@ class AppTranslations extends Translations {
           'no_results': 'Nessun risultato trovato',
           'error_happened': 'Si è verificato un errore',
           'get_drink_error': 'Errore nel recupero della bevanda',
+          'get_ingredient_error': 'Errore nel recupero dell\'ingrediente',
+          'get_glass_error': 'Errore nel recupero del bicchiere',
+          'get_category_error': 'Errore nel recupero della categoria',
           'get_drinks_error': 'Errore nel recupero delle bevande',
           'search_drink_error': 'Errore nella ricerca della bevanda',
 
@@ -711,6 +723,9 @@ class AppTranslations extends Translations {
           'no_results': 'No se encontraron resultados',
           'error_happened': 'Ocurrió un error',
           'get_drink_error': 'Error al obtener la bebida',
+          'get_ingredient_error': 'Error al obtener el ingrediente',
+          'get_glass_error': 'Error al obtener el vaso',
+          'get_category_error': 'Error al obtener la categoría',
           'get_drinks_error': 'Error al obtener las bebidas',
           'search_drink_error': 'Error al buscar la bebida',
           // Categories
